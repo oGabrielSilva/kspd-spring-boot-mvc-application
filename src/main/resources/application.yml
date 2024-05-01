@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: Blog Application
+  data:
+    mongodb:
+      # uri: mongodb+srv://odevg:asgd912jksn7paiud@devblog.iqrfcad.mongodb.net/Development?retryWrites=true&w=majority
+      uri: mongodb://localhost:27017/KassiopeiaDevelopment
+  mvc:
+    static-path-pattern: /public/**
+server:
+  port: 7000
+
+jwt:
+  key: 3Js7I9toygrSJydphpxWzWxMhVMOz8kFPjmPfUexmgRErAkje7IY7tfSIrn1YMI
+  issuer: Blog Kassiopeia.dev
+  audience: ${AUDIENCE:http://127.0.0.1}

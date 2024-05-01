@@ -1,0 +1,35 @@
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
+}
+
+.avatar-edit {
+  border: 2px solid var(--bulma-border);
+  border-radius: 32px;
+  cursor: pointer;
+  width: 84px;
+  height: 84px;
+}
+
+.modal-card-head {
+  box-shadow: none !important;
+}
+
+footer .lk {
+  gap: 1rem;
+}
+
+@media (max-width: 580px) {
+  .footer-footer {
+    flex-direction: column;
+  }
+
+  .footer-footer div.is-flex {
+    gap: 0.5rem;
+  }
+}
