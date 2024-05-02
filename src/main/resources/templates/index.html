@@ -17,7 +17,7 @@
       <th:block th:if="${user != null}">
         <div class="py-5">
           <header>
-            <h1 class="subtitle">Olá, <a th:href="'/user/' + ${user.username}" th:text="${user.name}"></a></h1>
+            <h1 class="subtitle">Olá, <a th:href="'/u/' + ${user.username}" th:text="${user.name}"></a></h1>
           </header>
         </div>
       </th:block>

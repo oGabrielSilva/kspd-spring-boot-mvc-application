@@ -197,7 +197,7 @@ async function submitPayload(
       return;
     }
     localStorage.setItem(localStorageId, successMessage);
-    if (!!payload.username) window.location.href = '/user/' + payload.username;
+    if (!!payload.username) window.location.href = '/u/' + payload.username;
     else window.location.reload();
   } catch (error) {
     console.log(error);
@@ -305,7 +305,7 @@ async function execChangePassword(
         password: passwordInput.value,
         newPassword: passwordInputNew.value,
       });
-      const response = await fetch('/api/user/update-password', {
+      const response = await fetch('/api/user/password', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: payload,

@@ -22,11 +22,16 @@ public class UserService implements UserDetailsService {
         return repository.findByUsername(username);
     }
 
-    public User getCurrentAuthenticatedUser(boolean throwsForbidden) {
+    public User getCurrentAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (throwsForbidden && !(authentication.getPrincipal() instanceof User))
-            throw new Forbidden();
         return authentication.getPrincipal() instanceof User ? (User) authentication.getPrincipal() : null;
+    }
+
+    public User getCurrentAuthenticatedUserOrThrowsForbidden() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication.getPrincipal() instanceof User))
+            throw new Forbidden();
+        return (User) authentication.getPrincipal();
     }
 
 }

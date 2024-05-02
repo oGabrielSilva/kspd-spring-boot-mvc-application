@@ -216,7 +216,8 @@
         </div>
       </form>
 
-      <form id="social-part" class="is-hidden" autocapitalize="off" autocomplete="off">
+      <form id="social-part" class="is-hidden" autocapitalize="off" autocomplete="off"
+        data-neutral="Nenhuma alteração encontrada">
         <h1 class="pt-3 pb-5 title">Edite suas redes sociais</h1>
         <div class="field">
           <label class="label" for="input-x">X (Twitter)</label>
@@ -244,7 +245,7 @@
           <label class="label" for="input-instagram">Instagram</label>
           <div class="control has-icons-left">
             <input th:value="${user.social.instagram}" th:data-original="${user.social.instagram}" class="input"
-              name="instagram" type="text" id="input-instagram" placeholder="kassiopeia.dev">
+              name="instagram" type="text" id="input-instagram" placeholder="@kassiopeia.dev">
             <span class="icon is-small is-left">
               <i class="fa-brands is-size-5 fa-instagram has-text-danger"></i>
             </span>
@@ -255,7 +256,7 @@
           <label class="label" for="input-linkedin">LinkedIn</label>
           <div class="control has-icons-left">
             <input th:value="${user.social.linkedin}" th:data-original="${user.social.linkedin}" class="input"
-              name="linkedin" type="text" id="input-linkedin" placeholder="kassiopeia.dev">
+              name="linkedin" type="text" id="input-linkedin" placeholder="/in/kassiopeia.dev">
             <span class="icon is-small is-left">
               <i class="fa-brands is-size-5 fa-linkedin has-text-link"></i>
             </span>
@@ -277,7 +278,7 @@
           <label class="label" for="input-site">Site</label>
           <div class="control has-icons-left">
             <input th:value="${user.social.site}" th:data-original="${user.social.site}" class="input" name="site"
-              type="text" id="input-site" placeholder="kassiopeia.dev">
+              type="text" id="input-site" placeholder="https://kassiopeia.dev">
             <span class="icon is-small is-left">
               <i class="fa-solid fa-earth-americas is-size-5 title"></i>
             </span>

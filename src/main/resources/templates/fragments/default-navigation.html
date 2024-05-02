@@ -57,7 +57,7 @@
                 data-class-light="has-text-link" class="has-text-warning fa-solid fa-sun"></i>
             </span>
           </button>
-          <a th:if="${user != null}" th:href="'/user/' + ${user.username}"
+          <a th:if="${user != null}" th:href="'/u/' + ${user.username}"
             class="is-flex is-justify-content-center is-align-items-center button is-size-6">
             <img th:if="${user.avatarURL != null}" alt="Usuário" width="48" height="48" id="nav-user-ic"
               th:src="${user.avatarURL}" />

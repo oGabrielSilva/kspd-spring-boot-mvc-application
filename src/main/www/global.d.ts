@@ -9,16 +9,18 @@ declare global {
     username: string;
     bio: string;
     avatarURL: string;
-    social: {
-      x: string;
-      youtube: string;
-      instagram: string;
-      linkedin: string;
-      github: string;
-      site: string;
-    };
+    social: Social;
     roles: Array<string>;
     isEmailChecked: boolean;
+  }
+
+  interface Social {
+    x: string;
+    youtube: string;
+    instagram: string;
+    linkedin: string;
+    github: string;
+    site: string;
   }
 }
 

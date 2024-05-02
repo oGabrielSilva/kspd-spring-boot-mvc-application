@@ -11,7 +11,7 @@ import dev.kassiopeia.blog.modules.user.repositories.UserRepository;
 import dev.kassiopeia.blog.modules.user.services.UserService;
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/u")
 public class UserController {
 
     @Autowired
@@ -21,7 +21,7 @@ public class UserController {
 
     @GetMapping("/{username}")
     public ModelAndView profile(@PathVariable String username, ModelAndView mv) {
-        var authenticatedUser = userService.getCurrentAuthenticatedUser(false);
+        var authenticatedUser = userService.getCurrentAuthenticatedUser();
         if (authenticatedUser != null && authenticatedUser.getUsername().equals(username)) {
             mv.setViewName("profile-edit");
             return mv;

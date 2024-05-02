@@ -16,6 +16,7 @@ import dev.kassiopeia.blog.exceptions.Conflict;
 import dev.kassiopeia.blog.exceptions.Unauthorized;
 import dev.kassiopeia.blog.modules.user.DTOs.UserUpdateDTO;
 import dev.kassiopeia.blog.modules.user.DTOs.UserUpdatePasswordDTO;
+import dev.kassiopeia.blog.modules.user.entities.SocialMedia;
 import dev.kassiopeia.blog.modules.user.entities.User;
 import dev.kassiopeia.blog.modules.user.repositories.UserRepository;
 import dev.kassiopeia.blog.modules.user.services.UserService;
@@ -38,7 +39,7 @@ public class UserRestController {
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     @PatchMapping
     public void partialUpdate(@RequestBody UserUpdateDTO payload, HttpServletResponse response) {
-        User user = userService.getCurrentAuthenticatedUser(true);
+        User user = userService.getCurrentAuthenticatedUserOrThrowsForbidden();
         var changed = false;
 
         if (payload.email() != null && !payload.email().isBlank()) {
@@ -82,13 +83,52 @@ public class UserRestController {
             var cookie = tokenService.createCookie(tokenService.create(user));
             response.addCookie(cookie);
             response.addHeader("Bearer__at__", cookie.getValue());
-        }
+        } else
+            throw new BadRequest("Requisição possui corpo inválido");
     }
 
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    @PatchMapping("/update-password")
+    @PatchMapping("/social")
+    public void socialUpdate(@RequestBody SocialMedia payload) {
+        User user = userService.getCurrentAuthenticatedUserOrThrowsForbidden();
+        boolean changed = false;
+
+        if (payload.getX() != null && !payload.getX().equals(user.getSocial().getX())) {
+            user.getSocial().setX(payload.getX());
+            changed = true;
+        }
+        if (payload.getGithub() != null && !payload.getGithub().equals(user.getSocial().getGithub())) {
+            user.getSocial().setGithub(payload.getGithub());
+            changed = true;
+        }
+        if (payload.getInstagram() != null && !payload.getInstagram().equals(user.getSocial().getInstagram())) {
+            user.getSocial().setInstagram(payload.getInstagram());
+            changed = true;
+        }
+        if (payload.getLinkedin() != null && !payload.getLinkedin().equals(user.getSocial().getLinkedin())) {
+            user.getSocial().setLinkedin(payload.getLinkedin());
+            changed = true;
+        }
+        if (payload.getSite() != null && !payload.getSite().equals(user.getSocial().getSite())) {
+            user.getSocial().setSite(payload.getSite());
+            changed = true;
+        }
+        if (payload.getYoutube() != null && !payload.getYoutube().equals(user.getSocial().getYoutube())) {
+            user.getSocial().setYoutube(payload.getYoutube());
+            changed = true;
+        }
+
+        if (!changed)
+            throw new BadRequest("Requisição possui corpo inválido");
+
+        userRepository.save(user);
+
+    }
+
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    @PatchMapping("/password")
     public void passwordUpdate(@RequestBody UserUpdatePasswordDTO payload) {
-        User user = userService.getCurrentAuthenticatedUser(true);
+        User user = userService.getCurrentAuthenticatedUserOrThrowsForbidden();
         if (!validation.isPasswordValid(payload.password())) {
             throw new BadRequest("Senha atual está inválida");
         }
