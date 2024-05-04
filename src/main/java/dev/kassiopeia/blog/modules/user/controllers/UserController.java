@@ -33,6 +33,9 @@ public class UserController {
         }
         mv.setViewName("profile-user");
         mv.addObject("profile", profile);
+        var social = profile.getSocial();
+        mv.addObject("social", social);
+
         return mv;
     }
 

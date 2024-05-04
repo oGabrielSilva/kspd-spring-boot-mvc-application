@@ -203,6 +203,7 @@ async function submitPayload(
   screenProgressTool: ScreenProgressTool
 ) {
   screenProgressTool.show();
+  console.log(payload);
   try {
     const response = await fetch('/api/user', {
       method: 'PATCH',

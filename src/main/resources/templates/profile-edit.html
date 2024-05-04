@@ -218,13 +218,13 @@
       </form>
 
       <form id="social-part" class="is-hidden" autocapitalize="off" autocomplete="off"
-        data-neutral="Nenhuma alteração encontrada">
+        data-neutral="Nenhuma alteração encontrada" data-message="Suas redes foram atualizadas com sucesso">
         <h1 class="pt-3 pb-5 title">Edite suas redes sociais</h1>
         <div class="field">
           <label class="label" for="input-x">X (Twitter)</label>
           <div class="control has-icons-left">
             <input th:value="${user.social.x}" th:data-original="${user.social.x}" class="input" name="x" type="text"
-              id="input-x" placeholder="kassiopeia.dev">
+              id="input-x" placeholder="Adicione o link do seu perfil">
             <span class="icon is-small is-left">
               <i class="fa-brands is-size-5 fa-x-twitter subtitle"></i>
             </span>
@@ -235,7 +235,7 @@
           <label class="label" for="input-youtube">YouTube</label>
           <div class="control has-icons-left">
             <input th:value="${user.social.youtube}" th:data-original="${user.social.youtube}" class="input"
-              name="youtube" type="text" id="input-youtube" placeholder="kassiopeia.dev">
+              name="youtube" type="text" id="input-youtube" placeholder="Adicione o link do seu canal">
             <span class="icon is-small is-left">
               <i class="fa-brands is-size-5 fa-youtube has-text-danger"></i>
             </span>
@@ -246,7 +246,7 @@
           <label class="label" for="input-instagram">Instagram</label>
           <div class="control has-icons-left">
             <input th:value="${user.social.instagram}" th:data-original="${user.social.instagram}" class="input"
-              name="instagram" type="text" id="input-instagram" placeholder="@kassiopeia.dev">
+              name="instagram" type="text" id="input-instagram" placeholder="Adicione o link do seu perfil">
             <span class="icon is-small is-left">
               <i class="fa-brands is-size-5 fa-instagram has-text-danger"></i>
             </span>
@@ -257,7 +257,7 @@
           <label class="label" for="input-linkedin">LinkedIn</label>
           <div class="control has-icons-left">
             <input th:value="${user.social.linkedin}" th:data-original="${user.social.linkedin}" class="input"
-              name="linkedin" type="text" id="input-linkedin" placeholder="/in/kassiopeia.dev">
+              name="linkedin" type="text" id="input-linkedin" placeholder="Adicione o link do seu perfil">
             <span class="icon is-small is-left">
               <i class="fa-brands is-size-5 fa-linkedin has-text-link"></i>
             </span>
@@ -268,9 +268,20 @@
           <label class="label" for="input-github">GitHub</label>
           <div class="control has-icons-left">
             <input th:value="${user.social.github}" th:data-original="${user.social.github}" class="input" name="github"
-              type="text" id="input-github" placeholder="kassiopeia.dev">
+              type="text" id="input-github" placeholder="Adicione o link do seu perfil">
             <span class="icon is-small is-left">
               <i class="fa-brands is-size-5 fa-github title"></i>
+            </span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label" for="input-reddit">Reddit</label>
+          <div class="control has-icons-left">
+            <input th:value="${user.social.reddit}" th:data-original="${user.social.reddit}" class="input" name="reddit"
+              type="text" id="input-reddit" placeholder="Adicione o link do seu perfil ou de uma comunidade">
+            <span class="icon is-small is-left">
+              <i class="fa-brands is-size-5 fa-reddit reddit title"></i>
             </span>
           </div>
         </div>

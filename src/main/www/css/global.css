@@ -1,3 +1,7 @@
+:root {
+  --reddit: #d93a00;
+}
+
 body {
   display: flex;
   flex-direction: column;
@@ -13,8 +17,18 @@ main {
   object-fit: cover;
 }
 
+.g-0 {
+  gap: 0.5rem;
+}
+
 .g-1 {
   gap: 1rem;
+}
+
+.user-links {
+  display: flex;
+  flex-flow: wrap;
+  gap: 1.75rem;
 }
 
 .avatar-edit {
@@ -26,6 +40,10 @@ main {
 
 .modal-card-head {
   box-shadow: none !important;
+}
+
+.reddit {
+  color: var(--reddit);
 }
 
 footer .lk {

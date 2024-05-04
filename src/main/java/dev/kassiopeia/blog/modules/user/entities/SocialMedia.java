@@ -13,5 +13,6 @@ public class SocialMedia {
     private String instagram = "";
     private String linkedin = "";
     private String github = "";
+    private String reddit = "";
     private String site = "";
 }

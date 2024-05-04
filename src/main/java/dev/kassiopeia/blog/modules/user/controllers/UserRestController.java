@@ -27,6 +27,7 @@ import dev.kassiopeia.blog.modules.user.entities.SocialMedia;
 import dev.kassiopeia.blog.modules.user.entities.User;
 import dev.kassiopeia.blog.modules.user.repositories.UserRepository;
 import dev.kassiopeia.blog.modules.user.services.UserService;
+import dev.kassiopeia.blog.utilities.StringUtils;
 import jakarta.servlet.http.HttpServletResponse;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 
@@ -61,7 +62,6 @@ public class UserRestController {
             if (!passwordEncoder.matches(payload.password(), user.getPassword()))
                 throw new Unauthorized("Credenciais inválidas");
             var userByEmail = userRepository.findByEmail(payload.email());
-            System.out.println("User by email: " + userByEmail);
             if (userByEmail != null)
                 throw new Conflict("Email já está em uso por outra conta");
             user.setEmail(payload.email().trim());
@@ -84,7 +84,6 @@ public class UserRestController {
 
         if (payload.bio() != null && !payload.bio().isBlank() && !payload.bio().equals(user.getBio())) {
             user.setBio(payload.bio());
-            user.setUsername(payload.username().trim());
             changed = true;
         }
 
@@ -102,34 +101,66 @@ public class UserRestController {
     public void socialUpdate(@RequestBody SocialMedia payload) {
         User user = userService.getCurrentAuthenticatedUserOrThrowsForbidden();
         boolean changed = false;
-
-        if (payload.getX() != null && !payload.getX().equals(user.getSocial().getX())) {
-            user.getSocial().setX(payload.getX());
+        System.out.println("\n\nPAYLOAD -> " + payload);
+        if (StringUtils.isNotNullOrBlank(payload.getX())
+                && StringUtils.isNotEquals(payload.getX(), user.getSocial().getX())) {
+            var x = payload.getX().toLowerCase().trim();
+            if (!x.contains("twitter.com/") && !x.contains("x.com/"))
+                throw new BadRequest("Link do Twitter/X é inválido");
+            user.getSocial().setX(x);
             changed = true;
         }
-        if (payload.getGithub() != null && !payload.getGithub().equals(user.getSocial().getGithub())) {
-            user.getSocial().setGithub(payload.getGithub());
+        if (StringUtils.isNotNullOrBlank(payload.getGithub())
+                && StringUtils.isNotEquals(payload.getGithub(), user.getSocial().getGithub())) {
+            var github = payload.getGithub().toLowerCase().trim();
+            if (!github.contains("github.com/"))
+                throw new BadRequest("Link do Github é inválido");
+            user.getSocial().setGithub(github);
             changed = true;
         }
-        if (payload.getInstagram() != null && !payload.getInstagram().equals(user.getSocial().getInstagram())) {
-            user.getSocial().setInstagram(payload.getInstagram());
+        if (StringUtils.isNotNullOrBlank(payload.getInstagram())
+                && StringUtils.isNotEquals(payload.getInstagram(), user.getSocial().getInstagram())) {
+            var instagram = payload.getInstagram().toLowerCase().trim();
+            if (!instagram.contains("instagram.com/"))
+                throw new BadRequest("Link do Instagram é inválido");
+            user.getSocial().setInstagram(instagram);
             changed = true;
         }
-        if (payload.getLinkedin() != null && !payload.getLinkedin().equals(user.getSocial().getLinkedin())) {
-            user.getSocial().setLinkedin(payload.getLinkedin());
+        if (StringUtils.isNotNullOrBlank(payload.getLinkedin())
+                && StringUtils.isNotEquals(payload.getLinkedin(), user.getSocial().getLinkedin())) {
+            var linkedin = payload.getLinkedin().toLowerCase().trim();
+            if (!linkedin.contains("linkedin.com/in/"))
+                throw new BadRequest("Link do LinkedIn é inválido");
+            user.getSocial().setLinkedin(linkedin);
             changed = true;
         }
-        if (payload.getSite() != null && !payload.getSite().equals(user.getSocial().getSite())) {
-            user.getSocial().setSite(payload.getSite());
+        if (StringUtils.isNotNullOrBlank(payload.getSite())
+                && StringUtils.isNotEquals(payload.getSite(), user.getSocial().getSite())) {
+            var site = payload.getSite().toLowerCase().trim();
+            if (!site.contains("https://"))
+                throw new BadRequest("Link do site é inválido. Causa: não começa com https://");
+            user.getSocial().setSite(site);
             changed = true;
         }
-        if (payload.getYoutube() != null && !payload.getYoutube().equals(user.getSocial().getYoutube())) {
-            user.getSocial().setYoutube(payload.getYoutube());
+        if (StringUtils.isNotNullOrBlank(payload.getReddit())
+                && StringUtils.isNotEquals(payload.getReddit(), user.getSocial().getReddit())) {
+            var reddit = payload.getReddit().toLowerCase().trim();
+            if (!reddit.contains("reddit.com/user/") && !reddit.contains("reddit.com/r/"))
+                throw new BadRequest("Link do Reddit é inválido");
+            user.getSocial().setReddit(reddit);
+            changed = true;
+        }
+        if (StringUtils.isNotNullOrBlank(payload.getYoutube())
+                && StringUtils.isNotEquals(payload.getYoutube(), user.getSocial().getYoutube())) {
+            var youtube = payload.getYoutube().toLowerCase().trim();
+            if (!youtube.contains("youtube.com/"))
+                throw new BadRequest("Link do Youtube é inválido");
+            user.getSocial().setYoutube(youtube);
             changed = true;
         }
 
         if (!changed)
-            throw new BadRequest("Requisição possui corpo inválido");
+            throw new BadRequest("Requisição possui corpo inválido ou vazio");
 
         userRepository.save(user);
 

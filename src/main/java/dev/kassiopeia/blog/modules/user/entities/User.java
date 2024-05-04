@@ -49,7 +49,7 @@ public class User implements UserDetails {
 
     private String avatarURL;
 
-    private SocialMedia social = new SocialMedia("", "", "", "", "", "");
+    private SocialMedia social = new SocialMedia("", "", "", "", "", "", "");
 
     private AuthenticationRole role = AuthenticationRole.COMMON;
 
