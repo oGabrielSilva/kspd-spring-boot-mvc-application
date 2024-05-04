@@ -1,18 +1,25 @@
 package dev.kassiopeia.blog.modules.user.controllers;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import dev.kassiopeia.blog.authentication.services.TokenService;
 import dev.kassiopeia.blog.authentication.validation.AuthenticationValidation;
+import dev.kassiopeia.blog.aws.services.AmazonS3Service;
 import dev.kassiopeia.blog.exceptions.BadRequest;
 import dev.kassiopeia.blog.exceptions.Conflict;
+import dev.kassiopeia.blog.exceptions.InternalServerError;
 import dev.kassiopeia.blog.exceptions.Unauthorized;
 import dev.kassiopeia.blog.modules.user.DTOs.UserUpdateDTO;
 import dev.kassiopeia.blog.modules.user.DTOs.UserUpdatePasswordDTO;
@@ -21,6 +28,7 @@ import dev.kassiopeia.blog.modules.user.entities.User;
 import dev.kassiopeia.blog.modules.user.repositories.UserRepository;
 import dev.kassiopeia.blog.modules.user.services.UserService;
 import jakarta.servlet.http.HttpServletResponse;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 
 @RestController
 @RequestMapping("/api/user")
@@ -35,6 +43,8 @@ public class UserRestController {
     TokenService tokenService;
     @Autowired
     PasswordEncoder passwordEncoder;
+    @Autowired
+    AmazonS3Service s3Service;
 
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     @PatchMapping
@@ -143,5 +153,26 @@ public class UserRestController {
 
         user.setPassword(passwordEncoder.encode(payload.newPassword()));
         userRepository.save(user);
+    }
+
+    @PatchMapping(consumes = { MediaType.MULTIPART_FORM_DATA_VALUE }, path = "/avatar")
+    public Map<String, String> avatarUpdate(@RequestParam("avatar") MultipartFile avatar) {
+        if (avatar == null || avatar.isEmpty() || avatar.getContentType() == null)
+            throw new BadRequest("Avatar inválido");
+        var contentType = avatar.getContentType();
+        if (!(contentType.equals("image/jpeg") || contentType.equals("image/webp")))
+            throw new BadRequest(
+                    "Erro de conteúdo. O cliente não processou a imagem para os formatos aceitos [jpeg, webp]");
+        var user = userService.getCurrentAuthenticatedUserOrThrowsForbidden();
+        var metadata = new ObjectMetadata();
+        metadata.addUserMetadata("id", user.getId());
+        metadata.addUserMetadata("time", String.valueOf(System.currentTimeMillis()));
+        var result = s3Service.uploadMultipart(avatar,
+                "avatar/" + user.getId(), metadata);
+        if (!result.success())
+            throw new InternalServerError("Não foi possível salvar a imagem");
+        user.setAvatarURL(result.url() + "?serial=" + String.valueOf(System.currentTimeMillis()));
+        userRepository.save(user);
+        return Map.of("url", result.url());
     }
 }

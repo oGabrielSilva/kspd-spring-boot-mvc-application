@@ -47,27 +47,47 @@ export function runModuleFormUserInfo() {
       const file = avatarInput.files && avatarInput.files[0] ? avatarInput.files[0] : null;
       if (!file) return;
       progress.show();
+      let hideProgressHere = true;
       try {
         avatar = await imageTool.fileToBlobWebpWithoutResize(file, 0);
         if (!avatar) {
           toaster.danger(err);
           return;
         }
-        const uri = URL.createObjectURL(avatar);
-        URL.revokeObjectURL(avatarPreview.src);
-        avatarPreview.src = uri;
+        hideProgressHere = false;
         submitAvatar();
       } catch (error) {
         console.log(error);
         toaster.danger();
       } finally {
-        progress.hide();
+        if (hideProgressHere) progress.hide();
       }
     });
     avatarPreview.addEventListener('click', () => avatarInput.click());
   }
 
-  function submitAvatar() {}
+  async function submitAvatar() {
+    try {
+      const payload = new FormData();
+      console.log(avatar);
+      payload.set('avatar', avatar);
+      const response = await fetch('/api/user/avatar', {
+        method: 'PATCH',
+        credentials: 'same-origin',
+        body: payload,
+      });
+      if (response.status === 403) return forbidden();
+      console.log(response);
+      console.log(await response.json());
+      const uri = URL.createObjectURL(avatar);
+      URL.revokeObjectURL(avatarPreview.src);
+      avatarPreview.src = uri;
+    } catch (error) {
+      console.log(error);
+    } finally {
+      progress.hide();
+    }
+  }
 
   formImageModule();
 

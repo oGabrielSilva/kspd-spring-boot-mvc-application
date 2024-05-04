@@ -59,9 +59,7 @@
           </button>
           <a th:if="${user != null}" th:href="'/u/' + ${user.username}"
             class="is-flex is-justify-content-center is-align-items-center button is-size-6">
-            <img th:if="${user.avatarURL != null}" alt="Usuário" width="48" height="48" id="nav-user-ic"
-              th:src="${user.avatarURL}" />
-            <span class="icon is-small" th:unless="${user.avatarURL != null}">
+            <span class="icon is-small">
               <i class="fa-solid fa-user-astronaut"></i>
             </span>
           </a>

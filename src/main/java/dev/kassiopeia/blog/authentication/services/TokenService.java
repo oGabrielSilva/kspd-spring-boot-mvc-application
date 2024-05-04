@@ -24,8 +24,9 @@ public class TokenService {
     private String audience;
     private Algorithm algorithm;
 
-    public TokenService(@Value("${jwt.key}") String tokenSecret, @Value("${jwt.issuer}") String issuer,
-            @Value("${jwt.audience}") String audience) {
+    public TokenService(@Value("${kassiopeia.jwt.key}") String tokenSecret,
+            @Value("${kassiopeia.jwt.issuer}") String issuer,
+            @Value("${kassiopeia.jwt.audience}") String audience) {
         this.algorithm = Algorithm.HMAC256(tokenSecret);
         this.issuer = issuer;
         this.audience = audience;

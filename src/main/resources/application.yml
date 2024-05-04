@@ -7,10 +7,14 @@ spring:
       uri: mongodb://localhost:27017/KassiopeiaDevelopment
   mvc:
     static-path-pattern: /public/**
+
 server:
   port: 7000
-
-jwt:
-  key: 3Js7I9toygrSJydphpxWzWxMhVMOz8kFPjmPfUexmgRErAkje7IY7tfSIrn1YMI
-  issuer: Blog Kassiopeia.dev
-  audience: ${AUDIENCE:http://127.0.0.1}
+aws:
+  s3:
+    bucket: kassiopeia.dev
+kassiopeia:
+  jwt:
+    key: 3Js7I9toygrSJydphpxWzWxMhVMOz8kFPjmPfUexmgRErAkje7IY7tfSIrn1YMI
+    issuer: Blog Kassiopeia.dev
+    audience: ${AUDIENCE:http://127.0.0.1}

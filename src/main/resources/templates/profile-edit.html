@@ -42,11 +42,12 @@
         <h1 class="pt-3 pb-5 title">Edite seu perfil</h1>
 
         <div class="is-flex is-justify-content-center is-align-items-center">
-          <img data-input="input-avatar" role="button" class="avatar-edit" id="avatar-preview"
+          <img data-input="input-avatar" role="button" class="avatar avatar-edit" id="avatar-preview"
             th:src="${user.avatarURL} ?: '/public/image/kassiopeia-92x92.webp'"
             th:alt="'Avatar do usuário ' + ${user.name}" title="Clique para trocar a foto" width="84" height="84"
             aria-label="Sua imagem de perfil. Você pode clicar para escolher uma nova" />
-          <input data-error="Oopss... algo deu errado ao ler a imagem" type="file" class="is-hidden" name="avatar"
+          <input data-rest-error="Infelizmente não conseguimos atualizar a sua imagem"
+            data-error="Oopss... algo deu errado ao ler a imagem" type="file" class="is-hidden" name="avatar"
             id="input-avatar" accept="image/png, image/jpeg, image/webp" data-accept="png@jpeg@jpg@webp">
         </div>
 

@@ -16,7 +16,9 @@
     <section class="section">
       <th:block th:if="${user != null}">
         <div class="py-5">
-          <header>
+          <header class="is-flex is-align-items-center g-1">
+            <img th:if="${user.avatarURL != null}" alt="Usuário" width="48" height="48" id="nav-user-ic"
+              th:src="${user.avatarURL}" class="avatar" />
             <h1 class="subtitle">Olá, <a th:href="'/u/' + ${user.username}" th:text="${user.name}"></a></h1>
           </header>
         </div>

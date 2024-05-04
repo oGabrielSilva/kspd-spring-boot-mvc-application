@@ -1,19 +1,24 @@
 {
   "properties": [
     {
-      "name": "jwt.key",
+      "name": "kassiopeia.jwt.key",
       "type": "java.lang.String",
       "description": "A description for 'jwt.key'"
     },
     {
-      "name": "jwt.audience",
+      "name": "kassiopeia.jwt.audience",
       "type": "java.lang.String",
       "description": "A description for 'jwt.audience'"
     },
     {
-      "name": "jwt.issuer",
+      "name": "kassiopeia.jwt.issuer",
       "type": "java.lang.String",
       "description": "A description for 'jwt.issuer'"
+    },
+    {
+      "name": "aws.s3.bucket",
+      "type": "java.lang.String",
+      "description": "A description for 'aws.s3.bucket'"
     }
   ]
 }

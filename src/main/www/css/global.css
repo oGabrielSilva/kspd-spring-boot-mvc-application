@@ -8,9 +8,17 @@ main {
   flex: 1;
 }
 
+.avatar {
+  border-radius: 32px;
+  object-fit: cover;
+}
+
+.g-1 {
+  gap: 1rem;
+}
+
 .avatar-edit {
   border: 2px solid var(--bulma-border);
-  border-radius: 32px;
   cursor: pointer;
   width: 84px;
   height: 84px;
