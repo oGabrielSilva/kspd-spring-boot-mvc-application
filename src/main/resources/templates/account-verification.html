@@ -20,6 +20,26 @@
           verifique sua caixa de entrada e insira o código aqui para que possamos proceder com a
           validação.
         </p>
+        <form class="py-6">
+          <label class="title is-6 has-text-weight-normal mb-0" for="account-check">
+            Código de uso único:
+          </label>
+          <div class="py-3">
+            <div class="control has-icons-left">
+              <input
+                class="input is-medium"
+                type="text"
+                placeholder="Código de uso único"
+                data-message="Código informado está incorreto ou é inválido"
+                id="account-check"
+              />
+              <span class="icon is-left">
+                <i class="fas fa-envelope"></i>
+              </span>
+            </div>
+          </div>
+          <button class="button is-link" type="submit">Validar</button>
+        </form>
       </section>
     </main>
 
