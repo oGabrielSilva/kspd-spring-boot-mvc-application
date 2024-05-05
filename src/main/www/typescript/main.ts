@@ -1,5 +1,6 @@
 import '../css/global.css';
 import { Bulma } from './libs/Bulma';
+import { runIndexPageManager } from './pages/IndexPageManager';
 import { runProfileEditPageManager } from './pages/ProfileEditPageManager';
 import { runSessionPageManager } from './pages/SessionPageManager';
 
@@ -10,6 +11,9 @@ import { runSessionPageManager } from './pages/SessionPageManager';
 
   switch (wwwrootPageManager.value ?? '') {
     case '':
+      break;
+    case '/index':
+      runIndexPageManager();
       break;
     case '/session':
       runSessionPageManager();

@@ -15,6 +15,9 @@ main {
 .avatar {
   border-radius: 32px;
   object-fit: cover;
+  width: 48px;
+  height: 48px;
+  cursor: pointer;
 }
 
 .g-0 {

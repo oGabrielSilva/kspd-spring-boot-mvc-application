@@ -17,9 +17,11 @@
       <th:block th:if="${user != null}">
         <div class="py-5">
           <header class="is-flex is-align-items-center g-1">
-            <img th:if="${user.avatarURL != null}" alt="Usuário" width="48" height="48" id="nav-user-ic"
+            <img role="button" aria-label="Clique para acessar seu perfil" th:if="${user.avatarURL != null}"
+              th:alt="|Imagem de usuário do usuário ${user.name}|" width="48" height="48" id="nav-user-ic"
               th:src="${user.avatarURL}" class="avatar" />
-            <h1 class="subtitle">Olá, <a th:href="'/u/' + ${user.username}" th:text="${user.name}"></a></h1>
+            <h1 class="subtitle">Olá, <a th:href="|/u/${user.username}|" aria-label="Link para seu perfil"
+                th:text="${user.name}" id="nav-user-profile-link"></a></h1>
           </header>
         </div>
       </th:block>
