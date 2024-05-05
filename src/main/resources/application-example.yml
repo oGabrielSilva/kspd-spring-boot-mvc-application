@@ -7,14 +7,27 @@ spring:
       uri: mongodb://localhost:27017/KassiopeiaDevelopment
   mvc:
     static-path-pattern: /public/**
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username:
+    password:
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
 server:
   port: 7000
+
 aws:
   s3:
-    bucket: kassiopeia.dev
+    bucket:
+
 kassiopeia:
   jwt:
-    key: 3Js7I9toygrSJydphpxWzWxMhVMOz8kFPjmPfUexmgRErAkje7IY7tfSIrn1YMI
+    key: 3Js7I9toygrSJydphpxWzWxMhVMOz8kFPjm
     issuer: Blog Kassiopeia.dev
     audience: ${AUDIENCE:http://127.0.0.1}

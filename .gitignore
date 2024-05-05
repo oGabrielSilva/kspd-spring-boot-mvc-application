@@ -243,3 +243,6 @@ dist
 
 *.min.js
 *.min.js.map
+
+application.properties
+application.yml

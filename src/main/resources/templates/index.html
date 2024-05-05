@@ -13,6 +13,7 @@
   </header>
 
   <main class="container p-3">
+    <th:block th:replace="~{fragments/account-verification-alert}"></th:block>
     <section class="section">
       <th:block th:if="${user != null}">
         <div class="py-5">

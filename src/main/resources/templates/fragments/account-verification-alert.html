@@ -1,0 +1,15 @@
+<th:block th:if="${user != null}">
+  <div>
+    <p th:if="${!user.isEmailChecked}" class="has-text-danger is-size-7 has-icons-left">
+      <code style="display: flex; align-items: baseline" class="g-0">
+        <span class="icon is-small is-left">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+        </span>
+        <span>
+          Seu email não foi confirmado. Clique <a href="/account-verification">aqui</a> para receber
+          um email de checagem
+        </span>
+      </code>
+    </p>
+  </div>
+</th:block>

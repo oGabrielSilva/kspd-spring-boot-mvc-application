@@ -31,11 +31,7 @@
         </ul>
       </div>
 
-      <p th:if="${!user.isEmailChecked}" class="has-text-danger is-size-7 has-icons-left">
-        <code><span class="icon is-small is-left"><i class="fa-solid fa-triangle-exclamation"></i></span>
-          Seu email não foi confirmado. Clique <a href="/check-email">aqui</a> para
-          receber um email de checagem</code>
-      </p>
+      <th:block th:replace="~{fragments/account-verification-alert}"></th:block>
 
       <form data-message="Suas informações foram atualizadas com sucesso" id="profile-part" autocapitalize="off"
         autocomplete="off">

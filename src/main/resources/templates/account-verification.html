@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <th:block th:replace="~{fragments/default-head}"></th:block>
+  </head>
+
+  <body>
+    <header class="p-3">
+      <div>
+        <th:block th:replace="~{fragments/default-navigation}"></th:block>
+      </div>
+    </header>
+
+    <main class="container p-3">
+      <section class="section">
+        <h1 class="title">Verificação de conta</h1>
+        <h2 class="subtitle">Seu email ainda não foi verificado</h2>
+        <p>
+          Um email acabou de ser enviado para você, contendo um código de uso único. Por favor,
+          verifique sua caixa de entrada e insira o código aqui para que possamos proceder com a
+          validação.
+        </p>
+      </section>
+    </main>
+
+    <th:block th:replace="~{fragments/footer}"></th:block>
+
+    <input type="hidden" value="/account-verification" id="wwwroot-page-manager-id" />
+  </body>
+</html>
