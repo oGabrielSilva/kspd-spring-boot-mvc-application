@@ -1,128 +1,179 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+  <head>
+    <th:block th:replace="~{fragments/default-head}"></th:block>
+  </head>
 
-<head>
-  <th:block th:replace="~{fragments/default-head}"></th:block>
-</head>
-
-<body>
-  <header class="p-3">
-    <div>
-      <th:block th:replace="~{fragments/default-navigation}"></th:block>
-    </div>
-  </header>
-
-  <main class="container p-3">
-    <section class="section">
-
-      <header class="is-flex is-justify-content-center is-flex-direction-column is-align-items-center">
-        <img class="avatar" id="avatar" th:src="${profile.avatarURL} ?: '/public/image/kassiopeia-92x92.webp'"
-          th:alt="'Avatar do usuário ' + ${profile.name}" width="84" height="84"
-          th:aria-label="'Imagem de perfil do usuário' + ${profile.name}" />
-        <h1 class="title is-5 has-text-weight-normal pt-3 mb-0" th:text="${profile.name}"></h1>
-        <p><small th:text="${profile.username}"></small></p>
-      </header>
-      <div class="block">
-        <h2 class="title is-5">Bio</h2>
-        <div class="message is-small" th:if="${#strings.isEmpty(profile.bio)}">
-          <p class="message-body">Usuário não adicionou uma bio</p>
-        </div>
-        <div th:unless="${#strings.isEmpty(profile.bio)}">
-          <p th:text="${profile.bio}"></p>
-        </div>
+  <body>
+    <header class="p-3">
+      <div>
+        <th:block th:replace="~{fragments/default-navigation}"></th:block>
       </div>
-      <footer>
-        <h2 class="title is-5">Redes</h2>
-        <nav>
-          <ul class="user-links">
-            <li class="is-flex is-justify-content-center is-align-items-center">
-              <a class="title is-6 mb-3 is-flex is-align-items-center g-0 has-text-weight-normal"
-                th:href="'mailto:' + ${profile.email}" target="_blank" rel="noopener noreferrer">
-                <span class="icon is-small">
-                  <i class="fa-solid fa-envelope title is-6"></i>
-                </span>
-                <span>Email</span>
-              </a>
-            </li>
-            <li class="is-flex is-justify-content-center is-align-items-center" th:if="${!#strings.isEmpty(social.x)}">
-              <a class="title is-6 mb-3 is-flex is-align-items-center g-0 has-text-weight-normal" th:href="${social.x}"
-                target="_blank" rel="noopener noreferrer">
-                <span class="icon is-small">
-                  <i class="fa-brands fa-x-twitter title is-6"></i>
-                </span>
-                <span>Twitter</span>
-              </a>
-            </li>
-            <li class="is-flex is-justify-content-center is-align-items-center"
-              th:if="${!#strings.isEmpty(social.youtube)}">
-              <a class="title is-6 mb-3 is-flex is-align-items-center g-0 has-text-weight-normal"
-                th:href="${social.youtube}" target="_blank" rel="noopener noreferrer">
-                <span class="icon is-small">
-                  <i class="fa-brands fa-youtube title is-6"></i>
-                </span>
-                <span>YouTube</span>
-              </a>
-            </li>
-            <li class="is-flex is-justify-content-center is-align-items-center"
-              th:if="${!#strings.isEmpty(social.instagram)}">
-              <a class="title is-6 mb-3 is-flex is-align-items-center g-0 has-text-weight-normal"
-                th:href="${social.instagram}" target="_blank" rel="noopener noreferrer">
-                <span class="icon is-small">
-                  <i class="fa-brands fa-instagram title is-6"></i>
-                </span>
-                <span>Instagram</span>
-              </a>
-            </li>
-            <li class="is-flex is-justify-content-center is-align-items-center"
-              th:if="${!#strings.isEmpty(social.linkedin)}">
-              <a class="title is-6 mb-3 is-flex is-align-items-center g-0 has-text-weight-normal"
-                th:href="${social.linkedin}" target="_blank" rel="noopener noreferrer">
-                <span class="icon is-small">
-                  <i class="fa-brands fa-linkedin title is-6"></i>
-                </span>
-                <span>LinkedIn</span>
-              </a>
-            </li>
-            <li class="is-flex is-justify-content-center is-align-items-center"
-              th:if="${!#strings.isEmpty(social.github)}">
-              <a class="title is-6 mb-3 is-flex is-align-items-center g-0 has-text-weight-normal"
-                th:href="${social.github}" target="_blank" rel="noopener noreferrer">
-                <span class="icon is-small">
-                  <i class="fa-brands fa-github title is-6"></i>
-                </span>
-                <span>GitHub</span>
-              </a>
-            </li>
-            <li class="is-flex is-justify-content-center is-align-items-center"
-              th:if="${!#strings.isEmpty(social.reddit)}">
-              <a class="title is-6 mb-3 is-flex is-align-items-center g-0 has-text-weight-normal"
-                th:href="${social.reddit}" target="_blank" rel="noopener noreferrer">
-                <span class="icon is-small">
-                  <i class="fa-brands fa-reddit title is-6"></i>
-                </span>
-                <span>Reddit</span>
-              </a>
-            </li>
-            <li class="is-flex is-justify-content-center is-align-items-center"
-              th:if="${!#strings.isEmpty(social.site)}">
-              <a class="title is-6 mb-3 is-flex is-align-items-center g-0 has-text-weight-normal"
-                th:href="${social.site}" target="_blank" rel="noopener noreferrer">
-                <span class="icon is-small">
-                  <i class="fa-solid fa-earth-americas title is-6"></i>
-                </span>
-                <span>Site</span>
-              </a>
-            </li>
-          </ul>
-        </nav>
-      </footer>
-    </section>
-  </main>
+    </header>
 
-  <th:block th:replace="~{fragments/footer}"></th:block>
+    <main class="container p-3">
+      <section class="section">
+        <header
+          class="is-flex is-justify-content-center is-flex-direction-column is-align-items-center"
+        >
+          <img
+            class="avatar"
+            id="avatar"
+            th:src="${profile.avatarURL} ?: '/public/image/kassiopeia-92x92.webp'"
+            th:alt="'Avatar do usuário ' + ${profile.name}"
+            width="84"
+            height="84"
+            th:aria-label="'Imagem de perfil do usuário' + ${profile.name}"
+          />
+          <h1 class="title is-5 has-text-weight-normal pt-3 mb-0" th:text="${profile.name}"></h1>
+          <p><small th:text="${profile.username}"></small></p>
+        </header>
+        <div class="block">
+          <h2 class="title is-5">Bio</h2>
+          <div class="message is-small" th:if="${#strings.isEmpty(profile.bio)}">
+            <p class="message-body">Usuário não adicionou uma bio</p>
+          </div>
+          <div th:unless="${#strings.isEmpty(profile.bio)}">
+            <p th:text="${profile.bio}"></p>
+          </div>
+        </div>
+        <footer>
+          <h2 class="title is-5">Redes</h2>
+          <nav>
+            <ul class="user-links">
+              <li class="is-flex is-justify-content-center is-align-items-center">
+                <a
+                  class="title is-6 mb-3 is-flex is-align-items-center g-0 has-text-weight-normal"
+                  th:href="'mailto:' + ${profile.email}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span class="icon is-small">
+                    <i class="fa-solid fa-envelope title is-6"></i>
+                  </span>
+                  <span>Email</span>
+                </a>
+              </li>
+              <li
+                class="is-flex is-justify-content-center is-align-items-center"
+                th:if="${!#strings.isEmpty(social.x)}"
+              >
+                <a
+                  class="title is-6 mb-3 is-flex is-align-items-center g-0 has-text-weight-normal"
+                  th:href="${social.x}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span class="icon is-small">
+                    <i class="fa-brands fa-x-twitter title is-6"></i>
+                  </span>
+                  <span>Twitter</span>
+                </a>
+              </li>
+              <li
+                class="is-flex is-justify-content-center is-align-items-center"
+                th:if="${!#strings.isEmpty(social.youtube)}"
+              >
+                <a
+                  class="title is-6 mb-3 is-flex is-align-items-center g-0 has-text-weight-normal"
+                  th:href="${social.youtube}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span class="icon is-small">
+                    <i class="fa-brands fa-youtube title is-6"></i>
+                  </span>
+                  <span>YouTube</span>
+                </a>
+              </li>
+              <li
+                class="is-flex is-justify-content-center is-align-items-center"
+                th:if="${!#strings.isEmpty(social.instagram)}"
+              >
+                <a
+                  class="title is-6 mb-3 is-flex is-align-items-center g-0 has-text-weight-normal"
+                  th:href="${social.instagram}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span class="icon is-small">
+                    <i class="fa-brands fa-instagram title is-6"></i>
+                  </span>
+                  <span>Instagram</span>
+                </a>
+              </li>
+              <li
+                class="is-flex is-justify-content-center is-align-items-center"
+                th:if="${!#strings.isEmpty(social.linkedin)}"
+              >
+                <a
+                  class="title is-6 mb-3 is-flex is-align-items-center g-0 has-text-weight-normal"
+                  th:href="${social.linkedin}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span class="icon is-small">
+                    <i class="fa-brands fa-linkedin title is-6"></i>
+                  </span>
+                  <span>LinkedIn</span>
+                </a>
+              </li>
+              <li
+                class="is-flex is-justify-content-center is-align-items-center"
+                th:if="${!#strings.isEmpty(social.github)}"
+              >
+                <a
+                  class="title is-6 mb-3 is-flex is-align-items-center g-0 has-text-weight-normal"
+                  th:href="${social.github}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span class="icon is-small">
+                    <i class="fa-brands fa-github title is-6"></i>
+                  </span>
+                  <span>GitHub</span>
+                </a>
+              </li>
+              <li
+                class="is-flex is-justify-content-center is-align-items-center"
+                th:if="${!#strings.isEmpty(social.reddit)}"
+              >
+                <a
+                  class="title is-6 mb-3 is-flex is-align-items-center g-0 has-text-weight-normal"
+                  th:href="${social.reddit}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span class="icon is-small">
+                    <i class="fa-brands fa-reddit title is-6"></i>
+                  </span>
+                  <span>Reddit</span>
+                </a>
+              </li>
+              <li
+                class="is-flex is-justify-content-center is-align-items-center"
+                th:if="${!#strings.isEmpty(social.site)}"
+              >
+                <a
+                  class="title is-6 mb-3 is-flex is-align-items-center g-0 has-text-weight-normal"
+                  th:href="${social.site}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span class="icon is-small">
+                    <i class="fa-solid fa-earth-americas title is-6"></i>
+                  </span>
+                  <span>Site</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </footer>
+      </section>
+    </main>
 
-  <input type="hidden" value="/profile-user" id="wwwroot-page-manager-id">
+    <th:block th:replace="~{fragments/footer}"></th:block>
 
-</body>
-
+    <input type="hidden" value="/profile-user" id="wwwroot-page-manager-id" />
+  </body>
 </html>

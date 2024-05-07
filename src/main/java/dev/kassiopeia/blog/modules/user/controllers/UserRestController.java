@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,15 +17,18 @@ import org.springframework.web.multipart.MultipartFile;
 
 import dev.kassiopeia.blog.authentication.services.TokenService;
 import dev.kassiopeia.blog.authentication.validation.AuthenticationValidation;
-import dev.kassiopeia.blog.aws.services.AmazonS3Service;
 import dev.kassiopeia.blog.exceptions.BadRequest;
 import dev.kassiopeia.blog.exceptions.Conflict;
 import dev.kassiopeia.blog.exceptions.InternalServerError;
+import dev.kassiopeia.blog.exceptions.NotFound;
 import dev.kassiopeia.blog.exceptions.Unauthorized;
+import dev.kassiopeia.blog.modules.aws.services.AmazonS3Service;
+import dev.kassiopeia.blog.modules.user.DTOs.AccountValidationDTO;
 import dev.kassiopeia.blog.modules.user.DTOs.UserUpdateDTO;
 import dev.kassiopeia.blog.modules.user.DTOs.UserUpdatePasswordDTO;
 import dev.kassiopeia.blog.modules.user.entities.SocialMedia;
 import dev.kassiopeia.blog.modules.user.entities.User;
+import dev.kassiopeia.blog.modules.user.repositories.EmailRepository;
 import dev.kassiopeia.blog.modules.user.repositories.UserRepository;
 import dev.kassiopeia.blog.modules.user.services.UserService;
 import dev.kassiopeia.blog.utilities.StringUtils;
@@ -46,6 +50,8 @@ public class UserRestController {
     PasswordEncoder passwordEncoder;
     @Autowired
     AmazonS3Service s3Service;
+    @Autowired
+    EmailRepository emailRepository;
 
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     @PatchMapping
@@ -205,5 +211,26 @@ public class UserRestController {
         user.setAvatarURL(result.url() + "?serial=" + String.valueOf(System.currentTimeMillis()));
         userRepository.save(user);
         return Map.of("url", result.url());
+    }
+
+    @PostMapping("/email-validation")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    public void emailValidation(@RequestBody AccountValidationDTO payload) {
+        if (payload == null)
+            throw new BadRequest("Requisição inválida");
+        if (StringUtils.isNullOrBlank(payload.validation()))
+            throw new BadRequest("Código de uso único não informado");
+        if (payload.validation().length() != 5)
+            throw new BadRequest("Código de uso único não é válido");
+        var validation = emailRepository.findByCode(payload.validation());
+        if (validation == null)
+            throw new NotFound("Código de uso único não é válido");
+        var user = userService.getCurrentAuthenticatedUserOrThrowsForbidden();
+        if (user.isEmailChecked())
+            throw new Conflict("Usuário já possui seu email verificado");
+        if (StringUtils.isNotEquals(validation.getUserId(), user.getId()))
+            throw new Unauthorized("Operação não permitida");
+        user.setEmailChecked(true);
+        userRepository.save(user);
     }
 }

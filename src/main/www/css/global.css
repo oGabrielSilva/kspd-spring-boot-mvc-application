@@ -28,6 +28,10 @@ main {
   gap: 1rem;
 }
 
+.g-2 {
+  gap: 2.75rem;
+}
+
 .user-links {
   display: flex;
   flex-flow: wrap;

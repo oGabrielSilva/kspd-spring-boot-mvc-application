@@ -1,4 +1,4 @@
-package dev.kassiopeia.blog.mail.configurations;
+package dev.kassiopeia.blog.modules.mail.configurations;
 
 import java.util.Properties;
 

@@ -18,15 +18,15 @@ public class Email {
     @Setter(AccessLevel.NONE)
     private String id;
 
-    private String verificationCode;
+    private String code;
 
     private String userId;
 
     @CreatedDate
     private Instant createdAt;
 
-    public Email(String verificationCode, String userId) {
-        this.verificationCode = verificationCode;
+    public Email(String code, String userId) {
+        this.code = code;
         this.userId = userId;
     }
 }

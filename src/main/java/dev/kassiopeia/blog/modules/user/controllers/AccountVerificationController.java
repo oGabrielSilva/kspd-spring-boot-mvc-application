@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import dev.kassiopeia.blog.mail.res.EmailTemplates;
-import dev.kassiopeia.blog.mail.services.MailService;
+import dev.kassiopeia.blog.modules.mail.res.EmailTemplates;
+import dev.kassiopeia.blog.modules.mail.services.MailService;
 import dev.kassiopeia.blog.modules.user.entities.Email;
 import dev.kassiopeia.blog.modules.user.repositories.EmailRepository;
 import dev.kassiopeia.blog.modules.user.services.UserService;
@@ -26,7 +26,7 @@ public class AccountVerificationController {
         if (user == null)
             return "redirect:/session";
         if (user.isEmailChecked()) {
-            return "redirect:/index";
+            return "redirect:/";
         }
         try {
             var emailByUser = emailRepository.findAllByUserId(user.getId());
@@ -40,7 +40,7 @@ public class AccountVerificationController {
             return "account-verification";
         } catch (Exception e) {
             e.printStackTrace();
-            return "account-verification-500";
+            return "500";
         }
     }
 }

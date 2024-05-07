@@ -1,4 +1,4 @@
-package dev.kassiopeia.blog.mail.res;
+package dev.kassiopeia.blog.modules.mail.res;
 
 import dev.kassiopeia.blog.modules.user.entities.User;
 
@@ -16,7 +16,7 @@ public class EmailTemplates {
 
                 <div style="max-width: 600px; margin: 0 auto; background-color: #fff; padding: 20px; border-radius: 10px;">
                     <h2 style="color: #333;">Verificação da Conta - Por favor, ative sua conta</h2>
-                    <p>Olá, [username],</p>
+                    <p>Olá, [username]</p>
                     <p>Para garantir a segurança da sua conta e fornecer a melhor experiência possível, precisamos que você ative sua conta.</p>
                     <p>Sua solicitação de ativação gerou o código de uso único: <strong>[unique-code]</strong></p>
                     <p>Se não foi você quem solicitou, por favor, ignore esta mensagem.</p>

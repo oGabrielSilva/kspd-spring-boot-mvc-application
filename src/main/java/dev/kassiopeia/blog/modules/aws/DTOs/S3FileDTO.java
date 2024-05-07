@@ -1,4 +1,4 @@
-package dev.kassiopeia.blog.aws.DTOs;
+package dev.kassiopeia.blog.modules.aws.DTOs;
 
 import com.amazonaws.services.s3.model.PutObjectResult;
 

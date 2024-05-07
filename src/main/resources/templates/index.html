@@ -1,38 +1,52 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+  <head>
+    <th:block th:replace="~{fragments/default-head}"></th:block>
+  </head>
 
-<head>
-  <th:block th:replace="~{fragments/default-head}"></th:block>
-</head>
+  <body>
+    <header class="p-3">
+      <div>
+        <th:block th:replace="~{fragments/default-navigation}"></th:block>
+      </div>
+    </header>
 
-<body>
-  <header class="p-3">
-    <div>
-      <th:block th:replace="~{fragments/default-navigation}"></th:block>
-    </div>
-  </header>
+    <main class="container p-3">
+      <th:block th:replace="~{fragments/account-verification-alert}"></th:block>
+      <section class="section">
+        <th:block th:if="${user != null}">
+          <div class="py-5">
+            <header class="is-flex is-align-items-center g-1">
+              <img
+                role="button"
+                aria-label="Clique para acessar seu perfil"
+                th:if="${user.avatarURL != null}"
+                th:alt="|Imagem de usuário do usuário ${user.name}|"
+                width="48"
+                height="48"
+                id="nav-user-ic"
+                th:src="${user.avatarURL}"
+                class="avatar"
+              />
+              <div>
+                <h1 class="subtitle mb-0">
+                  Olá,
+                  <a
+                    th:href="|/u/${user.username}|"
+                    aria-label="Link para seu perfil"
+                    th:text="${user.name}"
+                    id="nav-user-profile-link"
+                  ></a>
+                </h1>
+              </div>
+            </header>
+          </div>
+        </th:block>
+      </section>
+    </main>
 
-  <main class="container p-3">
-    <th:block th:replace="~{fragments/account-verification-alert}"></th:block>
-    <section class="section">
-      <th:block th:if="${user != null}">
-        <div class="py-5">
-          <header class="is-flex is-align-items-center g-1">
-            <img role="button" aria-label="Clique para acessar seu perfil" th:if="${user.avatarURL != null}"
-              th:alt="|Imagem de usuário do usuário ${user.name}|" width="48" height="48" id="nav-user-ic"
-              th:src="${user.avatarURL}" class="avatar" />
-            <h1 class="subtitle">Olá, <a th:href="|/u/${user.username}|" aria-label="Link para seu perfil"
-                th:text="${user.name}" id="nav-user-profile-link"></a></h1>
-          </header>
-        </div>
-      </th:block>
-    </section>
-  </main>
+    <th:block th:replace="~{fragments/footer}"></th:block>
 
-  <th:block th:replace="~{fragments/footer}"></th:block>
-
-  <input type="hidden" value="/index" id="wwwroot-page-manager-id">
-
-</body>
-
+    <input type="hidden" value="/index" id="wwwroot-page-manager-id" />
+  </body>
 </html>

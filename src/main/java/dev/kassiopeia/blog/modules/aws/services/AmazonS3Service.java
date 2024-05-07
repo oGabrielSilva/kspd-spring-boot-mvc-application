@@ -1,4 +1,4 @@
-package dev.kassiopeia.blog.aws.services;
+package dev.kassiopeia.blog.modules.aws.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 
-import dev.kassiopeia.blog.aws.DTOs.S3FileDTO;
+import dev.kassiopeia.blog.modules.aws.DTOs.S3FileDTO;
 
 @Service
 public class AmazonS3Service {

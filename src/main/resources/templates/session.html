@@ -1,88 +1,114 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+  <head>
+    <th:block th:replace="~{fragments/default-head}"></th:block>
+  </head>
 
-<head>
-  <th:block th:replace="~{fragments/default-head}"></th:block>
-</head>
-
-<body>
-  <header class="p-3">
-    <div>
-      <th:block th:replace="~{fragments/session-navigation}"></th:block>
-    </div>
-  </header>
-
-  <main class="container p-3">
-    <form id="form-session" class="section">
-      <div class="pb-5">
-        <h1 class="title pb-0 mb-0">Faça seu login ou cadastre-se</h1>
-        <p>Faça parte do grupo Kassiopeia. Tudo sobre desenvolvimento</p>
+  <body>
+    <header class="p-3">
+      <div>
+        <th:block th:replace="~{fragments/session-navigation}"></th:block>
       </div>
-      <div class="field">
-        <label class="label" for="input-email">Email</label>
-        <div class="control has-icons-left">
-          <input class="input" name="email" type="email" id="input-email" placeholder="robin@kassiopeia.dev">
-          <span class="icon is-small is-left">
-            <i class="fas fa-envelope"></i>
-          </span>
+    </header>
+
+    <main class="container p-3">
+      <form id="form-session" class="section">
+        <div class="pb-5">
+          <h1 class="title pb-0 mb-0">Faça seu login ou cadastre-se</h1>
+          <p>Faça parte do grupo Kassiopeia. Tudo sobre desenvolvimento</p>
         </div>
-        <p id="email-helper" style="visibility: hidden;" class="help is-danger">Email não é considerado válido</p>
-      </div>
-
-      <div class="field pb-0 mb-0">
-        <label class="label" for="input-password">Senha</label>
-        <div class="control has-icons-left">
-          <input class="input" type="password" name="password" id="input-password" placeholder="Mínimo de 8 caracteres">
-          <span class="icon is-small is-left">
-            <i class="fa-solid fa-key"></i>
-          </span>
-        </div>
-        <p id="password-helper" style="visibility: hidden;" class="help is-danger">Senha não é considerada válida</p>
-      </div>
-
-      <div class="pb-3 is-flex is-justify-content-end">
-        <a class="button is-ghost p-0" href="/forgot-password" target="_blank" rel="noopener noreferrer">Esqueceu a
-          senha?</a>
-      </div>
-
-      <div class="field is-grouped pt-3 is-flex is-justify-content-end">
-        <div class="control">
-          <button type="button" class="button sign-up no-js-modal-trigger" data-target="terms-modal">Cadastrar</button>
-        </div>
-        <div class="control">
-          <button type="submit" class="button is-link">Entrar</button>
-        </div>
-      </div>
-    </form>
-    <div class="modal" id="terms-modal">
-      <div class="modal-background"></div>
-      <div class="modal-card p-5">
-        <header class="modal-card-head pb-3">
-          <p class="modal-card-title">Termos de serviço</p>
-          <button class="delete" aria-label="close"></button>
-        </header>
-        <section class="modal-card-body">
-          <p>
-            <strong>Atenção</strong>
-            Antes de prosseguir com o cadastro, é importante que você esteja ciente e concorde com nossos
-            <a href="/terms" target="_blank" rel="noopener noreferrer">termos de
-              serviço</a>. Estamos aqui para ajudar, então, se tiver alguma dúvida, não hesite em nos <a href="/report"
-              target="_blank" rel="noopener noreferrer">contatar</a>!
-          </p>
-        </section>
-        <footer class="modal-card-foot">
-          <div class="buttons">
-            <button class="button is-success">Continuar</button>
-            <button class="button">Cancelar</button>
+        <div class="field">
+          <label class="label" for="input-email">Email</label>
+          <div class="control has-icons-left">
+            <input
+              class="input"
+              name="email"
+              type="email"
+              id="input-email"
+              placeholder="robin@kassiopeia.dev"
+            />
+            <span class="icon is-small is-left">
+              <i class="fas fa-envelope"></i>
+            </span>
           </div>
-        </footer>
+          <p id="email-helper" style="visibility: hidden" class="help is-danger">
+            Email não é considerado válido
+          </p>
+        </div>
+
+        <div class="field pb-0 mb-0">
+          <label class="label" for="input-password">Senha</label>
+          <div class="control has-icons-left">
+            <input
+              class="input"
+              type="password"
+              name="password"
+              id="input-password"
+              placeholder="Mínimo de 8 caracteres"
+            />
+            <span class="icon is-small is-left">
+              <i class="fa-solid fa-key"></i>
+            </span>
+          </div>
+          <p id="password-helper" style="visibility: hidden" class="help is-danger">
+            Senha não é considerada válida
+          </p>
+        </div>
+
+        <div class="pb-3 is-flex is-justify-content-end">
+          <a
+            class="button is-ghost p-0"
+            href="/forgot-password"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Esqueceu a senha?</a
+          >
+        </div>
+
+        <div class="field is-grouped pt-3 is-flex is-justify-content-end">
+          <div class="control">
+            <button
+              type="button"
+              class="button sign-up no-js-modal-trigger"
+              data-target="terms-modal"
+            >
+              Cadastrar
+            </button>
+          </div>
+          <div class="control">
+            <button type="submit" class="button is-link">Entrar</button>
+          </div>
+        </div>
+      </form>
+      <div class="modal" id="terms-modal">
+        <div class="modal-background"></div>
+        <div class="modal-card p-5">
+          <header class="modal-card-head pb-3">
+            <p class="modal-card-title">Termos de serviço</p>
+            <button class="delete" aria-label="close"></button>
+          </header>
+          <section class="modal-card-body">
+            <p>
+              <strong>Atenção</strong>
+              Antes de prosseguir com o cadastro, é importante que você esteja ciente e concorde com
+              nossos
+              <a href="/terms" target="_blank" rel="noopener noreferrer">termos de serviço</a>.
+              Estamos aqui para ajudar, então, se tiver alguma dúvida, não hesite em nos
+              <a href="/report" target="_blank" rel="noopener noreferrer">contatar</a>!
+            </p>
+          </section>
+          <footer class="modal-card-foot">
+            <div class="buttons">
+              <button class="button is-success">Continuar</button>
+              <button class="button">Cancelar</button>
+            </div>
+          </footer>
+        </div>
       </div>
-    </div>
-  </main>
+    </main>
 
-  <th:block th:replace="~{fragments/footer}"></th:block>
+    <th:block th:replace="~{fragments/footer}"></th:block>
 
-  <input type="hidden" value="/session" id="wwwroot-page-manager-id">
-</body>
-
+    <input type="hidden" value="/session" id="wwwroot-page-manager-id" />
+  </body>
 </html>

@@ -3,19 +3,15 @@ package dev.kassiopeia.blog.exceptions.handler;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.stream.Stream;
 
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import dev.kassiopeia.blog.exceptions.BadRequest;
 import dev.kassiopeia.blog.exceptions.Conflict;
@@ -27,9 +23,33 @@ import dev.kassiopeia.blog.exceptions.DTOs.ExceptionResponseDto;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-@RestController
 @ControllerAdvice
-public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+public class GlobalExceptionHandler {
+        @ResponseStatus(HttpStatus.BAD_REQUEST)
+        @ExceptionHandler(HttpMessageNotReadableException.class)
+        public ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
+                        HttpServletRequest request) {
+
+                return new ResponseEntity<Object>(new ExceptionResponseDto(
+                                LocalDateTime.now().toInstant(ZoneOffset.UTC),
+                                "Failed to read the request body. Check the JSON format.",
+                                request.getRequestURL().toString(),
+                                HttpStatus.BAD_REQUEST.value()),
+                                HttpStatus.BAD_REQUEST);
+        }
+
+        @ResponseStatus(HttpStatus.NOT_FOUND)
+        @ExceptionHandler(NoHandlerFoundException.class)
+        public ModelAndView handleNoHandlerFoundException(
+                        NoHandlerFoundException ex, HttpServletRequest request) {
+                var description = request.getRequestURL().toString();
+                if (description.contains("/api/")) {
+                        return new ModelAndView("redirect:/api/json-404");
+                }
+                var mv = new ModelAndView("404");
+                mv.setStatus(HttpStatus.NOT_FOUND);
+                return mv;
+        }
 
         @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
         @ExceptionHandler(Exception.class)
@@ -41,21 +61,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                                 "Unexpected exception", request.getRequestURL().toString(),
                                 HttpStatus.INTERNAL_SERVER_ERROR.value()),
                                 HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-        @ResponseStatus(HttpStatus.BAD_REQUEST)
-        @Override
-        protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
-                        HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-                Stream.of(headers).forEach(h -> {
-                        System.out.println(h.toString());
-                });
-                return new ResponseEntity<Object>(new ExceptionResponseDto(
-                                LocalDateTime.now().toInstant(ZoneOffset.UTC),
-                                "Failed to read the request body. Check the JSON format.",
-                                request.getDescription(false).replace("uri=", ""),
-                                HttpStatus.BAD_REQUEST.value()),
-                                HttpStatus.BAD_REQUEST);
         }
 
         @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

@@ -17,7 +17,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import dev.kassiopeia.blog.authentication.enums.AuthenticationRole;
 import dev.kassiopeia.blog.authentication.filters.DefaultSecurityFilter;
-import dev.kassiopeia.blog.authentication.interceptors.AddUserToModelViewInterceptor;
+import dev.kassiopeia.blog.modules.user.interceptors.AddUserToModelViewInterceptor;
 
 @Configuration
 @EnableWebSecurity

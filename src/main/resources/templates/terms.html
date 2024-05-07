@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <th:block th:replace="~{fragments/default-head}"></th:block>
+  </head>
+
+  <body>
+    <header class="p-3">
+      <div>
+        <th:block th:replace="~{fragments/default-navigation}"></th:block>
+      </div>
+    </header>
+
+    <main class="container p-3">
+      <div>
+        <p>
+          <strong>ATENÇÃO</strong>: Os termos presentes nesta página são apenas um texto de exemplo
+          gerado automaticamente (IA) e não são válidos. Eles foram criados apenas para ilustrar o
+          formato e o conteúdo dos termos de uso e condições. Por favor, desconsidere esta mensagem
+          e consulte os termos reais da plataforma para obter informações precisas e atualizadas.
+          Pedimos desculpas por qualquer confusão que isso possa ter causado.
+        </p>
+      </div>
+      <div class="tabs is-right is-medium">
+        <ul>
+          <li data-controls="commom" class="user-term-tab is-active">
+            <a
+              aria-label="Clique para que seja mostrado os termos para o usuário do tipo comum"
+              id="show-user"
+              >Usuário</a
+            >
+          </li>
+          <li data-controls="author" class="user-term-tab">
+            <a
+              aria-label="Clique para que seja mostrado os termos para o usuário do tipo escritor/autor"
+              id="show-author"
+              >Author</a
+            >
+          </li>
+        </ul>
+      </div>
+      <th:block th:replace="~{fragments/terms-user}"></th:block>
+      <th:block th:replace="~{fragments/terms-author}"></th:block>
+    </main>
+
+    <th:block th:replace="~{fragments/footer}"></th:block>
+
+    <input type="hidden" value="/terms" id="wwwroot-page-manager-id" />
+  </body>
+</html>

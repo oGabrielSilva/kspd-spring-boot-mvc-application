@@ -1,308 +1,455 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+  <head>
+    <th:block th:replace="~{fragments/default-head}"></th:block>
+  </head>
 
-<head>
-  <th:block th:replace="~{fragments/default-head}"></th:block>
-</head>
-
-<body>
-  <header class="p-3">
-    <div>
-      <th:block th:replace="~{fragments/session-navigation}"></th:block>
-    </div>
-  </header>
-
-  <main class="container p-3">
-    <section class="section">
-      <div class="tabs is-boxed">
-        <ul>
-          <li class="is-active">
-            <a role="button" class="tab-show-form" data-controls="profile-part" id="show-form-info" href="#info">
-              <span class="icon is-small"><i class="fa-solid fa-user-doctor" aria-hidden="true"></i></span>
-              <span>Perfil</span>
-            </a>
-          </li>
-          <li>
-            <a class="tab-show-form" data-controls="social-part" id="show-form-social" role="button" href="#social">
-              <span class="icon is-small"><i class="fa-solid fa-link" aria-hidden="true"></i></span>
-              <span>Links</span>
-            </a>
-          </li>
-        </ul>
+  <body>
+    <header class="p-3">
+      <div>
+        <th:block th:replace="~{fragments/session-navigation}"></th:block>
       </div>
+    </header>
 
-      <th:block th:replace="~{fragments/account-verification-alert}"></th:block>
-
-      <form data-message="Suas informações foram atualizadas com sucesso" id="profile-part" autocapitalize="off"
-        autocomplete="off">
-        <h1 class="pt-3 pb-5 title">Edite seu perfil</h1>
-
-        <div class="is-flex is-justify-content-center is-align-items-center">
-          <img data-input="input-avatar" role="button" class="avatar avatar-edit" id="avatar-preview"
-            th:src="${user.avatarURL} ?: '/public/image/kassiopeia-92x92.webp'"
-            th:alt="'Avatar do usuário ' + ${user.name}" title="Clique para trocar a foto" width="84" height="84"
-            aria-label="Sua imagem de perfil. Você pode clicar para escolher uma nova" />
-          <input data-rest-error="Infelizmente não conseguimos atualizar a sua imagem"
-            data-error="Oopss... algo deu errado ao ler a imagem" type="file" class="is-hidden" name="avatar"
-            id="input-avatar" accept="image/png, image/jpeg, image/webp" data-accept="png@jpeg@jpg@webp">
+    <main class="container p-3">
+      <section class="section">
+        <div class="tabs is-boxed">
+          <ul>
+            <li class="is-active">
+              <a
+                role="button"
+                class="tab-show-form"
+                data-controls="profile-part"
+                id="show-form-info"
+                href="#info"
+              >
+                <span class="icon is-small"
+                  ><i class="fa-solid fa-user-doctor" aria-hidden="true"></i
+                ></span>
+                <span>Perfil</span>
+              </a>
+            </li>
+            <li>
+              <a
+                class="tab-show-form"
+                data-controls="social-part"
+                id="show-form-social"
+                role="button"
+                href="#social"
+              >
+                <span class="icon is-small"
+                  ><i class="fa-solid fa-link" aria-hidden="true"></i
+                ></span>
+                <span>Links</span>
+              </a>
+            </li>
+          </ul>
         </div>
 
-        <div class="field">
-          <label class="label" for="input-email">Email</label>
-          <div class="control has-icons-left">
-            <input th:value="${user.email}" th:data-original="${user.email}" class="input" name="email" type="email"
-              id="input-email" placeholder="robin@kassiopeia.dev">
-            <span class="icon is-small is-left">
-              <i class="fas fa-envelope has-text-danger"></i>
-            </span>
+        <th:block th:replace="~{fragments/account-verification-alert}"></th:block>
+
+        <form
+          data-message="Suas informações foram atualizadas com sucesso"
+          id="profile-part"
+          autocapitalize="off"
+          autocomplete="off"
+        >
+          <h1 class="pt-3 pb-5 title">Edite seu perfil</h1>
+
+          <div class="is-flex is-justify-content-center is-align-items-center">
+            <img
+              data-input="input-avatar"
+              role="button"
+              class="avatar avatar-edit"
+              id="avatar-preview"
+              th:src="${user.avatarURL} ?: '/public/image/kassiopeia-92x92.webp'"
+              th:alt="'Avatar do usuário ' + ${user.name}"
+              title="Clique para trocar a foto"
+              width="84"
+              height="84"
+              aria-label="Sua imagem de perfil. Você pode clicar para escolher uma nova"
+            />
+            <input
+              data-rest-error="Infelizmente não conseguimos atualizar a sua imagem"
+              data-error="Oopss... algo deu errado ao ler a imagem"
+              type="file"
+              class="is-hidden"
+              name="avatar"
+              id="input-avatar"
+              accept="image/png, image/jpeg, image/webp"
+              data-accept="png@jpeg@jpg@webp"
+            />
           </div>
-          <p id="email-helper" class="help is-danger is-hidden">Email não é considerado válido</p>
-        </div>
 
-        <div class="field">
-          <label class="label" for="input-name">Nome</label>
-          <div class="control has-icons-left">
-            <input th:value="${user.name}" th:data-original="${user.name}" class="input" name="name" type="text"
-              id="input-name" placeholder="Nico Robin">
-            <span class="icon is-small is-left">
-              <i class="fa-solid fa-chess-bishop has-text-warning"></i>
-            </span>
+          <div class="field">
+            <label class="label" for="input-email">Email</label>
+            <div class="control has-icons-left">
+              <input
+                th:value="${user.email}"
+                th:data-original="${user.email}"
+                class="input"
+                name="email"
+                type="email"
+                id="input-email"
+                placeholder="robin@kassiopeia.dev"
+              />
+              <span class="icon is-small is-left">
+                <i class="fas fa-envelope has-text-danger"></i>
+              </span>
+            </div>
+            <p id="email-helper" class="help is-danger is-hidden">Email não é considerado válido</p>
           </div>
-          <p id="name-helper" class="help is-danger is-hidden">Nome muito pequeno</p>
-        </div>
 
-        <div class="field">
-          <label class="label" for="input-username">Username (@)</label>
-          <div class="control has-icons-left">
-            <input th:value="${user.username}" th:data-original="${user.username}" class="input" name="username"
-              type="text" id="input-username" placeholder="kassiopeia.dev"
-              data-error="Username é considerado inválido. Exemplo: miss_all_sunday">
-            <span class="icon is-small is-left has-text-warning">
-              <i class="fa-solid fa-at"></i>
-            </span>
+          <div class="field">
+            <label class="label" for="input-name">Nome</label>
+            <div class="control has-icons-left">
+              <input
+                th:value="${user.name}"
+                th:data-original="${user.name}"
+                class="input"
+                name="name"
+                type="text"
+                id="input-name"
+                placeholder="Nico Robin"
+              />
+              <span class="icon is-small is-left">
+                <i class="fa-solid fa-chess-bishop has-text-warning"></i>
+              </span>
+            </div>
+            <p id="name-helper" class="help is-danger is-hidden">Nome muito pequeno</p>
           </div>
-          <p id="username-helper" class="help">
-            O nome de usuário só pode conter letras (<code>a-z, A-Z</code>), números (<code>0-9</code>), hífens
-            (<code>-</code>), underline (<code>_</code>) ou ponto final (<code>.</code>). <strong>Username deve ser
-              único</strong>.
-          </p>
-        </div>
 
-        <div class="field">
-          <label class="label" for="input-bio">
-            Bio
-          </label>
-          <div class="control">
-            <textarea th:value="${user.bio}" th:data-original="${user.bio}" class="textarea" name="bio" type="text"
-              id="input-bio" placeholder="Este campo não é obrigatório"></textarea>
-          </div>
-          <p id="bio-helper" class="help">
-            Conte-nos quem você é. Pode ser sobre suas paixões, o que te faz sorrir, ou até mesmo aquela piada que
-            sempre conta para animar o ambiente. Compartilhe um pouco da sua história para que possamos te conhecer
-            melhor.
-          </p>
-        </div>
-        <div>
-          <button type="button" class="button is-ghost px-0" id="button-change-password">Quero trocar minha
-            senha</button>
-        </div>
-        <div class="control pt-5 pb-3">
-          <button class="button is-primary" type="submit">Salvar alterações</button>
-        </div>
-      </form>
-
-      <form class="modal" id="confirm-email-modal">
-        <div class="modal-background"></div>
-        <div class="modal-card">
-          <header class="modal-card-head">
-            <p class="modal-card-title">Alterar email</p>
-            <button type="button" class="delete" aria-label="close"></button>
-          </header>
-          <section class="modal-card-body">
-            <p>
-              Para proteger sua conta, precisamos confirmar suas credenciais antes de prosseguir com a alteração. Isso
-              ajuda a garantir a segurança dos seus dados.
+          <div class="field">
+            <label class="label" for="input-username">Username (@)</label>
+            <div class="control has-icons-left">
+              <input
+                th:value="${user.username}"
+                th:data-original="${user.username}"
+                class="input"
+                name="username"
+                type="text"
+                id="input-username"
+                placeholder="kassiopeia.dev"
+                data-error="Username é considerado inválido. Exemplo: miss_all_sunday"
+              />
+              <span class="icon is-small is-left has-text-warning">
+                <i class="fa-solid fa-at"></i>
+              </span>
+            </div>
+            <p id="username-helper" class="help">
+              O nome de usuário só pode conter letras (<code>a-z, A-Z</code>), números
+              (<code>0-9</code>), hífens (<code>-</code>), underline (<code>_</code>) ou ponto final
+              (<code>.</code>). <strong>Username deve ser único</strong>.
             </p>
+          </div>
 
-            <div class="field py-3">
-              <label class="label" for="input-password">Digite sua senha</label>
-              <div class="control has-icons-left">
-                <input class="input" name="password" type="password" id="input-password"
-                  placeholder="Mínimo de 8 caracteres" data-error="Senha muito curta">
-                <span class="icon is-small is-left has-text-warning">
-                  <i class="fa-solid fa-lock"></i>
-                </span>
-              </div>
-              <p id="password-helper" class="help is-danger is-hidden">
-                Senha muito curta. Para ser válida, precisa ter pelo menos 8 caracteres
-              </p>
+          <div class="field">
+            <label class="label" for="input-bio"> Bio </label>
+            <div class="control">
+              <textarea
+                th:value="${user.bio}"
+                th:data-original="${user.bio}"
+                class="textarea"
+                name="bio"
+                type="text"
+                id="input-bio"
+                placeholder="Este campo não é obrigatório"
+              ></textarea>
             </div>
-          </section>
-          <footer class="modal-card-foot">
-            <div class="buttons">
-              <button data-no-hide="true" class="button is-success" type="submit">Confirmar</button>
-              <button class="button" type="button">Cancelar</button>
-            </div>
-          </footer>
-        </div>
-      </form>
-
-
-      <form class="modal" id="change-password-modal" data-message="Sucesso! Sua senha foi atualizada">
-        <div class="modal-background"></div>
-        <div class="modal-card">
-          <header class="modal-card-head">
-            <p class="modal-card-title">Alterar senha</p>
-            <button type="button" class="delete" aria-label="close"></button>
-          </header>
-          <section class="modal-card-body">
-            <p>
-              Para proteger sua conta, precisamos confirmar suas credenciais antes de prosseguir com a alteração. Isso
-              ajuda a garantir a segurança dos seus dados.
+            <p id="bio-helper" class="help">
+              Conte-nos quem você é. Pode ser sobre suas paixões, o que te faz sorrir, ou até mesmo
+              aquela piada que sempre conta para animar o ambiente. Compartilhe um pouco da sua
+              história para que possamos te conhecer melhor.
             </p>
+          </div>
+          <div>
+            <button type="button" class="button is-ghost px-0" id="button-change-password">
+              Quero trocar minha senha
+            </button>
+          </div>
+          <div class="control pt-5 pb-3">
+            <button class="button is-primary" type="submit">Salvar alterações</button>
+          </div>
+        </form>
 
-            <div class="field pt-3">
-              <label class="label" for="input-current-password">Digite sua senha</label>
-              <div class="control has-icons-left">
-                <input class="input" name="current-password" type="password" id="input-current-password"
-                  placeholder="Mínimo de 8 caracteres" data-error="Senha muito curta"
-                  data-error-equal="A nova senha não pode ser igual a atual">
-                <span class="icon is-small is-left has-text-warning">
-                  <i class="fa-solid fa-unlock-keyhole"></i>
-                </span>
-              </div>
-              <p id="current-password-helper" class="help is-danger is-hidden">
-                Senha muito curta. Para ser válida, precisa ter pelo menos 8 caracteres
+        <form class="modal" id="confirm-email-modal">
+          <div class="modal-background"></div>
+          <div class="modal-card">
+            <header class="modal-card-head">
+              <p class="modal-card-title">Alterar email</p>
+              <button type="button" class="delete" aria-label="close"></button>
+            </header>
+            <section class="modal-card-body">
+              <p>
+                Para proteger sua conta, precisamos confirmar suas credenciais antes de prosseguir
+                com a alteração. Isso ajuda a garantir a segurança dos seus dados.
               </p>
-            </div>
 
-            <div class="field">
-              <label class="label" for="input-new-password">Qual a sua nova senha?</label>
-              <div class="control has-icons-left">
-                <input class="input" name="new-password" type="password" id="input-new-password"
-                  placeholder="Mínimo de 8 caracteres" data-error="Senha muito curta">
-                <span class="icon is-small is-left has-text-primary">
-                  <i class="fa-solid fa-lock"></i>
-                </span>
+              <div class="field py-3">
+                <label class="label" for="input-password">Digite sua senha</label>
+                <div class="control has-icons-left">
+                  <input
+                    class="input"
+                    name="password"
+                    type="password"
+                    id="input-password"
+                    placeholder="Mínimo de 8 caracteres"
+                    data-error="Senha muito curta"
+                  />
+                  <span class="icon is-small is-left has-text-warning">
+                    <i class="fa-solid fa-lock"></i>
+                  </span>
+                </div>
+                <p id="password-helper" class="help is-danger is-hidden">
+                  Senha muito curta. Para ser válida, precisa ter pelo menos 8 caracteres
+                </p>
               </div>
-              <p id="new-password-helper" class="help is-danger is-hidden">
-                Senha muito curta. Para ser válida, precisa ter pelo menos 8 caracteres
-              </p>
-            </div>
-
-            <div class="field">
-              <label class="label" for="input-confirm-new-password">Confirme sua nova senha</label>
-              <div class="control has-icons-left">
-                <input class="input" name="new-password" type="password" id="input-confirm-new-password"
-                  placeholder="Mínimo de 8 caracteres" data-error="Senha muito curta">
-                <span class="icon is-small is-left has-text-primary">
-                  <i class="fa-solid fa-lock"></i>
-                </span>
+            </section>
+            <footer class="modal-card-foot">
+              <div class="buttons">
+                <button data-no-hide="true" class="button is-success" type="submit">
+                  Confirmar
+                </button>
+                <button class="button" type="button">Cancelar</button>
               </div>
-              <p id="confirm-new-password-helper" class="help is-danger is-hidden">
-                Confirme a nova senha. As duas não são iguais
+            </footer>
+          </div>
+        </form>
+
+        <form
+          class="modal"
+          id="change-password-modal"
+          data-message="Sucesso! Sua senha foi atualizada"
+        >
+          <div class="modal-background"></div>
+          <div class="modal-card">
+            <header class="modal-card-head">
+              <p class="modal-card-title">Alterar senha</p>
+              <button type="button" class="delete" aria-label="close"></button>
+            </header>
+            <section class="modal-card-body">
+              <p>
+                Para proteger sua conta, precisamos confirmar suas credenciais antes de prosseguir
+                com a alteração. Isso ajuda a garantir a segurança dos seus dados.
               </p>
+
+              <div class="field pt-3">
+                <label class="label" for="input-current-password">Digite sua senha</label>
+                <div class="control has-icons-left">
+                  <input
+                    class="input"
+                    name="current-password"
+                    type="password"
+                    id="input-current-password"
+                    placeholder="Mínimo de 8 caracteres"
+                    data-error="Senha muito curta"
+                    data-error-equal="A nova senha não pode ser igual a atual"
+                  />
+                  <span class="icon is-small is-left has-text-warning">
+                    <i class="fa-solid fa-unlock-keyhole"></i>
+                  </span>
+                </div>
+                <p id="current-password-helper" class="help is-danger is-hidden">
+                  Senha muito curta. Para ser válida, precisa ter pelo menos 8 caracteres
+                </p>
+              </div>
+
+              <div class="field">
+                <label class="label" for="input-new-password">Qual a sua nova senha?</label>
+                <div class="control has-icons-left">
+                  <input
+                    class="input"
+                    name="new-password"
+                    type="password"
+                    id="input-new-password"
+                    placeholder="Mínimo de 8 caracteres"
+                    data-error="Senha muito curta"
+                  />
+                  <span class="icon is-small is-left has-text-primary">
+                    <i class="fa-solid fa-lock"></i>
+                  </span>
+                </div>
+                <p id="new-password-helper" class="help is-danger is-hidden">
+                  Senha muito curta. Para ser válida, precisa ter pelo menos 8 caracteres
+                </p>
+              </div>
+
+              <div class="field">
+                <label class="label" for="input-confirm-new-password"
+                  >Confirme sua nova senha</label
+                >
+                <div class="control has-icons-left">
+                  <input
+                    class="input"
+                    name="new-password"
+                    type="password"
+                    id="input-confirm-new-password"
+                    placeholder="Mínimo de 8 caracteres"
+                    data-error="Senha muito curta"
+                  />
+                  <span class="icon is-small is-left has-text-primary">
+                    <i class="fa-solid fa-lock"></i>
+                  </span>
+                </div>
+                <p id="confirm-new-password-helper" class="help is-danger is-hidden">
+                  Confirme a nova senha. As duas não são iguais
+                </p>
+              </div>
+            </section>
+            <footer class="modal-card-foot">
+              <div class="buttons">
+                <button data-no-hide="true" class="button is-success" type="submit">
+                  Atualizar
+                </button>
+                <button class="button" type="button">Cancelar</button>
+              </div>
+            </footer>
+          </div>
+        </form>
+
+        <form
+          id="social-part"
+          class="is-hidden"
+          autocapitalize="off"
+          autocomplete="off"
+          data-neutral="Nenhuma alteração encontrada"
+          data-message="Suas redes foram atualizadas com sucesso"
+        >
+          <h1 class="pt-3 pb-5 title">Edite suas redes sociais</h1>
+          <div class="field">
+            <label class="label" for="input-x">X (Twitter)</label>
+            <div class="control has-icons-left">
+              <input
+                th:value="${user.social.x}"
+                th:data-original="${user.social.x}"
+                class="input"
+                name="x"
+                type="text"
+                id="input-x"
+                placeholder="Adicione o link do seu perfil"
+              />
+              <span class="icon is-small is-left">
+                <i class="fa-brands is-size-5 fa-x-twitter subtitle"></i>
+              </span>
             </div>
-          </section>
-          <footer class="modal-card-foot">
-            <div class="buttons">
-              <button data-no-hide="true" class="button is-success" type="submit">Atualizar</button>
-              <button class="button" type="button">Cancelar</button>
+          </div>
+
+          <div class="field">
+            <label class="label" for="input-youtube">YouTube</label>
+            <div class="control has-icons-left">
+              <input
+                th:value="${user.social.youtube}"
+                th:data-original="${user.social.youtube}"
+                class="input"
+                name="youtube"
+                type="text"
+                id="input-youtube"
+                placeholder="Adicione o link do seu canal"
+              />
+              <span class="icon is-small is-left">
+                <i class="fa-brands is-size-5 fa-youtube has-text-danger"></i>
+              </span>
             </div>
-          </footer>
-        </div>
-      </form>
-
-      <form id="social-part" class="is-hidden" autocapitalize="off" autocomplete="off"
-        data-neutral="Nenhuma alteração encontrada" data-message="Suas redes foram atualizadas com sucesso">
-        <h1 class="pt-3 pb-5 title">Edite suas redes sociais</h1>
-        <div class="field">
-          <label class="label" for="input-x">X (Twitter)</label>
-          <div class="control has-icons-left">
-            <input th:value="${user.social.x}" th:data-original="${user.social.x}" class="input" name="x" type="text"
-              id="input-x" placeholder="Adicione o link do seu perfil">
-            <span class="icon is-small is-left">
-              <i class="fa-brands is-size-5 fa-x-twitter subtitle"></i>
-            </span>
           </div>
-        </div>
 
-        <div class="field">
-          <label class="label" for="input-youtube">YouTube</label>
-          <div class="control has-icons-left">
-            <input th:value="${user.social.youtube}" th:data-original="${user.social.youtube}" class="input"
-              name="youtube" type="text" id="input-youtube" placeholder="Adicione o link do seu canal">
-            <span class="icon is-small is-left">
-              <i class="fa-brands is-size-5 fa-youtube has-text-danger"></i>
-            </span>
+          <div class="field">
+            <label class="label" for="input-instagram">Instagram</label>
+            <div class="control has-icons-left">
+              <input
+                th:value="${user.social.instagram}"
+                th:data-original="${user.social.instagram}"
+                class="input"
+                name="instagram"
+                type="text"
+                id="input-instagram"
+                placeholder="Adicione o link do seu perfil"
+              />
+              <span class="icon is-small is-left">
+                <i class="fa-brands is-size-5 fa-instagram has-text-danger"></i>
+              </span>
+            </div>
           </div>
-        </div>
 
-        <div class="field">
-          <label class="label" for="input-instagram">Instagram</label>
-          <div class="control has-icons-left">
-            <input th:value="${user.social.instagram}" th:data-original="${user.social.instagram}" class="input"
-              name="instagram" type="text" id="input-instagram" placeholder="Adicione o link do seu perfil">
-            <span class="icon is-small is-left">
-              <i class="fa-brands is-size-5 fa-instagram has-text-danger"></i>
-            </span>
+          <div class="field">
+            <label class="label" for="input-linkedin">LinkedIn</label>
+            <div class="control has-icons-left">
+              <input
+                th:value="${user.social.linkedin}"
+                th:data-original="${user.social.linkedin}"
+                class="input"
+                name="linkedin"
+                type="text"
+                id="input-linkedin"
+                placeholder="Adicione o link do seu perfil"
+              />
+              <span class="icon is-small is-left">
+                <i class="fa-brands is-size-5 fa-linkedin has-text-link"></i>
+              </span>
+            </div>
           </div>
-        </div>
 
-        <div class="field">
-          <label class="label" for="input-linkedin">LinkedIn</label>
-          <div class="control has-icons-left">
-            <input th:value="${user.social.linkedin}" th:data-original="${user.social.linkedin}" class="input"
-              name="linkedin" type="text" id="input-linkedin" placeholder="Adicione o link do seu perfil">
-            <span class="icon is-small is-left">
-              <i class="fa-brands is-size-5 fa-linkedin has-text-link"></i>
-            </span>
+          <div class="field">
+            <label class="label" for="input-github">GitHub</label>
+            <div class="control has-icons-left">
+              <input
+                th:value="${user.social.github}"
+                th:data-original="${user.social.github}"
+                class="input"
+                name="github"
+                type="text"
+                id="input-github"
+                placeholder="Adicione o link do seu perfil"
+              />
+              <span class="icon is-small is-left">
+                <i class="fa-brands is-size-5 fa-github title"></i>
+              </span>
+            </div>
           </div>
-        </div>
 
-        <div class="field">
-          <label class="label" for="input-github">GitHub</label>
-          <div class="control has-icons-left">
-            <input th:value="${user.social.github}" th:data-original="${user.social.github}" class="input" name="github"
-              type="text" id="input-github" placeholder="Adicione o link do seu perfil">
-            <span class="icon is-small is-left">
-              <i class="fa-brands is-size-5 fa-github title"></i>
-            </span>
+          <div class="field">
+            <label class="label" for="input-reddit">Reddit</label>
+            <div class="control has-icons-left">
+              <input
+                th:value="${user.social.reddit}"
+                th:data-original="${user.social.reddit}"
+                class="input"
+                name="reddit"
+                type="text"
+                id="input-reddit"
+                placeholder="Adicione o link do seu perfil ou de uma comunidade"
+              />
+              <span class="icon is-small is-left">
+                <i class="fa-brands is-size-5 fa-reddit reddit title"></i>
+              </span>
+            </div>
           </div>
-        </div>
 
-        <div class="field">
-          <label class="label" for="input-reddit">Reddit</label>
-          <div class="control has-icons-left">
-            <input th:value="${user.social.reddit}" th:data-original="${user.social.reddit}" class="input" name="reddit"
-              type="text" id="input-reddit" placeholder="Adicione o link do seu perfil ou de uma comunidade">
-            <span class="icon is-small is-left">
-              <i class="fa-brands is-size-5 fa-reddit reddit title"></i>
-            </span>
+          <div class="field">
+            <label class="label" for="input-site">Site</label>
+            <div class="control has-icons-left">
+              <input
+                th:value="${user.social.site}"
+                th:data-original="${user.social.site}"
+                class="input"
+                name="site"
+                type="text"
+                id="input-site"
+                placeholder="https://kassiopeia.dev"
+              />
+              <span class="icon is-small is-left">
+                <i class="fa-solid fa-earth-americas is-size-5 title"></i>
+              </span>
+            </div>
           </div>
-        </div>
-
-        <div class="field">
-          <label class="label" for="input-site">Site</label>
-          <div class="control has-icons-left">
-            <input th:value="${user.social.site}" th:data-original="${user.social.site}" class="input" name="site"
-              type="text" id="input-site" placeholder="https://kassiopeia.dev">
-            <span class="icon is-small is-left">
-              <i class="fa-solid fa-earth-americas is-size-5 title"></i>
-            </span>
+          <div class="control pt-5 pb-3">
+            <button class="button is-primary" type="submit">Salvar alterações</button>
           </div>
-        </div>
-        <div class="control pt-5 pb-3">
-          <button class="button is-primary" type="submit">Salvar alterações</button>
-        </div>
-      </form>
-    </section>
-  </main>
+        </form>
+      </section>
+    </main>
 
-  <th:block th:replace="~{fragments/footer}"></th:block>
+    <th:block th:replace="~{fragments/footer}"></th:block>
 
-  <input type="hidden" value="/profile-edit" id="wwwroot-page-manager-id">
-
-</body>
-
+    <input type="hidden" value="/profile-edit" id="wwwroot-page-manager-id" />
+  </body>
 </html>

@@ -1,4 +1,4 @@
-package dev.kassiopeia.blog.aws.configurations;
+package dev.kassiopeia.blog.modules.aws.configurations;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

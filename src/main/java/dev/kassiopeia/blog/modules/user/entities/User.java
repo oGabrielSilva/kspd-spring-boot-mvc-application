@@ -135,6 +135,22 @@ public class User implements UserDetails {
         return emailChecked;
     }
 
+    public boolean isAuthor() {
+        return role != AuthenticationRole.COMMON;
+    }
+
+    public boolean isModerator() {
+        return role != AuthenticationRole.COMMON && role != AuthenticationRole.AUTHOR;
+    }
+
+    public boolean isAdmin() {
+        return role == AuthenticationRole.ADMIN || role == AuthenticationRole.ROOT;
+    }
+
+    public boolean isRoot() {
+        return role == AuthenticationRole.ROOT;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         var roles = new ArrayList<GrantedAuthority>();

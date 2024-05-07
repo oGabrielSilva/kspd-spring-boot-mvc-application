@@ -21,24 +21,21 @@
           validação.
         </p>
         <form class="py-6">
-          <label class="title is-6 has-text-weight-normal mb-0" for="account-check">
-            Código de uso único:
-          </label>
-          <div class="py-3">
-            <div class="control has-icons-left">
+          <div class="field has-addons">
+            <div class="control" style="width: 90%">
               <input
-                class="input is-medium"
+                class="input"
                 type="text"
                 placeholder="Código de uso único"
                 data-message="Código informado está incorreto ou é inválido"
+                data-message-len="O código de uso único possui 5 caracteres entre letras e números"
                 id="account-check"
               />
-              <span class="icon is-left">
-                <i class="fas fa-envelope"></i>
-              </span>
+            </div>
+            <div class="control">
+              <button class="button is-info" type="submit">Validar</button>
             </div>
           </div>
-          <button class="button is-link" type="submit">Validar</button>
         </form>
       </section>
     </main>

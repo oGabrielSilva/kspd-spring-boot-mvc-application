@@ -1,4 +1,4 @@
-package dev.kassiopeia.blog.mail.services;
+package dev.kassiopeia.blog.modules.mail.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
