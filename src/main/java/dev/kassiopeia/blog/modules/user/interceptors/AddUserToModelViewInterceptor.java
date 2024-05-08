@@ -18,20 +18,6 @@ public class AddUserToModelViewInterceptor implements HandlerInterceptor {
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
             ModelAndView modelAndView) throws Exception {
         var user = userService.getCurrentAuthenticatedUser();
-        if (user != null) {
-            modelAndView.addObject("user", user);
-            modelAndView.addObject("isAuthor", user.isAuthor());
-            modelAndView.addObject("isModerator", user.isModerator());
-            modelAndView.addObject("isAdmin", user.isAdmin());
-            modelAndView.addObject("isRoot", user.isRoot());
-        } else {
-            modelAndView.addObject("user", null);
-
-            modelAndView.addObject("isAuthor", false);
-            modelAndView.addObject("isModerator", false);
-            modelAndView.addObject("isAdmin", false);
-            modelAndView.addObject("isRoot", false);
-        }
-
+        modelAndView.addObject("user", user);
     }
 }

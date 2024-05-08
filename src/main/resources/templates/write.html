@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <th:block th:replace="~{fragments/default-head}"></th:block>
+  </head>
+
+  <body>
+    <header class="p-3">
+      <div>
+        <th:block th:replace="~{fragments/default-navigation}"></th:block>
+      </div>
+    </header>
+
+    <main class="container p-3">
+      <th:block th:replace="~{fragments/account-verification-alert}"></th:block>
+      <section class="section">
+        <th:block th:if="${user.isNonAuthor}">Não author </th:block>
+        <th:block th:unless="${user.isNonAuthor}">Author </th:block>
+      </section>
+    </main>
+
+    <th:block th:replace="~{fragments/footer}"></th:block>
+
+    <input type="hidden" value="/index" id="wwwroot-page-manager-id" />
+  </body>
+</html>

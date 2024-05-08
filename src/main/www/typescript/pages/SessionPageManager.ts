@@ -95,7 +95,7 @@ export function runSessionPageManager() {
         toaster.danger(message);
         return;
       }
-      return isForbidden ? window.close() : (window.location.href = '/');
+      return isForbidden ? window.close() : (window.location.href = getNextHref());
     } catch (error) {
       console.log(error);
     } finally {
@@ -109,4 +109,10 @@ export function runSessionPageManager() {
     const payload = validateForm();
     submitPayload(JSON.stringify(payload), true);
   }
+}
+
+function getNextHref() {
+  const params = window.location.search.replace('?', '').split('&');
+  const next = params.find((p) => p.startsWith('next'));
+  return next.length > 0 ? next.split('=')[1] : '/';
 }

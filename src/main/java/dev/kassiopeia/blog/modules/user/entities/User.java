@@ -151,6 +151,10 @@ public class User implements UserDetails {
         return role == AuthenticationRole.ROOT;
     }
 
+    public boolean isNonAuthor() {
+        return role == AuthenticationRole.COMMON;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         var roles = new ArrayList<GrantedAuthority>();
