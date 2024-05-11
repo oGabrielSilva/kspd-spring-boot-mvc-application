@@ -1,6 +1,5 @@
 package dev.kassiopeia.blog.modules.user.entities;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -8,10 +7,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,10 +16,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.aventrix.jnanoid.jnanoid.NanoIdUtils;
 
 import dev.kassiopeia.blog.authentication.enums.AuthenticationRole;
+import dev.kassiopeia.blog.data.entities.Metadata;
 import dev.kassiopeia.blog.modules.user.DTOs.UserDTO;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -32,11 +31,11 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class User implements UserDetails {
+@EqualsAndHashCode(callSuper = false)
+@Document
+public class User extends Metadata implements UserDetails {
     @Setter(AccessLevel.NONE)
-    @Id
     private String id;
-
     @Indexed(unique = true)
     private String email;
 
@@ -49,6 +48,8 @@ public class User implements UserDetails {
 
     private String avatarURL;
 
+    private String privateAvatarURL;
+
     private SocialMedia social = new SocialMedia("", "", "", "", "", "", "");
 
     private AuthenticationRole role = AuthenticationRole.COMMON;
@@ -60,11 +61,6 @@ public class User implements UserDetails {
 
     @Getter(AccessLevel.NONE)
     private boolean emailChecked = false;
-
-    @CreatedDate
-    private Instant createdAt;
-    @LastModifiedDate
-    private Instant updatedAt;
 
     public User(String email, String password) {
         this.email = email;

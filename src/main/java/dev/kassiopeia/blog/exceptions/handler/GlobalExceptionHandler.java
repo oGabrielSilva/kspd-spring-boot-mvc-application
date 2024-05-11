@@ -7,6 +7,7 @@ import java.time.ZoneOffset;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -18,9 +19,10 @@ import dev.kassiopeia.blog.exceptions.Conflict;
 import dev.kassiopeia.blog.exceptions.Forbidden;
 import dev.kassiopeia.blog.exceptions.InternalServerError;
 import dev.kassiopeia.blog.exceptions.NotFound;
+import dev.kassiopeia.blog.exceptions.ServiceUnavailable;
 import dev.kassiopeia.blog.exceptions.Unauthorized;
 import dev.kassiopeia.blog.exceptions.DTOs.ExceptionResponseDto;
-
+import dev.kassiopeia.blog.modules.user.entities.User;
 import jakarta.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
@@ -29,7 +31,6 @@ public class GlobalExceptionHandler {
         @ExceptionHandler(HttpMessageNotReadableException.class)
         public ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
                         HttpServletRequest request) {
-
                 return new ResponseEntity<Object>(new ExceptionResponseDto(
                                 LocalDateTime.now().toInstant(ZoneOffset.UTC),
                                 "Failed to read the request body. Check the JSON format.",
@@ -40,13 +41,18 @@ public class GlobalExceptionHandler {
 
         @ResponseStatus(HttpStatus.NOT_FOUND)
         @ExceptionHandler(NoHandlerFoundException.class)
-        public ModelAndView handleNoHandlerFoundException(
+        public Object handleNoHandlerFoundException(
                         NoHandlerFoundException ex, HttpServletRequest request) {
                 var description = request.getRequestURL().toString();
                 if (description.contains("/api/")) {
-                        return new ModelAndView("redirect:/api/json-404");
+                        return new ResponseEntity<>(
+                                        new ExceptionResponseDto(Instant.now(), "Recurso não econtrado", description,
+                                                        HttpStatus.NOT_FOUND.value()),
+                                        HttpStatus.NOT_FOUND);
                 }
+                var user = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
                 var mv = new ModelAndView("404");
+                mv.addObject("user", user instanceof User ? user : null);
                 mv.setStatus(HttpStatus.NOT_FOUND);
                 return mv;
         }
@@ -84,11 +90,15 @@ public class GlobalExceptionHandler {
 
         @ResponseStatus(HttpStatus.NOT_FOUND)
         @ExceptionHandler(NotFound.class)
-        public ResponseEntity<ExceptionResponseDto> notFound(HttpServletRequest request,
+        public Object notFound(HttpServletRequest request,
                         NotFound ex) {
-                return new ResponseEntity<>(new ExceptionResponseDto(LocalDateTime.now().toInstant(ZoneOffset.UTC),
-                                ex.getMessage(), request.getRequestURL().toString(), HttpStatus.NOT_FOUND.value()),
-                                HttpStatus.NOT_FOUND);
+                return request.getServletPath().contains("/api/")
+                                ? new ResponseEntity<>(
+                                                new ExceptionResponseDto(LocalDateTime.now().toInstant(ZoneOffset.UTC),
+                                                                ex.getMessage(), request.getRequestURL().toString(),
+                                                                HttpStatus.NOT_FOUND.value()),
+                                                HttpStatus.NOT_FOUND)
+                                : new ModelAndView("404");
         }
 
         @ResponseStatus(HttpStatus.CONFLICT)
@@ -116,4 +126,13 @@ public class GlobalExceptionHandler {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
+        @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+        @ExceptionHandler(ServiceUnavailable.class)
+        public ResponseEntity<ExceptionResponseDto> serviceUnavailable(HttpServletRequest request,
+                        ServiceUnavailable ex) {
+                return new ResponseEntity<>(new ExceptionResponseDto(LocalDateTime.now().toInstant(ZoneOffset.UTC),
+                                ex.getMessage(), request.getRequestURL().toString(),
+                                HttpStatus.SERVICE_UNAVAILABLE.value()),
+                                HttpStatus.SERVICE_UNAVAILABLE);
+        }
 }

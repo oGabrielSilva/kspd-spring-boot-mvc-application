@@ -34,4 +34,9 @@ public class UserService implements UserDetailsService {
         return (User) authentication.getPrincipal();
     }
 
+    public void userIsAuthenticatedOrElseThrowsForbidden() {
+        if (!(SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof User))
+            throw new Forbidden();
+    }
+
 }

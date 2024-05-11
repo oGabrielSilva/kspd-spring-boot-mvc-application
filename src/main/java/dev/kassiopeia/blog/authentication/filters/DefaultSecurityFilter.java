@@ -49,6 +49,7 @@ public class DefaultSecurityFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getServletPath();
         return path.startsWith("/public") || path.startsWith("/api/session/sign-up")
+                || path.startsWith("/api/user/avatar/**")
                 || path.startsWith("/api/session");
     }
 }

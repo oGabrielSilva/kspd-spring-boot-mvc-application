@@ -14,13 +14,64 @@
     <main class="container p-3">
       <th:block th:replace="~{fragments/account-verification-alert}"></th:block>
       <section class="section">
-        <th:block th:if="${user.isNonAuthor}">Não author </th:block>
-        <th:block th:unless="${user.isNonAuthor}">Author </th:block>
+        <th:block th:if="${user.isNonAuthor}">
+          <div th:replace="~{fragments/become-author}"></div>
+        </th:block>
+        <th:block th:unless="${user.isNonAuthor}">
+          <section class="content">
+            <h1 class="title">Escreva um artigo grandioso</h1>
+            <p>Estamos ansiosos para ver seus artigos e recebê-lo em nossa comunidade!</p>
+            <h3 class="subtitle">Algumas dicas para começar:</h3>
+            <ul>
+              <li>Escolha um tópico que você conhece bem e sobre o qual seja apaixonado</li>
+              <li>Escreva de forma clara e concisa</li>
+              <li>Use exemplos e ilustrações para tornar seus artigos mais fáceis de entender</li>
+              <li>Revise e edite seus artigos cuidadosamente antes de publicá-los</li>
+              <li>Promova seus artigos nas redes sociais e em outros canais</li>
+            </ul>
+
+            <form
+              data-message="Aguarde... estamos preparando o recurso para você"
+              class="modal"
+              id="new-article"
+            >
+              <div class="modal-background"></div>
+              <div class="modal-card">
+                <header class="modal-card-head pb-0">
+                  <h3 class="modal-card-title mb-0">Novo artigo</h3>
+                  <button class="delete" type="button" aria-label="Fechar"></button>
+                </header>
+                <section class="modal-card-body">
+                  <p>Confirmo que quero desenvolver um novo artigo para a plataforma</p>
+                </section>
+                <footer class="modal-card-foot">
+                  <div class="buttons">
+                    <button
+                      type="submit"
+                      data-no-hide="true"
+                      id="become-author"
+                      class="button is-primary"
+                    >
+                      Criar novo artigo
+                    </button>
+                    <button class="button" type="button">Cancelar</button>
+                  </div>
+                </footer>
+              </div>
+            </form>
+
+            <div class="my-3 pt-5">
+              <button id="start-new-article" class="button" type="button">
+                Desejo começar um novo artigo
+              </button>
+            </div>
+          </section>
+        </th:block>
       </section>
     </main>
 
     <th:block th:replace="~{fragments/footer}"></th:block>
 
-    <input type="hidden" value="/index" id="wwwroot-page-manager-id" />
+    <input type="hidden" value="/write" id="wwwroot-page-manager-id" />
   </body>
 </html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <th:block th:replace="~{fragments/default-head}"></th:block>
+  </head>
+
+  <body>
+    <header class="p-3">
+      <div>
+        <th:block th:replace="~{fragments/default-navigation}"></th:block>
+      </div>
+    </header>
+
+    <main class="container p-3">
+      <section class="section">
+        <header>
+          <div><span>Slug:</span> <small id="slug-element" th:text="${article.slug}"></small></div>
+          <input
+            type="text"
+            class="title input is-4 has-text-weight-normal mt-3 p-0"
+            th:text="${article.title}"
+            placeholder="Título..."
+            id="article-title"
+            style="border: none; outline: none; box-shadow: none"
+          />
+        </header>
+        <div>
+          <article
+            th:text="${article.content}"
+            data-placeholder="Escreva seu artigo aqui..."
+            id="article-content"
+            contenteditable="true"
+            class="pb-6"
+          ></article>
+          <div id="menu" class="is-hidden" style="position: fixed">
+            <button class="button" type="button" data-no-hide-menu="true" data-action="bold">
+              <span class="icon is-small" data-no-hide-menu="true">
+                <i class="fa-solid fa-bold" data-no-hide-menu="true"></i>
+              </span>
+            </button>
+            <button class="button" type="button" data-no-hide-menu="true" data-action="italic">
+              <span class="icon is-small" data-no-hide-menu="true">
+                <i class="fa-solid fa-italic" data-no-hide-menu="true"></i>
+              </span>
+            </button>
+            <button class="button" type="button" data-no-hide-menu="true" data-action="header">
+              <span class="icon is-small" data-no-hide-menu="true">
+                <i class="fa-solid fa-heading" data-no-hide-menu="true"></i>
+              </span>
+            </button>
+            <button class="button" type="button" data-no-hide-menu="true" data-action="list-ul">
+              <span class="icon is-small" data-no-hide-menu="true">
+                <i class="fa-solid fa-list" data-no-hide-menu="true"></i>
+              </span>
+            </button>
+            <button class="button" type="button" data-no-hide-menu="true" data-action="list-ol">
+              <span class="icon is-small" data-no-hide-menu="true">
+                <i class="fa-solid fa-list-ol" data-no-hide-menu="true"></i>
+              </span>
+            </button>
+            <button class="button" type="button" data-no-hide-menu="true" data-action="code">
+              <span class="icon is-small" data-no-hide-menu="true">
+                <i class="fa-solid fa-code" data-no-hide-menu="true"></i>
+              </span>
+            </button>
+            <button class="button" type="button" data-no-hide-menu="true" data-action="image">
+              <span class="icon is-small" data-no-hide-menu="true">
+                <i class="fa-regular fa-images" data-no-hide-menu="true"></i>
+              </span>
+            </button>
+            <button class="button" type="button" data-no-hide-menu="true" data-action="link">
+              <span class="icon is-small" data-no-hide-menu="true">
+                <i class="fa-solid fa-link" data-no-hide-menu="true"></i>
+              </span>
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <th:block th:replace="~{fragments/footer}"></th:block>
+
+    <input
+      type="hidden"
+      value="/article/edit"
+      th:data-slug="${article.slug}"
+      id="wwwroot-page-manager-id"
+    />
+  </body>
+</html>

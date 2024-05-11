@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.S3Object;
 
 import dev.kassiopeia.blog.modules.aws.DTOs.S3FileDTO;
 
@@ -18,6 +19,10 @@ public class AmazonS3Service {
 
     @Autowired
     AmazonS3 s3Client;
+
+    public S3Object getObject(String id) {
+        return s3Client.getObject(bucketName, id);
+    }
 
     public S3FileDTO uploadMultipart(MultipartFile file, String pathWithName, ObjectMetadata metadata) {
         try {

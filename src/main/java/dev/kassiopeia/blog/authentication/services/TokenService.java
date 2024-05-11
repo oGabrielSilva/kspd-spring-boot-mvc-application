@@ -85,4 +85,13 @@ public class TokenService {
         return c;
     }
 
+    public Cookie createInvalidCookie() {
+        var c = new Cookie(COOKIE_AUTHORIZATION_KEY, "invalid");
+        c.setHttpOnly(true);
+        c.setAttribute("SameSite", "Strict");
+        c.setPath("/");
+        c.setMaxAge(60);
+        return c;
+    }
+
 }

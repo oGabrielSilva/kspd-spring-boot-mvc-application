@@ -2,8 +2,6 @@ export function runTermsPageManager() {
   const tabs = document.querySelectorAll<HTMLElement>('.user-term-tab');
   const tabControls: Array<HTMLElement> = [];
 
-  console.log(tabs);
-
   tabs.forEach((tab) => {
     const control = document.getElementById(tab.dataset.controls);
     tabControls.push(control);
@@ -19,4 +17,22 @@ export function runTermsPageManager() {
       control.classList.add('is-flex');
     });
   });
+
+  byHash(tabs);
+
+  window.addEventListener('hashchange', () => byHash(tabs));
+}
+
+function byHash(tabs: NodeListOf<HTMLElement>) {
+  const hash = location.hash.replace('#', '');
+  console.log(hash);
+  if (hash === 'author' || hash === 'autor') {
+    const tab = Array.from(tabs).find((t) => t.dataset.controls === 'author');
+    if (tab) tab.click();
+    return;
+  }
+  if (hash === 'common' || hash === 'user') {
+    const tab = Array.from(tabs).find((t) => t.dataset.controls === 'common');
+    if (tab) tab.click();
+  }
 }

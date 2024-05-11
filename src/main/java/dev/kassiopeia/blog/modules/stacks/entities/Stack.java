@@ -1,4 +1,4 @@
-package dev.kassiopeia.blog.modules.user.entities;
+package dev.kassiopeia.blog.modules.stacks.entities;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -9,21 +9,18 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-@Document
+@NoArgsConstructor
+@ToString
 @EqualsAndHashCode(callSuper = false)
-public class Email extends Metadata {
+@Document
+public class Stack extends Metadata {
     @Setter(AccessLevel.NONE)
     private String id;
-    private String code;
 
-    private String userId;
-
-    public Email(String code, String userId) {
-        this.code = code;
-        this.userId = userId;
-    }
+    private String name;
+    private String description;
 }

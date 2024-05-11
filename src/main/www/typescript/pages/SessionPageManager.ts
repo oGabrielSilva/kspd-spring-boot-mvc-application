@@ -114,5 +114,5 @@ export function runSessionPageManager() {
 function getNextHref() {
   const params = window.location.search.replace('?', '').split('&');
   const next = params.find((p) => p.startsWith('next'));
-  return next.length > 0 ? next.split('=')[1] : '/';
+  return (next && next.length) > 0 ? next.split('=')[1] : '/';
 }

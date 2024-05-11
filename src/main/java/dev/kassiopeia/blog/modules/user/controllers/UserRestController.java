@@ -1,12 +1,17 @@
 package dev.kassiopeia.blog.modules.user.controllers;
 
+import java.io.IOException;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +26,7 @@ import dev.kassiopeia.blog.exceptions.BadRequest;
 import dev.kassiopeia.blog.exceptions.Conflict;
 import dev.kassiopeia.blog.exceptions.InternalServerError;
 import dev.kassiopeia.blog.exceptions.NotFound;
+import dev.kassiopeia.blog.exceptions.ServiceUnavailable;
 import dev.kassiopeia.blog.exceptions.Unauthorized;
 import dev.kassiopeia.blog.modules.aws.services.AmazonS3Service;
 import dev.kassiopeia.blog.modules.user.DTOs.AccountValidationDTO;
@@ -34,6 +40,7 @@ import dev.kassiopeia.blog.modules.user.services.UserService;
 import dev.kassiopeia.blog.utilities.StringUtils;
 import jakarta.servlet.http.HttpServletResponse;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/api/user")
@@ -52,6 +59,8 @@ public class UserRestController {
     AmazonS3Service s3Service;
     @Autowired
     EmailRepository emailRepository;
+    // @Autowired
+    // ApplicationBecomeAuthorRepository applicationBecomeAuthorRepository;
 
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     @PatchMapping
@@ -192,6 +201,31 @@ public class UserRestController {
         userRepository.save(user);
     }
 
+    @GetMapping("/avatar/{username}")
+    public ResponseEntity<Resource> getAvatar(@PathVariable("username") String username) {
+        if (StringUtils.isNullOrBlank(username))
+            throw new BadRequest("URL inválida");
+        System.out.println(username);
+        var user = userRepository.findByUsername(username);
+        if (user == null)
+            throw new NotFound("Usuário não existe");
+        var avatar = s3Service.getObject("avatar/" + user.getId());
+        if (avatar == null)
+            throw new NotFound("Avatar não encontrado");
+
+        Resource resource;
+        try {
+            resource = new ByteArrayResource(avatar.getObjectContent().readAllBytes());
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(avatar.getObjectMetadata().getContentType()))
+                    .contentLength(avatar.getObjectMetadata().getContentLength())
+                    .body(resource);
+        } catch (IOException e) {
+            throw new InternalServerError("Erro ao ler a imagem");
+        }
+
+    }
+
     @PatchMapping(consumes = { MediaType.MULTIPART_FORM_DATA_VALUE }, path = "/avatar")
     public Map<String, String> avatarUpdate(@RequestParam("avatar") MultipartFile avatar) {
         if (avatar == null || avatar.isEmpty() || avatar.getContentType() == null)
@@ -208,9 +242,10 @@ public class UserRestController {
                 "avatar/" + user.getId(), metadata);
         if (!result.success())
             throw new InternalServerError("Não foi possível salvar a imagem");
-        user.setAvatarURL(result.url() + "?serial=" + String.valueOf(System.currentTimeMillis()));
+        user.setPrivateAvatarURL(result.url());
+        user.setAvatarURL("/api/user/avatar/" + user.getUsername() + "?version=" + System.currentTimeMillis());
         userRepository.save(user);
-        return Map.of("url", result.url());
+        return Map.of("url", user.getAvatarURL());
     }
 
     @PostMapping("/email-validation")
@@ -232,5 +267,21 @@ public class UserRestController {
             throw new Unauthorized("Operação não permitida");
         user.setEmailChecked(true);
         userRepository.save(user);
+    }
+
+    @PatchMapping("/become-author")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    public Map<String, String> becomeAuthor() {
+        throw new ServiceUnavailable("Lamentamos informar que este serviço encontra-se temporariamente indisponível");
+        // var user = userService.getCurrentAuthenticatedUserOrThrowsForbidden();
+        // if (user.isNonAuthor()) {
+        // var aba = new ApplicationBecomeAuthor();
+        // applicationBecomeAuthorRepository.save(aba);
+        // return Map.of("message",
+        // "Recebemos seu pedido para se tornar um autor e ele se encontra pendente no
+        // momento.");
+        // }
+        // throw new Conflict("Obtivemos um conflito na sua requisição. Talvez você já
+        // seja um autor");
     }
 }

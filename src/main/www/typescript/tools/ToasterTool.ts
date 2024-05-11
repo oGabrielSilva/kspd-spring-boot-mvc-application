@@ -18,7 +18,7 @@ export class ToasterTool {
     return this.anim;
   }
 
-  private readonly events: Array<NodeJS.Timeout> = [];
+  private readonly events: Array<number> = [];
   private readonly toasterID = 'toaster';
   private toaster: HTMLDivElement | null = null;
   private toasterText: HTMLSpanElement | null = null;

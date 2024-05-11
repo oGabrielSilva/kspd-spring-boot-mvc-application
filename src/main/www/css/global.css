@@ -12,6 +12,10 @@ main {
   flex: 1;
 }
 
+.modal {
+  padding: 0 1rem;
+}
+
 .avatar {
   border-radius: 32px;
   object-fit: cover;
@@ -53,8 +57,45 @@ main {
   color: var(--reddit);
 }
 
+.default-navigation-dropdown {
+  right: 0;
+  min-width: 100px;
+  left: unset;
+  position: absolute;
+  bottom: unset;
+  top: 100%;
+  border-top: none;
+}
+
 footer .lk {
   gap: 1rem;
+}
+
+#menu {
+  display: flex;
+  max-width: 98vw;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.15rem;
+}
+
+article#article-content * {
+  white-space: unset !important;
+}
+
+article#article-content div[style] {
+  padding: 1rem;
+}
+
+[contenteditable='true']:empty:before {
+  content: attr(data-placeholder);
+  color: #808080;
+  cursor: text;
+}
+
+[contenteditable='true']:focus-visible {
+  outline: none;
 }
 
 @media (max-width: 580px) {
