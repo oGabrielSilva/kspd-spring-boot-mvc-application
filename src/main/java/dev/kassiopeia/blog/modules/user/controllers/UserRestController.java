@@ -116,7 +116,6 @@ public class UserRestController {
     public void socialUpdate(@RequestBody SocialMedia payload) {
         User user = userService.getCurrentAuthenticatedUserOrThrowsForbidden();
         boolean changed = false;
-        System.out.println("\n\nPAYLOAD -> " + payload);
         if (StringUtils.isNotNullOrBlank(payload.getX())
                 && StringUtils.isNotEquals(payload.getX(), user.getSocial().getX())) {
             var x = payload.getX().toLowerCase().trim();
@@ -205,7 +204,6 @@ public class UserRestController {
     public ResponseEntity<Resource> getAvatar(@PathVariable("username") String username) {
         if (StringUtils.isNullOrBlank(username))
             throw new BadRequest("URL inválida");
-        System.out.println(username);
         var user = userRepository.findByUsername(username);
         if (user == null)
             throw new NotFound("Usuário não existe");

@@ -1,77 +1,100 @@
+import Quill from 'quill';
+
 import { ArticleValidation } from '../validations/ArticleValidation';
+import { ImageProcessingTool } from '../tools/ImageProcessingTool';
+import { forbidden } from '../utilities/forbidden';
+import { ImageBlot, quillConfiguration } from '../modules/write/Quill';
+import { showModal } from '../libs/Bulma';
 
 export function runEditArticlePageManager(slug: string) {
+  const imageProcessor = ImageProcessingTool.get();
   const validation = new ArticleValidation();
 
   const titleElement = document.getElementById('article-title') as HTMLInputElement;
-  const slugElement = document.getElementById('slug-element');
-  const contentElement = document.getElementById('article-content');
+  const slugElement = document.getElementById('slug-element') as HTMLInputElement;
+
+  slugElement.addEventListener('input', () => {
+    slugElement.value = validation.extractSlug(slugElement.value);
+  });
 
   //TITLE
   const onTitleInput = () => {
     const title = titleElement.value;
-    if (title.length < 1) slugElement.textContent = slug;
-    else slugElement.textContent = validation.extractSlug(title);
+    if (title.length < 1) {
+      slugElement.value = slug;
+      return;
+    }
+    const newSlug = validation.extractSlug(title);
+    slugElement.value = newSlug;
   };
   titleElement.addEventListener('input', () => onTitleInput());
 
-  // titleElement.addEventListener('paste', (e) => {
-  //   e.preventDefault();
-  //   var text = e.clipboardData.getData('text/plain').trim();
-  //   const selection = window.getSelection();
-  //   if (selection && selection.rangeCount > 0) {
-  //     const range = selection.getRangeAt(0);
-  //     const span = document.createElement('span');
-  //     span.textContent = text;
-  //     range.insertNode(span);
-  //     selection.collapseToEnd();
-  //     onTitleInput();
-  //   }
+  [slugElement, titleElement].forEach((input) =>
+    input.addEventListener('blur', async () => {
+      const newSlug = slugElement.value;
+      if (!newSlug) return slugElement.classList.add('is-danger');
+      else slugElement.classList.remove('is-danger');
+      if (newSlug === slug) return;
+      const response = await fetch('/api/articles/' + newSlug, {
+        method: 'GET',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      if (response.status === 404) return slugElement.classList.remove('is-danger');
+      if (response.status === 403) forbidden();
+      slugElement.classList.add('is-danger');
+      console.log(await response.json());
+    })
+  );
+
+  //Quill
+
+  const article = document.querySelector('#article-content') as HTMLElement;
+  const figureModal = document.getElementById('figure-modal');
+
+  const editor = new Quill(
+    article,
+    quillConfiguration(imageProcessor, article.dataset.placeholder)
+  );
+  ImageBlot.editor = editor;
+  ImageBlot.blotName = 'image';
+  ImageBlot.tagName = 'img';
+  // Quill.register(ImageBlot);
+
+  ImageBlot.onFigureClick = (img, figcaption, figure) => {
+    if (figure.dataset.img !== img.id) {
+      const figureFigcaption = figureModal.querySelector('#figure-figcaption') as HTMLInputElement;
+      const figureTitle = figureModal.querySelector('#figure-title') as HTMLInputElement;
+      const figureAlt = figureModal.querySelector('#figure-alt') as HTMLInputElement;
+      const figureLoading = figureModal.querySelector('#figure-loading') as HTMLSelectElement;
+
+      figureFigcaption.value = figcaption.innerText;
+      figureTitle.value = img.title;
+      figureAlt.value = img.alt;
+      figureLoading.value = img.loading;
+
+      figureFigcaption.oninput = () => (figcaption.textContent = figureFigcaption.value);
+      figureTitle.oninput = () => (img.title = figureTitle.value);
+      figureAlt.oninput = () => (img.alt = figureAlt.value);
+      figureLoading.onchange = () => {
+        if (figureLoading.value === 'eager' || figureLoading.value === 'lazy')
+          img.loading = figureLoading.value;
+      };
+
+      figure.dataset.img = img.id;
+    }
+
+    showModal(figureModal);
+  };
+
+  // editor.root.innerHTML = article.dataset.content;
+
+  // editor.root.querySelectorAll('figure')?.forEach((figure) => {
+  //   const img = figure.querySelector('img');
+  //   const figcaption = figure.querySelector('figcaption');
+  //   if (img && figcaption) ImageBlot.configureFigure(figure, img, figcaption);
   // });
 
-  //CONTENT
-  // const menu = document.getElementById('menu');
-
-  // const posMenu = () => {
-  //   const selection = window.getSelection();
-  //   const range = selection.getRangeAt(0);
-  //   let rect = range.getBoundingClientRect();
-  //   if (rect.x === 0 && rect.y === 0) {
-  //     rect = contentElement.getBoundingClientRect();
-  //   }
-
-  //   let top = rect.top - menu.offsetHeight - 40;
-  //   top = Math.max(0, top);
-
-  //   let left = rect.left + rect.width / 2 - menu.offsetWidth / 2;
-  //   left = Math.max(0, Math.min(left, window.innerWidth - menu.offsetWidth));
-
-  //   menu.style.top = top + 'px';
-  //   menu.style.left = left + 'px';
-  // };
-
-  // const onContentInput = () => {
-  //   posMenu();
-  // };
-  // contentElement.addEventListener('input', () => onContentInput());
-
-  // contentElement.addEventListener('click', () => {
-  //   menu.classList.remove('is-hidden');
-  //   posMenu();
-  // });
-
-  // document.addEventListener('click', (e) => {
-  //   if (
-  //     e.target instanceof HTMLElement &&
-  //     (e.target.dataset.noHideMenu === 'true' ||
-  //       e.target.id === contentElement.id ||
-  //       contentElement.contains(e.target))
-  //   )
-  //     return;
-  //   menu.classList.add('is-hidden');
-  // });
-
-  // const bold = menu.querySelector('button[data-action="bold"]') as HTMLButtonElement;
-
-  // bold.onclick = () => {};
+  (window as any).editor = editor;
 }

@@ -80,14 +80,6 @@ footer .lk {
   gap: 0.15rem;
 }
 
-article#article-content * {
-  white-space: unset !important;
-}
-
-article#article-content div[style] {
-  padding: 1rem;
-}
-
 [contenteditable='true']:empty:before {
   content: attr(data-placeholder);
   color: #808080;
@@ -106,4 +98,77 @@ article#article-content div[style] {
   .footer-footer div.is-flex {
     gap: 0.5rem;
   }
+}
+
+article#article-content {
+  border: none;
+  padding: 1rem;
+  min-height: 50vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Quill */
+
+.ql-container {
+  font-family: var(--bulma-body-family);
+}
+
+.ql-editor {
+  padding: 0;
+  flex: 1;
+}
+
+.ql-editor blockquote {
+  padding: var(--bulma-content-blockquote-padding);
+}
+
+.ql-editor.ql-blank::before {
+  color: #808080;
+  left: unset;
+  right: unset;
+  padding: 0;
+  font-style: normal;
+}
+
+.ql-toolbar.ql-snow {
+  border: none;
+}
+
+.ql-formats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.ql-snow .ql-editor img {
+  max-width: 720px;
+}
+
+.ql-editor .ql-video,
+.ql-video {
+  display: block;
+  width: 100%;
+  max-width: 720px;
+  height: 100vh;
+  max-height: 480px;
+  margin: 0 auto;
+}
+
+.art-img {
+  max-height: 420px;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto;
+  cursor: pointer;
+  width: 100%;
+}
+
+.button.is-outlined:hover {
+  --bulma-button-border-width: max(1px, 0.0625em);
+  --bulma-button-outer-shadow-alpha: 1;
+}
+
+button.button.is-danger.is-outlined:hover {
+  border-color: var(--bulma-danger-40);
+  color: var(--bulma-danger-40);
 }

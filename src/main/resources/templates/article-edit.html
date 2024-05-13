@@ -2,83 +2,116 @@
 <html lang="pt-BR">
   <head>
     <th:block th:replace="~{fragments/default-head}"></th:block>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@2.0.1/dist/quill.snow.css" />
   </head>
 
   <body>
-    <header class="p-3">
-      <div>
-        <th:block th:replace="~{fragments/default-navigation}"></th:block>
-      </div>
-    </header>
-
-    <main class="container p-3">
-      <section class="section">
+    <main class="py-5 px-3">
+      <section class="">
         <header>
-          <div><span>Slug:</span> <small id="slug-element" th:text="${article.slug}"></small></div>
+          <div class="is-flex is-align-items-center g-0">
+            <span>Slug:</span>
+            <input
+              style="border: none"
+              id="slug-element"
+              class="input is-small"
+              th:value="${article.slug}"
+            />
+          </div>
           <input
+            data-slug=""
             type="text"
-            class="title input is-4 has-text-weight-normal mt-3 p-0"
-            th:text="${article.title}"
+            class="title input is-4 has-text-weight-normal mt-3 p-0 px-4"
+            th:value="${article.title}"
             placeholder="Título..."
             id="article-title"
-            style="border: none; outline: none; box-shadow: none"
+            style="border: none"
           />
         </header>
         <div>
           <article
-            th:text="${article.content}"
-            data-placeholder="Escreva seu artigo aqui..."
             id="article-content"
-            contenteditable="true"
-            class="pb-6"
+            th:data-content="${article.content}"
+            data-placeholder="Escreva algo épico..."
+            class="pb-6 content"
           ></article>
-          <div id="menu" class="is-hidden" style="position: fixed">
-            <button class="button" type="button" data-no-hide-menu="true" data-action="bold">
-              <span class="icon is-small" data-no-hide-menu="true">
-                <i class="fa-solid fa-bold" data-no-hide-menu="true"></i>
-              </span>
-            </button>
-            <button class="button" type="button" data-no-hide-menu="true" data-action="italic">
-              <span class="icon is-small" data-no-hide-menu="true">
-                <i class="fa-solid fa-italic" data-no-hide-menu="true"></i>
-              </span>
-            </button>
-            <button class="button" type="button" data-no-hide-menu="true" data-action="header">
-              <span class="icon is-small" data-no-hide-menu="true">
-                <i class="fa-solid fa-heading" data-no-hide-menu="true"></i>
-              </span>
-            </button>
-            <button class="button" type="button" data-no-hide-menu="true" data-action="list-ul">
-              <span class="icon is-small" data-no-hide-menu="true">
-                <i class="fa-solid fa-list" data-no-hide-menu="true"></i>
-              </span>
-            </button>
-            <button class="button" type="button" data-no-hide-menu="true" data-action="list-ol">
-              <span class="icon is-small" data-no-hide-menu="true">
-                <i class="fa-solid fa-list-ol" data-no-hide-menu="true"></i>
-              </span>
-            </button>
-            <button class="button" type="button" data-no-hide-menu="true" data-action="code">
-              <span class="icon is-small" data-no-hide-menu="true">
-                <i class="fa-solid fa-code" data-no-hide-menu="true"></i>
-              </span>
-            </button>
-            <button class="button" type="button" data-no-hide-menu="true" data-action="image">
-              <span class="icon is-small" data-no-hide-menu="true">
-                <i class="fa-regular fa-images" data-no-hide-menu="true"></i>
-              </span>
-            </button>
-            <button class="button" type="button" data-no-hide-menu="true" data-action="link">
-              <span class="icon is-small" data-no-hide-menu="true">
-                <i class="fa-solid fa-link" data-no-hide-menu="true"></i>
-              </span>
-            </button>
-          </div>
+
+          <form class="modal" id="figure-modal">
+            <div class="modal-background"></div>
+            <div class="modal-card">
+              <header class="modal-card-head">
+                <p class="modal-card-title">Configure a imagem</p>
+                <button type="button" class="delete" aria-label="close"></button>
+              </header>
+              <section class="modal-card-body">
+                <div class="mb-3">
+                  <label for="figure-figcaption">Figcaption</label>
+                  <div class="control mt-1">
+                    <input
+                      class="input"
+                      id="figure-figcaption"
+                      type="text"
+                      placeholder="Exemplo: gráfico de visualização..."
+                    />
+                  </div>
+                  <small style="font-size: small">
+                    Figcaption é o rótulo visível da imagem, exibido abaixo dela. É utilizado para
+                    descrever a imagem e/ou fornecer informações sobre sua fonte.
+                  </small>
+                </div>
+                <h2 class="subtitle mt-5 mb-3">Metadados</h2>
+                <div class="mb-3">
+                  <label for="figure-title">Qual o título da imagem?</label>
+                  <div class="control mt-1">
+                    <input
+                      class="input"
+                      id="figure-title"
+                      type="text"
+                      placeholder="Imagem do personagem..."
+                    />
+                  </div>
+                  <small style="font-size: small">
+                    Fornece informações adicionais sobre uma imagem quando o cursor do mouse está
+                    sobre ela, ajudando a contextualizar sua finalidade ou oferecer uma descrição
+                    mais detalhada
+                  </small>
+                </div>
+                <div class="mb-3">
+                  <label for="figure-alt">Alt</label>
+                  <div class="control mt-1">
+                    <input class="input" id="figure-alt" type="text" placeholder="Gráfico..." />
+                  </div>
+                  <small style="font-size: small">
+                    O atributo "alt" em HTML fornece um texto alternativo que é exibido quando a
+                    imagem não pode ser carregada
+                  </small>
+                </div>
+                <div class="mb-3">
+                  <label for="figure-loading">Tipo de carregamento</label>
+                  <img src="" alt="" loading="lazy" />
+                  <div class="select is-link">
+                    <select id="figure-loading">
+                      <option value="lazy">Lazy (otimiza o desempenho)</option>
+                      <option value="eager">
+                        Eager (prioriza o carregamento imediato da imagem)
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <button type="button" class="mt-4 button is-danger is-outlined">
+                  Apagar imagem
+                </button>
+              </section>
+              <footer class="modal-card-foot">
+                <div class="buttons">
+                  <button type="button" class="button is-success">Salvar alterações</button>
+                </div>
+              </footer>
+            </div>
+          </form>
         </div>
       </section>
     </main>
-
-    <th:block th:replace="~{fragments/footer}"></th:block>
 
     <input
       type="hidden"

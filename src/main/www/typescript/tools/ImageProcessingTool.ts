@@ -42,7 +42,7 @@ export class ImageProcessingTool {
     });
   }
 
-  public fileToBlobWebpWithoutResize(file: File, quality = 0.9) {
+  public fileToBlobWebpWithoutResize(file: File, quality = 0.9, blob = true) {
     return new Promise<Blob | null>((resolve) => {
       try {
         if (!file) return resolve(null);
@@ -59,14 +59,24 @@ export class ImageProcessingTool {
           ctx.canvas.width = w;
           ctx.canvas.height = h;
           ctx.drawImage(img, 0, 0, w, h);
-          ctx.canvas.toBlob(
-            (b) => {
-              URL.revokeObjectURL(url);
-              resolve(b);
-            },
-            'image/webp',
-            quality
-          );
+          if (blob)
+            ctx.canvas.toBlob(
+              (b) => {
+                URL.revokeObjectURL(url);
+                resolve(b);
+              },
+              'image/webp',
+              quality
+            );
+          else {
+            ctx.canvas.toBlob(
+              (b) => {
+                URL.revokeObjectURL(url);
+              },
+              'image/webp',
+              quality
+            );
+          }
         };
         img.crossOrigin = 'Anonymous';
         img.src = url;
@@ -139,6 +149,31 @@ export class ImageProcessingTool {
             'image/jpeg',
             quality
           );
+        };
+        img.crossOrigin = 'Anonymous';
+        img.src = url;
+      } catch (error) {
+        resolve(null);
+      }
+    });
+  }
+
+  public blobToDataURL(blob: Blob) {
+    return new Promise<string>((resolve) => {
+      try {
+        if (!blob) return resolve(null);
+        const url = URL.createObjectURL(blob);
+        const img = new Image();
+        img.onload = async () => {
+          const w = img.width;
+          const h = img.height;
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d')!;
+
+          ctx.canvas.width = w;
+          ctx.canvas.height = h;
+          ctx.drawImage(img, 0, 0, w, h);
+          resolve(ctx.canvas.toDataURL('image/webp', 1));
         };
         img.crossOrigin = 'Anonymous';
         img.src = url;
