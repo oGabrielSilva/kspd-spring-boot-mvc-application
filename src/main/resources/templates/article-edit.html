@@ -2,7 +2,6 @@
 <html lang="pt-BR">
   <head>
     <th:block th:replace="~{fragments/default-head}"></th:block>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@2.0.1/dist/quill.snow.css" />
   </head>
 
   <body>
@@ -29,10 +28,192 @@
           />
         </header>
         <div>
+          <div id="toolbar" class="is-flex pt-4 px-4 g-1 pb-0">
+            <div class="tool-group">
+              <button type="button" title="Negrito" id="bold" data-action="toggle-bold">
+                <span class="icon">
+                  <i class="fa-solid fa-bold"></i>
+                </span>
+              </button>
+              <button type="button" title="Itálico" id="italic" data-action="toggle-italic">
+                <span class="icon">
+                  <i class="fa-solid fa-italic"></i>
+                </span>
+              </button>
+              <button
+                type="button"
+                title="Sublinhado"
+                id="underline"
+                data-action="toggle-underline"
+              >
+                <span class="icon">
+                  <i class="fa-solid fa-underline"></i>
+                </span>
+              </button>
+              <button type="button" title="Tachado" id="strike" data-action="toggle-strike">
+                <span class="icon">
+                  <i class="fa-solid fa-strikethrough"></i>
+                </span>
+              </button>
+            </div>
+            <div class="tool-group">
+              <button type="button" title="Cor do texto" id="color" data-action="change-color">
+                <input type="color" id="color-input" class="is-hidden" />
+                <span class="icon">
+                  <i class="fa-solid fa-droplet"></i>
+                </span>
+              </button>
+              <button type="button" title="Cor de fundo do texto" id="bg" data-action="change-bg">
+                <input type="color" id="bg-input" class="is-hidden" />
+                <span class="icon">
+                  <i class="fa-solid fa-fill"></i>
+                </span>
+              </button>
+            </div>
+            <div class="tool-group">
+              <button
+                type="button"
+                title="Alinhar à esquerda"
+                id="align-left"
+                data-action="align-left"
+              >
+                <span class="icon">
+                  <i class="fa-solid fa-align-left"></i>
+                </span>
+              </button>
+              <button
+                type="button"
+                title="Centralizar texto"
+                id="align-center"
+                data-action="align-center"
+              >
+                <span class="icon">
+                  <i class="fa-solid fa-align-center"></i>
+                </span>
+              </button>
+              <button
+                type="button"
+                title="Alinhar à direita"
+                id="align-right"
+                data-action="align-right"
+              >
+                <span class="icon">
+                  <i class="fa-solid fa-align-right"></i>
+                </span>
+              </button>
+              <button
+                type="button"
+                title="Justificar texto"
+                id="align-justify"
+                data-action="align-justify"
+              >
+                <span class="icon">
+                  <i class="fa-solid fa-align-justify"></i>
+                </span>
+              </button>
+            </div>
+            <div class="tool-group">
+              <button type="button" title="Lista não ordenada" id="list-ul" data-action="add-ul">
+                <span class="icon">
+                  <i class="fa-solid fa-list"></i>
+                </span>
+              </button>
+              <button type="button" title="Lista numérica" id="list-ol" data-action="add-ol">
+                <span class="icon">
+                  <i class="fa-solid fa-list-ol"></i>
+                </span>
+              </button>
+              <button type="button" title="Adicionar recuo" id="indent" data-action="indent">
+                <span class="icon">
+                  <i class="fa-solid fa-indent"></i>
+                </span>
+              </button>
+              <button type="button" title="Remover recuo" id="outdent" data-action="outdent">
+                <span class="icon">
+                  <i class="fa-solid fa-outdent"></i>
+                </span>
+              </button>
+              <button type="button" title="Bloco de citação" id="quote" data-action="toggle-quote">
+                <span class="icon">
+                  <i class="fa-solid fa-quote-right"></i>
+                </span>
+              </button>
+              <button type="button" title="Bloco de código" id="code" data-action="toggle-code">
+                <span class="icon">
+                  <i class="fa-solid fa-code"></i>
+                </span>
+              </button>
+            </div>
+            <div class="tool-group">
+              <button type="button" title="Recortar texto" id="cut" data-action="cut">
+                <span class="icon">
+                  <i class="fa-solid fa-scissors"></i>
+                </span>
+              </button>
+              <button type="button" title="Copiar texto" id="copy" data-action="copy">
+                <span class="icon">
+                  <i class="fa-regular fa-copy"></i>
+                </span>
+              </button>
+              <button type="button" title="Colar texto" id="paste" data-action="paste">
+                <span class="icon">
+                  <i class="fa-regular fa-paste"></i>
+                </span>
+              </button>
+            </div>
+            <div class="tool-group">
+              <button type="button" title="Título" id="title" data-action="title">
+                <span class="icon">
+                  <i class="bi bi-type-h1"></i>
+                </span>
+              </button>
+              <button type="button" title="Subtítulo" id="subtitle" data-action="subtitle">
+                <span class="icon">
+                  <i class="bi bi-type-h2"></i>
+                </span>
+              </button>
+              <button
+                type="button"
+                title="Subtítulo menor"
+                id="subtitle-3"
+                data-action="subtitle-3"
+              >
+                <span class="icon">
+                  <i class="bi bi-type-h3"></i>
+                </span>
+              </button>
+              <button
+                type="button"
+                title="Texto sobrescrito"
+                id="superscript"
+                data-action="toggle-superscript"
+              >
+                <span class="icon">
+                  <i class="fa-solid fa-superscript"></i>
+                </span>
+              </button>
+              <button
+                type="button"
+                title="Texto subscrito"
+                id="subscript"
+                data-action="toggle-subscript"
+              >
+                <span class="icon">
+                  <i class="fa-solid fa-subscript"></i>
+                </span>
+              </button>
+            </div>
+            <div class="tool-group">
+              <button type="button" title="Link" id="link" data-action="toggle-link">
+                <span class="icon">
+                  <i class="fa-solid fa-link"></i>
+                </span>
+              </button>
+            </div>
+          </div>
           <article
             id="article-content"
             th:data-content="${article.content}"
-            data-placeholder="Escreva algo épico..."
             class="pb-6 content"
           ></article>
 
@@ -40,7 +221,7 @@
             <div class="modal-background"></div>
             <div class="modal-card">
               <header class="modal-card-head">
-                <p class="modal-card-title">Configure a imagem</p>
+                <h1 class="modal-card-title">Configure a imagem</h1>
                 <button type="button" class="delete" aria-label="close"></button>
               </header>
               <section class="modal-card-body">
@@ -104,7 +285,41 @@
               </section>
               <footer class="modal-card-foot">
                 <div class="buttons">
-                  <button type="button" class="button is-success">Salvar alterações</button>
+                  <button type="submit" class="button is-success">Salvar alterações</button>
+                </div>
+              </footer>
+            </div>
+          </form>
+          <form class="modal" id="link-modal">
+            <div class="modal-background"></div>
+            <div class="modal-card">
+              <header class="modal-card-head">
+                <h1 class="modal-card-title">Adicionar link</h1>
+                <button type="button" class="delete" aria-label="close"></button>
+              </header>
+              <section class="modal-card-body">
+                <div class="mb-3">
+                  <label for="figure-figcaption">URL</label>
+                  <div class="control mt-1">
+                    <input
+                      class="input"
+                      id="link-href"
+                      type="text"
+                      placeholder="https://kassiopeia.dev"
+                    />
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label for="figure-title">Título do link</label>
+                  <div class="control mt-1">
+                    <input class="input" id="link-text" type="text" placeholder="Kassiopeia" />
+                  </div>
+                </div>
+              </section>
+              <footer class="modal-card-foot">
+                <div class="buttons">
+                  <button type="submit" class="button is-success">Adicionar URL</button>
+                  <button type="button" class="button">Cancelar</button>
                 </div>
               </footer>
             </div>

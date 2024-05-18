@@ -172,3 +172,43 @@ button.button.is-danger.is-outlined:hover {
   border-color: var(--bulma-danger-40);
   color: var(--bulma-danger-40);
 }
+
+.tool-group i {
+  font-size: 1.1em;
+}
+
+.tool-group .icon {
+  justify-content: unset;
+}
+
+.tt-indent-1 {
+  text-indent: 1rem;
+}
+
+.tt-indent-2 {
+  text-indent: 2rem;
+}
+
+.tt-indent-3 {
+  text-indent: 3rem;
+}
+
+.tt-indent-4 {
+  text-indent: 4rem;
+}
+
+.tt-indent-5 {
+  text-indent: 5rem;
+}
+
+.tt-indent-6 {
+  text-indent: 6rem;
+}
+
+.tt-indent-7 {
+  text-indent: 7rem;
+}
+
+.tt-indent-8 {
+  text-indent: 8rem;
+}
