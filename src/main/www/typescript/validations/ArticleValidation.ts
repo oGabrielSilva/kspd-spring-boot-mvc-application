@@ -3,8 +3,12 @@ export class ArticleValidation {
   readonly URLRegex =
     /(https:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/;
 
-  public URLIsValid(link: string) {
+  public isURLValid(link: string) {
     return !link.startsWith('http:') && this.URLRegex.test(link);
+  }
+
+  public isYouTubeURLValid(link: string) {
+    return (link.includes('youtube') || link.includes('youtu.be')) && this.isURLValid(link);
   }
 
   public extractSlug(content: string) {

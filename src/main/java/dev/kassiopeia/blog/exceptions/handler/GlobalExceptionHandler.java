@@ -1,5 +1,6 @@
 package dev.kassiopeia.blog.exceptions.handler;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -24,6 +25,7 @@ import dev.kassiopeia.blog.exceptions.Unauthorized;
 import dev.kassiopeia.blog.exceptions.DTOs.ExceptionResponseDto;
 import dev.kassiopeia.blog.modules.user.entities.User;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -121,9 +123,19 @@ public class GlobalExceptionHandler {
 
         @ResponseStatus(HttpStatus.FORBIDDEN)
         @ExceptionHandler(Forbidden.class)
-        public ResponseEntity<Void> forbidden(HttpServletRequest request,
+        public Object forbidden(HttpServletRequest request, HttpServletResponse response,
                         Forbidden ex) {
-                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                if (!request.getServletPath().contains("/api/")) {
+                        try {
+                                response.sendRedirect("/session?next=" + request.getServletPath());
+                                return null;
+                        } catch (IOException e) {
+                                e.printStackTrace();
+                        }
+                }
+                return request.getServletPath().contains("/api/")
+                                ? new ResponseEntity<>(HttpStatus.FORBIDDEN)
+                                : new ModelAndView("session");
         }
 
         @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)

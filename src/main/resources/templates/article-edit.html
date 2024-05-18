@@ -209,6 +209,22 @@
                   <i class="fa-solid fa-link"></i>
                 </span>
               </button>
+              <button
+                type="button"
+                title="Adicione uma imagem"
+                id="add-figure"
+                data-action="add-figure"
+              >
+                <input type="file" accept="image/*" class="is-hidden" />
+                <span class="icon">
+                  <i class="fa-regular fa-images"></i>
+                </span>
+              </button>
+              <button type="button" title="Vídeo do YouTube" id="youtube" data-action="youtube">
+                <span class="icon">
+                  <i class="fa-brands fa-youtube"></i>
+                </span>
+              </button>
             </div>
           </div>
           <article
@@ -269,7 +285,6 @@
                 </div>
                 <div class="mb-3">
                   <label for="figure-loading">Tipo de carregamento</label>
-                  <img src="" alt="" loading="lazy" />
                   <div class="select is-link">
                     <select id="figure-loading">
                       <option value="lazy">Lazy (otimiza o desempenho)</option>
@@ -299,10 +314,11 @@
               </header>
               <section class="modal-card-body">
                 <div class="mb-3">
-                  <label for="figure-figcaption">URL</label>
+                  <label for="link-href">URL</label>
                   <div class="control mt-1">
                     <input
                       class="input"
+                      data-message="Links que não utilizem HTTPS (apenas HTTP) não serão aceitos, pois são inseguros"
                       id="link-href"
                       type="text"
                       placeholder="https://kassiopeia.dev"
@@ -310,15 +326,54 @@
                   </div>
                 </div>
                 <div class="mb-3">
-                  <label for="figure-title">Título do link</label>
+                  <label for="link-title">Título do link</label>
                   <div class="control mt-1">
-                    <input class="input" id="link-text" type="text" placeholder="Kassiopeia" />
+                    <input
+                      data-message="Insira pelo menos um caractere aqui."
+                      class="input"
+                      id="link-title"
+                      type="text"
+                      placeholder="Kassiopeia"
+                    />
                   </div>
                 </div>
               </section>
               <footer class="modal-card-foot">
                 <div class="buttons">
-                  <button type="submit" class="button is-success">Adicionar URL</button>
+                  <button type="submit" data-no-hide="true" class="button is-success">
+                    Adicionar URL
+                  </button>
+                  <button type="button" class="button">Cancelar</button>
+                </div>
+              </footer>
+            </div>
+          </form>
+          <form class="modal" id="youtube-modal">
+            <div class="modal-background"></div>
+            <div class="modal-card">
+              <header class="modal-card-head">
+                <h1 class="modal-card-title">Adicione um vídeo do YouTube</h1>
+                <button type="button" class="delete" aria-label="close"></button>
+              </header>
+              <section class="modal-card-body">
+                <div class="mb-3">
+                  <label for="link-href">URL</label>
+                  <div class="control mt-1">
+                    <input
+                      class="input"
+                      id="youtube-href"
+                      type="text"
+                      data-message="O link informado não parece pertencer ao YouTube"
+                      placeholder="https://youtube.com/..."
+                    />
+                  </div>
+                </div>
+              </section>
+              <footer class="modal-card-foot">
+                <div class="buttons">
+                  <button type="submit" data-no-hide="true" class="button is-success">
+                    Adicionar vídeo
+                  </button>
                   <button type="button" class="button">Cancelar</button>
                 </div>
               </footer>
