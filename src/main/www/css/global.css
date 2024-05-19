@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400;1,700&family=Tinos:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
 :root {
   --reddit: #d93a00;
 }
@@ -108,61 +110,6 @@ article#article-content {
   flex-direction: column;
 }
 
-/* Quill */
-
-.ql-container {
-  font-family: var(--bulma-body-family);
-}
-
-.ql-editor {
-  padding: 0;
-  flex: 1;
-}
-
-.ql-editor blockquote {
-  padding: var(--bulma-content-blockquote-padding);
-}
-
-.ql-editor.ql-blank::before {
-  color: #808080;
-  left: unset;
-  right: unset;
-  padding: 0;
-  font-style: normal;
-}
-
-.ql-toolbar.ql-snow {
-  border: none;
-}
-
-.ql-formats {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-.ql-snow .ql-editor img {
-  max-width: 720px;
-}
-
-.ql-editor .ql-video,
-.ql-video {
-  display: block;
-  width: 100%;
-  max-width: 720px;
-  height: 100vh;
-  max-height: 480px;
-  margin: 0 auto;
-}
-
-.art-img {
-  max-height: 420px;
-  object-fit: cover;
-  display: block;
-  margin: 0 auto;
-  cursor: pointer;
-  width: 100%;
-}
-
 .button.is-outlined:hover {
   --bulma-button-border-width: max(1px, 0.0625em);
   --bulma-button-outer-shadow-alpha: 1;
@@ -171,6 +118,20 @@ article#article-content {
 button.button.is-danger.is-outlined:hover {
   border-color: var(--bulma-danger-40);
   color: var(--bulma-danger-40);
+}
+
+#toolbar {
+  flex-wrap: wrap;
+}
+
+.tool-group {
+  display: flex;
+  align-items: center;
+}
+
+.tool-group button {
+  transition: none;
+  margin: 0 0.2rem;
 }
 
 .tool-group i {
@@ -211,4 +172,17 @@ button.button.is-danger.is-outlined:hover {
 
 .tt-indent-8 {
   text-indent: 8rem;
+}
+
+figure img {
+  max-width: 720px;
+  height: auto;
+  object-fit: cover;
+  width: 100%;
+  cursor: pointer;
+}
+
+figure:not([class]) {
+  margin-left: 0;
+  margin-right: 0;
 }

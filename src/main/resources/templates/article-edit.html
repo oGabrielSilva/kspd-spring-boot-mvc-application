@@ -28,7 +28,15 @@
           />
         </header>
         <div>
-          <div id="toolbar" class="is-flex pt-4 px-4 g-1 pb-0">
+          <div id="toolbar" class="is-flex is-align-items-center pt-4 px-4 g-0 pb-0">
+            <div class="tool-group">
+              <div class="select is-normal">
+                <select id="font-family" data-action="set-font-family" title="Troque a fonte">
+                  <option value="Lato">Lato (Sans-Serif)</option>
+                  <option value="Tinos">Tinos (Serif)</option>
+                </select>
+              </div>
+            </div>
             <div class="tool-group">
               <button type="button" title="Negrito" id="bold" data-action="toggle-bold">
                 <span class="icon">
@@ -66,7 +74,7 @@
               <button type="button" title="Cor de fundo do texto" id="bg" data-action="change-bg">
                 <input type="color" id="bg-input" class="is-hidden" />
                 <span class="icon">
-                  <i class="fa-solid fa-fill"></i>
+                  <i class="fa-solid fa-highlighter"></i>
                 </span>
               </button>
             </div>
@@ -226,13 +234,23 @@
                 </span>
               </button>
             </div>
+            <div class="tool-group">
+              <button
+                type="button"
+                class="pl-3"
+                title="Limpar formatação"
+                id="clean"
+                data-action="clean"
+              >
+                <i class="fa-solid fa-text-slash"></i>
+              </button>
+            </div>
           </div>
           <article
             id="article-content"
             th:data-content="${article.content}"
             class="pb-6 content"
           ></article>
-
           <form class="modal" id="figure-modal">
             <div class="modal-background"></div>
             <div class="modal-card">
@@ -284,6 +302,22 @@
                   </small>
                 </div>
                 <div class="mb-3">
+                  <label for="figure-aria-label">Rótulo para leitores de tela</label>
+                  <div class="control mt-1">
+                    <input
+                      class="input"
+                      id="figure-aria-label"
+                      type="text"
+                      placeholder="Descrição da imagem para leitores de tela"
+                    />
+                  </div>
+                  <small style="font-size: small">
+                    O rótulo é um texto que descreve a imagem. Ele é um atributo de acessibilidade.
+                    Nesse caso, não é <strong>obrigatório</strong> se a descrição no
+                    <em>Figcaption</em> for suficiente.
+                  </small>
+                </div>
+                <div class="mb-3">
                   <label for="figure-loading">Tipo de carregamento</label>
                   <div class="select is-link">
                     <select id="figure-loading">
@@ -294,7 +328,7 @@
                     </select>
                   </div>
                 </div>
-                <button type="button" class="mt-4 button is-danger is-outlined">
+                <button id="del-figure-img" type="button" class="mt-4 button is-danger is-outlined">
                   Apagar imagem
                 </button>
               </section>
