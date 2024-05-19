@@ -32,8 +32,12 @@
             <div class="tool-group">
               <div class="select is-normal">
                 <select id="font-family" data-action="set-font-family" title="Troque a fonte">
-                  <option value="Lato">Lato (Sans-Serif)</option>
-                  <option value="Tinos">Tinos (Serif)</option>
+                  <option data-type="sans-serif" value="Lato">Lato</option>
+                  <option data-type="sans-serif" value="Reddit Sans">Reddit Sans</option>
+                  <option data-type="monospace" value="Reddit Mono">Reddit Mono</option>
+                  <option data-type="serif" value="Tinos">Tinos</option>
+                  <option data-type="serif" value="IBM Plex Serif">IBM Plex Serif</option>
+                  <option data-type="monospace" value="JetBrains Mono">JetBrains Mono</option>
                 </select>
               </div>
             </div>
@@ -61,6 +65,16 @@
               <button type="button" title="Tachado" id="strike" data-action="toggle-strike">
                 <span class="icon">
                   <i class="fa-solid fa-strikethrough"></i>
+                </span>
+              </button>
+              <button type="button" title="Bloco de citação" id="quote" data-action="toggle-quote">
+                <span class="icon">
+                  <i class="fa-solid fa-quote-right"></i>
+                </span>
+              </button>
+              <button type="button" title="Bloco de código" id="code" data-action="toggle-code">
+                <span class="icon">
+                  <i class="fa-solid fa-code"></i>
                 </span>
               </button>
             </div>
@@ -139,16 +153,6 @@
               <button type="button" title="Remover recuo" id="outdent" data-action="outdent">
                 <span class="icon">
                   <i class="fa-solid fa-outdent"></i>
-                </span>
-              </button>
-              <button type="button" title="Bloco de citação" id="quote" data-action="toggle-quote">
-                <span class="icon">
-                  <i class="fa-solid fa-quote-right"></i>
-                </span>
-              </button>
-              <button type="button" title="Bloco de código" id="code" data-action="toggle-code">
-                <span class="icon">
-                  <i class="fa-solid fa-code"></i>
                 </span>
               </button>
             </div>
@@ -250,6 +254,7 @@
             id="article-content"
             th:data-content="${article.content}"
             class="pb-6 content"
+            data-placeholder="Escreva..."
           ></article>
           <form class="modal" id="figure-modal">
             <div class="modal-background"></div>

@@ -11,8 +11,9 @@ import Link from '@tiptap/extension-link';
 import Youtube from '@tiptap/extension-youtube';
 import { hideModal, showModal } from './Bulma';
 import { Figcaption, Figure, FigureImage } from '../libs/FigureTipTap';
+import Placeholder from '@tiptap/extension-placeholder';
 
-export const extensions = [
+export const extensions = (placeholder: string) => [
   StarterKit,
   Underline,
   TextStyle,
@@ -48,6 +49,10 @@ export const extensions = [
   Figure,
   FigureImage,
   Figcaption,
+  Placeholder.configure({
+    placeholder,
+    showOnlyWhenEditable: true,
+  }),
 ];
 
 const toolbarHTMLTipTapElement = document.querySelector('#toolbar');
@@ -139,5 +144,6 @@ export const toolbar = () => {
       showModal(figureModal);
     },
     fontFamily: toolbarHTMLTipTapElement.querySelector('#font-family') as HTMLSelectElement,
+    clean: toolbarHTMLTipTapElement.querySelector('#clean') as HTMLButtonElement,
   };
 };

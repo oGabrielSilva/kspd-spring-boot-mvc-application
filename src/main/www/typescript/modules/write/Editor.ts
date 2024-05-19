@@ -16,14 +16,38 @@ export function editor(validation: ArticleValidation) {
   const article = document.querySelector('#article-content') as HTMLElement;
   const editor = new Editor({
     element: article,
-    extensions,
+    extensions: extensions(article.dataset.placeholder),
     content: article.dataset.content,
     autofocus: true,
   });
 
   const tool = toolbar();
 
-  article.style.fontFamily = tool.fontFamily.querySelector('option').value;
+  function updateToolTextAlignColor(selectedItem?: HTMLButtonElement) {
+    if (selectedItem) {
+      tool.leftAlign.style.color =
+        selectedItem.id === tool.leftAlign.id ? 'var(--bulma-primary)' : '';
+      tool.rightAlign.style.color =
+        selectedItem.id === tool.rightAlign.id ? 'var(--bulma-primary)' : '';
+      tool.centerAlign.style.color =
+        selectedItem.id === tool.centerAlign.id ? 'var(--bulma-primary)' : '';
+      tool.justifyAlign.style.color =
+        selectedItem.id === tool.justifyAlign.id ? 'var(--bulma-primary)' : '';
+      return;
+    }
+    tool.leftAlign.style.color = editor.isActive({ textAlign: 'left' })
+      ? 'var(--bulma-primary)'
+      : '';
+    tool.rightAlign.style.color = editor.isActive({ textAlign: 'right' })
+      ? 'var(--bulma-primary)'
+      : '';
+    tool.centerAlign.style.color = editor.isActive({ textAlign: 'center' })
+      ? 'var(--bulma-primary)'
+      : '';
+    tool.justifyAlign.style.color = editor.isActive({ textAlign: 'justify' })
+      ? 'var(--bulma-primary)'
+      : '';
+  }
 
   editor.on('selectionUpdate', () => {
     tool.bold.style.color = editor.isActive('bold') ? 'var(--bulma-primary)' : '';
@@ -34,6 +58,16 @@ export function editor(validation: ArticleValidation) {
     tool.colorInput.value = editor.getAttributes('textStyle').color ?? '';
     tool.bg.style.color = editor.getAttributes('highlight').color ?? '';
     tool.bgInput.value = editor.getAttributes('highlight').color ?? '';
+    tool.listUl.style.color = editor.isActive('bulletList') ? 'var(--bulma-primary)' : '';
+    tool.listOl.style.color = editor.isActive('orderedList') ? 'var(--bulma-primary)' : '';
+    tool.quote.style.color = editor.isActive('blockquote') ? 'var(--bulma-primary)' : '';
+    tool.code.style.color = editor.isActive('codeBlock') ? 'var(--bulma-primary)' : '';
+    tool.h1.style.color = editor.isActive('heading', { level: 1 }) ? 'var(--bulma-primary)' : '';
+    tool.h2.style.color = editor.isActive('heading', { level: 2 }) ? 'var(--bulma-primary)' : '';
+    tool.h3.style.color = editor.isActive('heading', { level: 3 }) ? 'var(--bulma-primary)' : '';
+    tool.subscript.style.color = editor.isActive('subscript') ? 'var(--bulma-primary)' : '';
+    tool.superscript.style.color = editor.isActive('superscript') ? 'var(--bulma-primary)' : '';
+    updateToolTextAlignColor();
   });
 
   tool.bold.onclick = () => {
@@ -64,16 +98,31 @@ export function editor(validation: ArticleValidation) {
     tool.bg.style.color = tool.bgInput.value;
     editor.commands.blur();
   };
-  tool.leftAlign.onclick = () => editor.chain().focus().setTextAlign('left').run();
-  tool.rightAlign.onclick = () => editor.chain().focus().setTextAlign('right').run();
-  tool.centerAlign.onclick = () => editor.chain().focus().setTextAlign('center').run();
-  tool.justifyAlign.onclick = () => editor.chain().focus().setTextAlign('justify').run();
+  tool.leftAlign.onclick = () => {
+    editor.chain().focus().setTextAlign('left').run();
+    updateToolTextAlignColor(tool.leftAlign);
+  };
+  tool.rightAlign.onclick = () => {
+    editor.chain().focus().setTextAlign('right').run();
+    updateToolTextAlignColor(tool.rightAlign);
+  };
+  tool.centerAlign.onclick = () => {
+    editor.chain().focus().setTextAlign('center').run();
+    updateToolTextAlignColor(tool.centerAlign);
+  };
+  tool.justifyAlign.onclick = () => {
+    editor.chain().focus().setTextAlign('justify').run();
+    updateToolTextAlignColor(tool.justifyAlign);
+  };
   tool.listUl.onclick = () => editor.chain().focus().toggleBulletList().run();
   tool.listOl.onclick = () => editor.chain().focus().toggleOrderedList().run();
   tool.indent.onclick = () => editor.chain().focus().indent().run();
   tool.outdent.onclick = () => editor.chain().focus().outdent().run();
   tool.quote.onclick = () => editor.chain().focus().toggleBlockquote().run();
-  tool.code.onclick = () => editor.chain().focus().toggleCodeBlock().run();
+  tool.code.onclick = () => {
+    editor.chain().focus().toggleCodeBlock().run();
+    tool.code.style.color = editor.isActive('codeBlock') ? 'var(--bulma-primary)' : '';
+  };
   tool.cut.onclick = async () => {
     const selection = window.getSelection();
     if (selection.rangeCount < 1) return;
@@ -102,11 +151,34 @@ export function editor(validation: ArticleValidation) {
     const txt = await navigator.clipboard.readText();
     editor.chain().focus().insertContent(txt).run();
   };
-  tool.h1.onclick = () => editor.chain().focus().toggleHeading({ level: 1 }).run();
-  tool.h2.onclick = () => editor.chain().focus().toggleHeading({ level: 2 }).run();
-  tool.h3.onclick = () => editor.chain().focus().toggleHeading({ level: 3 }).run();
-  tool.superscript.onclick = () => editor.chain().focus().toggleSuperscript().run();
-  tool.subscript.onclick = () => editor.chain().focus().toggleSubscript().run();
+  tool.h1.onclick = () => {
+    editor.chain().focus().toggleHeading({ level: 1 }).run();
+    tool.h1.style.color = editor.isActive('heading', { level: 1 }) ? 'var(--bulma-primary)' : '';
+  };
+  tool.h2.onclick = () => {
+    editor.chain().focus().toggleHeading({ level: 2 }).run();
+    tool.h2.style.color = editor.isActive('heading', { level: 2 }) ? 'var(--bulma-primary)' : '';
+  };
+  tool.h3.onclick = () => {
+    editor.chain().focus().toggleHeading({ level: 3 }).run();
+    tool.h3.style.color = editor.isActive('heading', { level: 3 }) ? 'var(--bulma-primary)' : '';
+  };
+  tool.superscript.onclick = () => {
+    if (editor.isActive('subscript')) {
+      editor.commands.unsetSubscript();
+      tool.subscript.style.color = '';
+    }
+    editor.chain().focus().toggleSuperscript().run();
+    tool.superscript.style.color = editor.isActive('superscript') ? 'var(--bulma-primary)' : '';
+  };
+  tool.subscript.onclick = () => {
+    if (editor.isActive('superscript')) {
+      editor.commands.unsetSuperscript();
+      tool.superscript.style.color = '';
+    }
+    editor.chain().focus().toggleSubscript().run();
+    tool.subscript.style.color = editor.isActive('subscript') ? 'var(--bulma-primary)' : '';
+  };
   tool.link.onclick = () => {
     const sel = window.getSelection();
     if (sel.rangeCount < 1 || sel.getRangeAt(0).collapsed)
@@ -215,7 +287,30 @@ export function editor(validation: ArticleValidation) {
       screenProgress.hide();
     }
   };
-  tool.fontFamily.oninput = () => {
-    article.style.fontFamily = tool.fontFamily.value;
+  tool.fontFamily.oninput = updateFont;
+  tool.clean.onclick = () => {
+    editor
+      .chain()
+      .focus()
+      .unsetBold()
+      .unsetItalic()
+      .unsetUnderline()
+      .unsetStrike()
+      .unsetBlockquote()
+      .unsetCode()
+      .unsetColor()
+      .unsetHighlight()
+      .unsetLink()
+      .unsetSubscript()
+      .unsetSuperscript()
+      .run();
   };
+
+  function updateFont() {
+    const font = tool.fontFamily.value;
+    const type = tool.fontFamily.querySelector<HTMLElement>(`option[value="${font}"]`).dataset.type;
+    article.style.fontFamily = `"${font}", ${type}`;
+  }
+
+  updateFont();
 }
