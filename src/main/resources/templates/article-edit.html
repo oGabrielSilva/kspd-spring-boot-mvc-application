@@ -15,6 +15,7 @@
               id="slug-element"
               class="input is-small"
               th:value="${article.slug}"
+              th:data-original="${article.slug}"
             />
           </div>
           <input
@@ -22,6 +23,7 @@
             type="text"
             class="title input is-4 has-text-weight-normal mt-3 p-0 px-4"
             th:value="${article.title}"
+            th:data-original="${article.title}"
             placeholder="Título..."
             id="article-title"
             style="border: none"

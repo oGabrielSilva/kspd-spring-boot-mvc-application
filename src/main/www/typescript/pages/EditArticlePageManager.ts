@@ -3,12 +3,10 @@ import { forbidden } from '../utilities/forbidden';
 import { TipTapBasedHTMLEditor } from '../modules/write/TipTapBasedHTMLEditor';
 import { tools } from '../utilities/tools';
 
-export interface UnsavedImages {
-  blobs: Array<{ blob: Blob; id: string; url: string }>;
-}
-
 export function runEditArticlePageManager(slug: string) {
   const validation = new ArticleValidation();
+
+  let hasChanges = false;
 
   const titleElement = document.getElementById('article-title') as HTMLInputElement;
   const slugElement = document.getElementById('slug-element') as HTMLInputElement;
@@ -50,12 +48,20 @@ export function runEditArticlePageManager(slug: string) {
 
   //Body
   const article = document.querySelector('#article-content') as HTMLElement;
-  // const unsavedImages: UnsavedImages = { blobs: [] };
 
   const { editor } = TipTapBasedHTMLEditor.initialize(article, uploadBlob, deleteBlob, validation);
   const { toaster, screenProgress } = tools();
 
-  editor.on('update', () => {});
+  editor.on('update', () => {
+    hasChanges = true;
+  });
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 's' && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      saveChanges();
+    }
+  });
 
   async function uploadBlob(blob: Blob) {
     const body = new FormData();
@@ -103,5 +109,35 @@ export function runEditArticlePageManager(slug: string) {
     } finally {
       screenProgress.hide();
     }
+  }
+
+  const originalTitle = titleElement.dataset.original;
+  const originalContent = article.dataset.content;
+
+  async function saveChanges() {
+    const content = editor.getHTML();
+    const title = titleElement.value;
+    const newSlug = slugElement.value;
+    const data = {
+      ...(hasChanges && content !== originalContent ? { content } : {}),
+      ...(title && title !== originalTitle ? { title } : {}),
+      ...(newSlug && slug !== newSlug ? { slug: newSlug } : {}),
+    };
+
+    if (!Object.keys(data).length) return;
+    const response = await fetch('/api/articles/' + slug, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'same-origin',
+    });
+    if (response.status === 403) return forbidden();
+    if (!response.ok) {
+      const { message } = await response.json();
+      toaster.danger(message);
+      return;
+    }
+    toaster.success();
+    console.log(await response.json());
   }
 }
