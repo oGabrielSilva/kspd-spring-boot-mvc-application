@@ -74,6 +74,7 @@ export const toolbar = () => {
   figureModal.onsubmit = (e) => e.preventDefault();
 
   return {
+    toolbar: toolbarHTMLTipTapElement,
     bold: toolbarHTMLTipTapElement.querySelector('#bold') as HTMLButtonElement,
     italic: toolbarHTMLTipTapElement.querySelector('#italic') as HTMLButtonElement,
     underline: toolbarHTMLTipTapElement.querySelector('#underline') as HTMLButtonElement,

@@ -102,8 +102,7 @@ footer .lk {
 
 article#article-content {
   border: none;
-  padding: 1rem;
-  min-height: 50vh;
+  padding: 1rem 1rem 0;
   display: flex;
   flex-direction: column;
 }
@@ -120,6 +119,10 @@ button.button.is-danger.is-outlined:hover {
 
 #toolbar {
   flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  background: var(--bulma-body-background-color);
+  z-index: 10;
 }
 
 .tool-group {
@@ -191,4 +194,16 @@ figure:not([class]) {
   float: left;
   height: 0;
   pointer-events: none;
+}
+
+#up-down {
+  position: fixed;
+  bottom: 5vh;
+  right: 5vw;
+  background: var(--bulma-primary);
+  font-size: 1.1em;
+  width: 2em;
+  height: 2em;
+  border-radius: 100%;
+  color: #000;
 }

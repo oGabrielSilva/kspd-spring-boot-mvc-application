@@ -81,6 +81,9 @@ const FigureImage = Node.create({
       draggable: {
         default: 'false',
       },
+      'data-nano': {
+        default: '',
+      },
     };
   },
 

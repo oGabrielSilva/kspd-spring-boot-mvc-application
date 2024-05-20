@@ -19,6 +19,16 @@ public class ArticleService {
         @Autowired
         UserRepository userRepository;
 
+        public boolean canEdit(User user, Article article) {
+                return article.getEditors().stream().filter(editor -> editor.id().equals(user.getId())).findFirst()
+                                .isPresent();
+        }
+
+        public boolean cannotEdit(User user, Article article) {
+                return article.getEditors().stream().filter(editor -> editor.id().equals(user.getId())).findFirst()
+                                .isEmpty();
+        }
+
         public ArticleDTO toDataTransferObject(Article art) {
                 List<StackDTO> stacks = art.getStacks().stream()
                                 .map(stack -> new StackDTO(stack.getName(), stack.getDescription()))

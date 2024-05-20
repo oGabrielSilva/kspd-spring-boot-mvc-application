@@ -32,15 +32,15 @@ public class AmazonS3Service {
             }
             metadata.setContentLength(file.getSize());
             metadata.setContentType(file.getContentType());
-            var obj = s3Client.putObject(bucketName, pathWithName, file.getInputStream(), metadata);
+            var obj = s3Client.putObject(bucketName, pathWithName, is, metadata);
             if (obj == null)
                 throw new Exception("S3 exception");
             is.close();
-            return new S3FileDTO(normalizeURL(pathWithName), obj, true);
+            return new S3FileDTO(normalizeURL(pathWithName), obj, bucketName, pathWithName, true);
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("\n\n" + e.getMessage());
-            return new S3FileDTO(null, null, false);
+            return new S3FileDTO(null, null, null, null, false);
         }
     }
 

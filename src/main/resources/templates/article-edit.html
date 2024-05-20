@@ -227,7 +227,12 @@
                 id="add-figure"
                 data-action="add-figure"
               >
-                <input type="file" accept="image/*" class="is-hidden" />
+                <input
+                  type="file"
+                  accept="image/*"
+                  class="is-hidden"
+                  data-message="A imagem selecionada é muito grande"
+                />
                 <span class="icon">
                   <i class="fa-regular fa-images"></i>
                 </span>
@@ -253,9 +258,15 @@
           <article
             id="article-content"
             th:data-content="${article.content}"
-            class="pb-6 content"
+            class="mb-0 content"
             data-placeholder="Escreva..."
           ></article>
+          <button type="button" class="is-hidden" id="up-down">
+            <span class="icon">
+              <i data-dr="up" class="is-hidden fa-solid fa-arrow-up"></i>
+              <i data-dr="down" class="is-hidden fa-solid fa-arrow-down"></i>
+            </span>
+          </button>
           <form class="modal" id="figure-modal">
             <div class="modal-background"></div>
             <div class="modal-card">

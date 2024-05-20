@@ -43,6 +43,7 @@ public class Article extends Metadata {
     private String lang = "pt-BR";
 
     private ArrayList<UserInternalDTO> editors = new ArrayList<>();
+    private ArrayList<ImageLink> images = new ArrayList<>();
 
     public Article(User... editors) {
         pushEditors(editors);

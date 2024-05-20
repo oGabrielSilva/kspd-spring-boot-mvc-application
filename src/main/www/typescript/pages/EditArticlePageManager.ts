@@ -1,7 +1,11 @@
 import { ArticleValidation } from '../validations/ArticleValidation';
 import { forbidden } from '../utilities/forbidden';
+import { TipTapBasedHTMLEditor } from '../modules/write/TipTapBasedHTMLEditor';
+import { tools } from '../utilities/tools';
 
-import { editor } from '../modules/write/Editor';
+export interface UnsavedImages {
+  blobs: Array<{ blob: Blob; id: string; url: string }>;
+}
 
 export function runEditArticlePageManager(slug: string) {
   const validation = new ArticleValidation();
@@ -45,6 +49,59 @@ export function runEditArticlePageManager(slug: string) {
   );
 
   //Body
+  const article = document.querySelector('#article-content') as HTMLElement;
+  // const unsavedImages: UnsavedImages = { blobs: [] };
 
-  editor(validation);
+  const { editor } = TipTapBasedHTMLEditor.initialize(article, uploadBlob, deleteBlob, validation);
+  const { toaster, screenProgress } = tools();
+
+  editor.on('update', () => {});
+
+  async function uploadBlob(blob: Blob) {
+    const body = new FormData();
+    body.set('blob', blob);
+    const response = await fetch(`/api/articles/${slug}/blob`, {
+      method: 'POST',
+      body,
+      credentials: 'same-origin',
+    });
+    if (response.status === 403) {
+      forbidden();
+      return null;
+    }
+    if (!response.ok) {
+      const { message } = await response.json();
+      toaster.danger(message);
+      return null;
+    }
+    const data = await response.json();
+    return { url: data.url as string, id: data.id as string };
+  }
+
+  async function deleteBlob(nanoId: string) {
+    screenProgress.show();
+    try {
+      const response = await fetch(`/api/articles/${slug}/${nanoId}`, {
+        method: 'DELETE',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      if (response.status === 403) {
+        forbidden();
+        return false;
+      }
+      if (!response.ok) {
+        const { message } = await response.json();
+        toaster.danger(message);
+        return false;
+      }
+      return true;
+    } catch (error) {
+      toaster.danger();
+      console.log(error);
+      return false;
+    } finally {
+      screenProgress.hide();
+    }
+  }
 }
