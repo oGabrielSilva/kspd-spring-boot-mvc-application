@@ -25,6 +25,9 @@ spring:
 
 server:
   port: 7000
+  tomcat:
+    relaxed-query-chars: ['{', '}', '[', ']', '|', '\', '^', '~', '`']
+    relaxed-path-chars: ['{', '}', '[', ']', '|', '\', '^', '~', '`']
 
 aws:
   s3:

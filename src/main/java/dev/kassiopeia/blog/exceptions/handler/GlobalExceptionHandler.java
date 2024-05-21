@@ -29,6 +29,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
         @ResponseStatus(HttpStatus.BAD_REQUEST)
         @ExceptionHandler(HttpMessageNotReadableException.class)
         public ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,

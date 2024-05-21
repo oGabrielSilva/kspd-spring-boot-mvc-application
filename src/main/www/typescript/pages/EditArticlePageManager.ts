@@ -1,12 +1,11 @@
 import { ArticleValidation } from '../validations/ArticleValidation';
 import { forbidden } from '../utilities/forbidden';
 import { TipTapBasedHTMLEditor } from '../modules/write/TipTapBasedHTMLEditor';
-import { tools } from '../utilities/tools';
+import { saveEditorChanges } from '../modules/write/saveEditorChanges';
 
 export function runEditArticlePageManager(slug: string) {
   const validation = new ArticleValidation();
-
-  let hasChanges = false;
+  const headTitle = document.head.querySelector('title');
 
   const titleElement = document.getElementById('article-title') as HTMLInputElement;
   const slugElement = document.getElementById('slug-element') as HTMLInputElement;
@@ -16,8 +15,10 @@ export function runEditArticlePageManager(slug: string) {
   });
 
   //TITLE
+  const titlePrefix = ' - ' + headTitle.textContent.split('-')[1];
   const onTitleInput = () => {
     const title = titleElement.value;
+    headTitle.textContent = title + titlePrefix;
     if (title.length < 1) {
       slugElement.value = slug;
       return;
@@ -49,95 +50,20 @@ export function runEditArticlePageManager(slug: string) {
   //Body
   const article = document.querySelector('#article-content') as HTMLElement;
 
-  const { editor } = TipTapBasedHTMLEditor.initialize(article, uploadBlob, deleteBlob, validation);
-  const { toaster, screenProgress } = tools();
-
-  editor.on('update', () => {
-    hasChanges = true;
-  });
+  TipTapBasedHTMLEditor.slug = slug;
+  const { editor } = TipTapBasedHTMLEditor.initialize(article, validation);
 
   window.addEventListener('keydown', (e) => {
     if (e.key === 's' && (e.ctrlKey || e.metaKey)) {
       e.preventDefault();
-      saveChanges();
+      saveEditorChanges(editor, titleElement, slugElement, slug);
     }
   });
 
-  async function uploadBlob(blob: Blob) {
-    const body = new FormData();
-    body.set('blob', blob);
-    const response = await fetch(`/api/articles/${slug}/blob`, {
-      method: 'POST',
-      body,
-      credentials: 'same-origin',
-    });
-    if (response.status === 403) {
-      forbidden();
-      return null;
-    }
-    if (!response.ok) {
-      const { message } = await response.json();
-      toaster.danger(message);
-      return null;
-    }
-    const data = await response.json();
-    return { url: data.url as string, id: data.id as string };
-  }
+  window.onbeforeunload = (e) => {
+    e.preventDefault();
+    return (e.returnValue = true);
+  };
 
-  async function deleteBlob(nanoId: string) {
-    screenProgress.show();
-    try {
-      const response = await fetch(`/api/articles/${slug}/${nanoId}`, {
-        method: 'DELETE',
-        credentials: 'same-origin',
-        headers: { 'Content-Type': 'application/json' },
-      });
-      if (response.status === 403) {
-        forbidden();
-        return false;
-      }
-      if (!response.ok) {
-        const { message } = await response.json();
-        toaster.danger(message);
-        return false;
-      }
-      return true;
-    } catch (error) {
-      toaster.danger();
-      console.log(error);
-      return false;
-    } finally {
-      screenProgress.hide();
-    }
-  }
-
-  const originalTitle = titleElement.dataset.original;
-  const originalContent = article.dataset.content;
-
-  async function saveChanges() {
-    const content = editor.getHTML();
-    const title = titleElement.value;
-    const newSlug = slugElement.value;
-    const data = {
-      ...(hasChanges && content !== originalContent ? { content } : {}),
-      ...(title && title !== originalTitle ? { title } : {}),
-      ...(newSlug && slug !== newSlug ? { slug: newSlug } : {}),
-    };
-
-    if (!Object.keys(data).length) return;
-    const response = await fetch('/api/articles/' + slug, {
-      method: 'PATCH',
-      body: JSON.stringify(data),
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'same-origin',
-    });
-    if (response.status === 403) return forbidden();
-    if (!response.ok) {
-      const { message } = await response.json();
-      toaster.danger(message);
-      return;
-    }
-    toaster.success();
-    console.log(await response.json());
-  }
+  (window as any).editor = editor;
 }

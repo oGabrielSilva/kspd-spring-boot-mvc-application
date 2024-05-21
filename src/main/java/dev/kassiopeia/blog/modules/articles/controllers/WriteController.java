@@ -45,6 +45,7 @@ public class WriteController {
         }
         var mv = new ModelAndView("article-edit");
         mv.addObject("article", art);
+        mv.addObject("title", art.getTitle());
         return mv;
     }
 }

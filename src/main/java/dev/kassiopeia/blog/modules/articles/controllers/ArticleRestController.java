@@ -4,10 +4,13 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -21,6 +24,7 @@ import dev.kassiopeia.blog.exceptions.InternalServerError;
 import dev.kassiopeia.blog.exceptions.NotFound;
 import dev.kassiopeia.blog.exceptions.Unauthorized;
 import dev.kassiopeia.blog.modules.articles.DTOs.ArticleDTO;
+import dev.kassiopeia.blog.modules.articles.DTOs.ArticlePatchDTO;
 import dev.kassiopeia.blog.modules.articles.entities.Article;
 import dev.kassiopeia.blog.modules.articles.entities.ImageLink;
 import dev.kassiopeia.blog.modules.articles.repositories.ArticleRepository;
@@ -56,6 +60,48 @@ public class ArticleRestController {
         if (article == null)
             throw new NotFound("Artigo com slug informado não existe");
         return articleService.toDataTransferObject(article);
+    }
+
+    @PatchMapping("/{slug}")
+    public ResponseEntity<?> updateArticle(@PathVariable("slug") String slug, @RequestBody ArticlePatchDTO dto) {
+        if (StringUtils.isNullOrBlank(slug))
+            throw new BadRequest("Artigo não informado");
+        var user = userService.getCurrentAuthenticatedUserOrThrowsForbidden();
+        var article = articleRepository.findBySlug(slug);
+        if (article == null)
+            throw new NotFound("Artigo não encontrado");
+        if (articleService.cannotEdit(user, article))
+            throw new Unauthorized("Usuário não tem a permissão de modificar o artigo " + slug);
+
+        var changed = false;
+
+        if (StringUtils.isNotNullOrBlank(dto.content())) {
+            var content = dto.content();
+            if (StringUtils.isNotEquals(content, article.getContent())) {
+                article.setContent(content);
+                changed = true;
+            }
+        }
+        if (StringUtils.isNotNullOrBlank(dto.slug())) {
+            var newSlug = dto.slug();
+            if (StringUtils.isNotEquals(newSlug, slug)) {
+                article.setSlug(newSlug);
+                changed = true;
+            }
+        }
+        if (StringUtils.isNotNullOrBlank(dto.title())) {
+            var title = dto.title();
+            if (StringUtils.isNotEquals(title, article.getTitle())) {
+                article.setTitle(title);
+                changed = true;
+            }
+        }
+
+        if (changed) {
+            articleRepository.save(article);
+            return ResponseEntity.ok().body(articleService.toDataTransferObject(article));
+        }
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/{slug}/blob")

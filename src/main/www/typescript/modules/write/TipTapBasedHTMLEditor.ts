@@ -4,14 +4,13 @@ import { hideModal, showModal } from '../../libs/Bulma';
 import { tools } from '../../utilities/tools';
 import { generateHTML } from '../../utilities/generateHtml';
 import { extensions, toolbar } from '../../libs/Tiptap';
+import { deleteBlob } from './deleteBlob';
+import { uploadBlob } from './uploadBlob';
 
 export class TipTapBasedHTMLEditor {
-  static initialize(
-    article: HTMLElement,
-    submitNewImage: (blob: Blob) => Promise<{ id: string; url: string }>,
-    deleteBlob: (nanoId: string) => Promise<boolean>,
-    validation: ArticleValidation
-  ) {
+  static slug: string;
+
+  static initialize(article: HTMLElement, validation: ArticleValidation) {
     const { anim, toaster, image, screenProgress } = tools();
 
     const editor = new Editor({
@@ -250,7 +249,7 @@ export class TipTapBasedHTMLEditor {
           toaster.alert(tool.figureInput.dataset.message);
           return;
         }
-        const { url, id: nanoId } = await submitNewImage(blob);
+        const { url, id: nanoId } = await uploadBlob(blob, TipTapBasedHTMLEditor.slug);
         if (!url) return;
         const id = 'IMG-' + Date.now().toString(36) + '_' + document.querySelectorAll('img').length;
         const html = generateHTML({
@@ -329,7 +328,7 @@ export class TipTapBasedHTMLEditor {
                 .$nodes('figure')
                 .find((node) => node.element.dataset.id === figureIMG.id);
               if (node) {
-                deleteBlob(nanoId)
+                deleteBlob(nanoId, TipTapBasedHTMLEditor.slug)
                   .then((success) => {
                     if (success) editor.commands.deleteNode(node.node.type);
                   })
