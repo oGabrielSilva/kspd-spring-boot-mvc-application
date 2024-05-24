@@ -101,9 +101,9 @@ function updateTheme(theme: 'dark' | 'light') {
       icon.classList.add(lightConfig.ic);
     }
 
-    document.documentElement.dataset.theme = theme;
     localStorage.setItem(STORAGE_THEME_KEY, theme);
   });
+  document.documentElement.dataset.theme = theme;
 }
 
 export function showModal(modal: HTMLElement) {

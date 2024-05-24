@@ -207,3 +207,21 @@ figure:not([class]) {
   border-radius: 100%;
   color: #000;
 }
+
+@media (max-width: 640px) {
+  div#g1 {
+    display: block !important;
+  }
+}
+
+.description-container {
+  position: relative;
+}
+
+.description-len {
+  position: absolute;
+  bottom: 0;
+  right: 1%;
+  cursor: default;
+  font-size: 11px;
+}

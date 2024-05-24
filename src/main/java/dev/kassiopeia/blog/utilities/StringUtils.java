@@ -17,4 +17,12 @@ public class StringUtils {
         return !test.equals(compare);
     }
 
+    public static boolean isDescriptionTagTextValidForSEO(String description) {
+        return isNotNullOrBlank(description) && description.length() <= 160;
+    }
+
+    public static boolean isNotDescriptionTagTextValidForSEO(String description) {
+        return !isDescriptionTagTextValidForSEO(description);
+    }
+
 }

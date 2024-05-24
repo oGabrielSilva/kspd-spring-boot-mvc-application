@@ -45,6 +45,11 @@ declare global {
     views: number;
     lang: string;
   }
+
+  interface Stack {
+    name: string;
+    description: string;
+  }
 }
 
 export {};

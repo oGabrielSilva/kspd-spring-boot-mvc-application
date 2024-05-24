@@ -1,6 +1,8 @@
 package dev.kassiopeia.blog.modules.articles.entities;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -36,14 +38,16 @@ public class Article extends Metadata {
     private String title = "";
     private String content = "";
     private String description = "";
-    private ArrayList<String> keywords = new ArrayList<>();
+    private Set<String> keywords = new HashSet<String>();
     private long views = 0;
 
-    private ArrayList<Stack> stacks = new ArrayList<>();
+    private Set<Stack> stacks = new HashSet<Stack>();
     private String lang = "pt-BR";
 
     private ArrayList<UserInternalDTO> editors = new ArrayList<>();
     private ArrayList<ImageLink> images = new ArrayList<>();
+
+    private ArticleMetadata metadata = new ArticleMetadata();
 
     public Article(User... editors) {
         pushEditors(editors);

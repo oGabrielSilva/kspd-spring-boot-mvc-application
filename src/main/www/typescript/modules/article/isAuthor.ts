@@ -14,7 +14,7 @@ export function runIsAuthor(form: HTMLFormElement) {
     screenProgress.show();
 
     try {
-      const response = await fetch('/api/articles', {
+      const response = await fetch('/api/article', {
         method: 'POST',
         credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },

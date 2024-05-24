@@ -1,7 +1,7 @@
 import { ArticleValidation } from '../validations/ArticleValidation';
 import { forbidden } from '../utilities/forbidden';
-import { TipTapBasedHTMLEditor } from '../modules/write/TipTapBasedHTMLEditor';
-import { saveEditorChanges } from '../modules/write/saveEditorChanges';
+import { TipTapBasedHTMLEditor } from '../modules/article/TipTapBasedHTMLEditor';
+import { saveEditorChanges } from '../modules/article/saveEditorChanges';
 
 export function runEditArticlePageManager(slug: string) {
   const validation = new ArticleValidation();
@@ -34,7 +34,7 @@ export function runEditArticlePageManager(slug: string) {
       if (!newSlug) return slugElement.classList.add('is-danger');
       else slugElement.classList.remove('is-danger');
       if (newSlug === slug) return;
-      const response = await fetch('/api/articles/' + newSlug, {
+      const response = await fetch('/api/article/' + newSlug, {
         method: 'GET',
         credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },

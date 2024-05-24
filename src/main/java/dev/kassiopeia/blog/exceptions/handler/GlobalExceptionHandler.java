@@ -20,6 +20,7 @@ import dev.kassiopeia.blog.exceptions.Conflict;
 import dev.kassiopeia.blog.exceptions.Forbidden;
 import dev.kassiopeia.blog.exceptions.InternalServerError;
 import dev.kassiopeia.blog.exceptions.NotFound;
+import dev.kassiopeia.blog.exceptions.PayloadTooLarge;
 import dev.kassiopeia.blog.exceptions.ServiceUnavailable;
 import dev.kassiopeia.blog.exceptions.Unauthorized;
 import dev.kassiopeia.blog.exceptions.DTOs.ExceptionResponseDto;
@@ -111,6 +112,16 @@ public class GlobalExceptionHandler {
                 return new ResponseEntity<>(new ExceptionResponseDto(LocalDateTime.now().toInstant(ZoneOffset.UTC),
                                 ex.getMessage(), request.getRequestURL().toString(), HttpStatus.CONFLICT.value()),
                                 HttpStatus.CONFLICT);
+        }
+
+        @ResponseStatus(HttpStatus.PAYLOAD_TOO_LARGE)
+        @ExceptionHandler(PayloadTooLarge.class)
+        public ResponseEntity<ExceptionResponseDto> payloadTooLarge(HttpServletRequest request,
+                        PayloadTooLarge ex) {
+                return new ResponseEntity<>(new ExceptionResponseDto(LocalDateTime.now().toInstant(ZoneOffset.UTC),
+                                ex.getMessage(), request.getRequestURL().toString(),
+                                HttpStatus.PAYLOAD_TOO_LARGE.value()),
+                                HttpStatus.PAYLOAD_TOO_LARGE);
         }
 
         @ResponseStatus(HttpStatus.UNAUTHORIZED)

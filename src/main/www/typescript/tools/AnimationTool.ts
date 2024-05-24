@@ -34,6 +34,19 @@ export class AnimationTool {
     }, 100);
   }
 
+  public shakeAll(elements: Array<HTMLElement>, focusAt: HTMLElement = null, timer = 400) {
+    elements.forEach((element) => {
+      if (element.classList.contains(this.shakeClass)) {
+        element.classList.remove(this.shakeClass);
+      }
+      if (focusAt === element) element.focus();
+      setTimeout(() => {
+        element.classList.add(this.shakeClass);
+        setTimeout(() => element.classList.remove(this.shakeClass), timer);
+      }, 100);
+    });
+  }
+
   public static get() {
     if (!AnimationTool.anim) {
       AnimationTool.anim = new AnimationTool();

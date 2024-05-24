@@ -5,7 +5,7 @@ export async function uploadBlob(blob: Blob, slug: string) {
   const { toaster } = tools();
   const body = new FormData();
   body.set('blob', blob);
-  const response = await fetch(`/api/articles/${slug}/blob`, {
+  const response = await fetch(`/api/article/${slug}/blob`, {
     method: 'POST',
     body,
     credentials: 'same-origin',

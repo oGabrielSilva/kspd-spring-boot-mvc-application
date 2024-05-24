@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <th:block th:replace="~{fragments/default-head}"></th:block>
+  </head>
+
+  <body>
+    <header class="p-3">
+      <div>
+        <th:block th:replace="~{fragments/default-navigation}"></th:block>
+      </div>
+    </header>
+
+    <main class="container p-3">
+      <section class="section">
+        <div class="pb-5">
+          <h1 class="title">
+            Artigo:
+            <span style="color: var(--bulma-subtitle-color)" th:text="${article.title}"></span>
+          </h1>
+          <p><strong>Visualizações</strong>: <span th:text="${article.views}"></span></p>
+        </div>
+        <header>
+          <h2 class="title is-4">Atualize os metadados do seu artigo</h2>
+          <p>
+            Os metadados são informações estruturadas que descrevem e contextualizam seu conteúdo,
+            incluindo editores, título, slug, palavras-chave (keywords) e descrição
+          </p>
+        </header>
+
+        <div class="py-6">
+          <form class="pb-5" id="keyword-form">
+            <label class="label" for="keywords">Adicione novas palavras-chave</label>
+            <div class="field has-addons" style="width: 100%">
+              <div class="control" style="width: 100%">
+                <input
+                  class="input"
+                  id="keywords"
+                  type="text"
+                  placeholder="Palavras-chave"
+                  data-message="Palavras adicionadas: "
+                />
+              </div>
+              <div class="control">
+                <button type="submit" class="button is-info">Adicionar</button>
+              </div>
+            </div>
+            <small class="help">
+              Inclua ou remova palavras-chave relacionadas ao seu artigo. Isso ajudará a melhorar a
+              visibilidade do conteúdo nas buscas, facilitando para os usuários encontrarem o seu
+              artigo.
+              <em>Limite de palavras-chave: 20</em>.
+              <strong>
+                Número de palavras-chave:
+                <code><span id="keywords-count" th:text="${article.keywords.size()}"></span></code>
+              </strong>
+              <div>
+                <strong>
+                  Separe as palavras-chave por vírgulas <code>,</code> ou ponto e vírgula
+                  <code>;</code>
+                </strong>
+              </div>
+            </small>
+            <div
+              style="flex-wrap: wrap"
+              id="keyword-tag"
+              class="pt-4 is-flex is-align-items-center g-0"
+            >
+              <div th:each="keyword, metadata : ${article.keywords}" class="mb-0 tags has-addons">
+                <span
+                  class="keyword-presentation tag"
+                  th:text="${keyword}"
+                  th:data-keyword="${keyword}"
+                ></span>
+                <button
+                  th:data-index="${metadata.index}"
+                  th:data-value="${keyword}"
+                  type="button"
+                  class="tag is-delete"
+                ></button>
+              </div>
+            </div>
+          </form>
+          <form id="description-form" class="pb-5">
+            <div class="control pb-5">
+              <label class="label" for="seo-description">Descrição do SEO</label>
+              <div class="description-container">
+                <textarea
+                  class="textarea has-fixed-size"
+                  placeholder="Descrição"
+                  th:text="${article.description}"
+                  th:data-original="${article.description}"
+                  id="seo-description"
+                  rows="2"
+                  data-message="Descrição atualizada"
+                  data-conflict="Modifique a descrição primeiro"
+                ></textarea>
+                <small class="description-len" th:text="${160 - article.description.length()}">
+                  160
+                </small>
+              </div>
+              <small class="help">
+                Um resumo breve e conciso do conteúdo. Essa descrição não é visível para os usuários
+                na página em si, mas é utilizada pelos mecanismos de busca para exibir um trecho
+                descritivo nos resultados de pesquisa e na apresentação do artigo.
+              </small>
+            </div>
+            <button class="button is-info" type="submit">Atualizar descrição</button>
+          </form>
+          <div class="pb-5">
+            <p class="label">Adicione stacks ao artigo</p>
+
+            <div>
+              <small class="help">
+                Refere-se ao conjunto de tecnologias, ferramentas e frameworks utilizadas para
+                construir, manter e executar aplicações. Isso inclui linguagens de programação,
+                servidores, bibliotecas, bases de dados e qualquer outra tecnologia necessária
+              </small>
+            </div>
+
+            <form id="add-stack" class="py-4">
+              <div class="is-flex g-1 pb-5">
+                <div style="width: 100%" class="control has-icons-left">
+                  <div class="select" style="width: 100%">
+                    <select style="width: 100%" id="stack-select">
+                      <option
+                        th:each="stack : ${stacks}"
+                        th:value="${stack.name}"
+                        th:text="${stack.name}"
+                      ></option>
+                    </select>
+                  </div>
+                  <div class="icon is-small is-left">
+                    <i class="fa-solid fa-layer-group"></i>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <button type="button" class="button is-primary is-outlined">Adicionar stack</button>
+
+                <button
+                  type="button"
+                  title="Adicione uma nova stack"
+                  class="button is-ghost"
+                  id="create-stack"
+                >
+                  <span>Criar nova stack</span>
+                </button>
+              </div>
+            </form>
+            <div style="overflow-x: auto" class="">
+              <table class="table" id="stack-tb" style="width: 100%">
+                <thead>
+                  <tr>
+                    <th class="has-text-centered">Nome</th>
+                    <th class="has-text-centered">Descrição</th>
+                    <th class="has-text-centered">Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr id="no-stack" th:if="${#lists.isEmpty(article.stacks)}">
+                    <td colspan="3">Nenhuma stack adicionada</td>
+                  </tr>
+                  <tr
+                    th:unless="${#lists.isEmpty(article.stacks)}"
+                    th:each="stack : ${article.stacks}"
+                    th:title="${stack.name}"
+                  >
+                    <td class="has-text-centered">
+                      <a
+                        th:href="|/stack/${stack.name}|"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        th:text="${stack.name}"
+                      >
+                      </a>
+                    </td>
+                    <td class="has-text-centered" th:text="${stack.description}"></td>
+                    <td class="has-text-centered">
+                      <button
+                        class="button is-small is-danger remove-stack"
+                        th:data-stack="${stack.name}"
+                        type="button"
+                      >
+                        <i class="fa-solid fa-trash-arrow-up"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="pb-5">
+            <label for="lang" class="label">Idioma do artigo</label>
+            <div class="field">
+              <p class="control has-icons-left">
+                <span class="select">
+                  <select id="lang">
+                    <option value="pt-BR">Português (Brasil)</option>
+                  </select>
+                </span>
+                <span class="icon is-small is-left">
+                  <i class="fas fa-globe"></i>
+                </span>
+              </p>
+            </div>
+          </div>
+          <section>
+            <div>
+              <label class="label" for="add-editor">Adicione um novo editor</label>
+              <div class="field has-addons" style="width: 100%">
+                <div class="control" style="width: 100%">
+                  <input
+                    class="input"
+                    id="add-editor"
+                    type="text"
+                    placeholder="Email ou username do novo editor"
+                  />
+                </div>
+                <div class="control">
+                  <button type="button" class="button is-info">Buscar</button>
+                </div>
+              </div>
+            </div>
+            <div style="overflow-x: auto" class="pt-4">
+              <table class="table" style="width: 100%">
+                <thead>
+                  <tr>
+                    <th class="has-text-centered">Email</th>
+                    <th class="has-text-centered">Username</th>
+                    <th class="has-text-centered"><abbr title="Papel do usuário">R.</abbr></th>
+                    <th class="has-text-centered"><abbr title="Criador do artigo">#</abbr></th>
+                    <th class="has-text-centered">Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    th:each="editor : ${article.editors}"
+                    th:class="${imOwner} ? 'is-primary' : ''"
+                    th:title="${imOwner} ? 'Você' : ${editor.email}"
+                  >
+                    <td class="has-text-centered" th:text="${editor.email}"></td>
+                    <td class="has-text-centered" th:text="${editor.username}"></td>
+                    <td class="has-text-centered" th:text="${editor.role}"></td>
+                    <td
+                      class="has-text-centered"
+                      th:text="${editor.id.equals(article.createdBy.id)} ? 'Sim' : 'Não'"
+                    ></td>
+                    <td class="has-text-centered">
+                      <button
+                        th:if="${!imOwner}"
+                        class="button is-small is-danger remove-editor"
+                        th:data-hash="${editor.id}"
+                        type="button"
+                      >
+                        <i class="fa-solid fa-user-slash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <form data-message="Stack adicionada ao artigo" id="modal-create-stack" class="modal">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Crie uma nova stack</p>
+          <button type="button" class="delete" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+          <div class="field">
+            <label class="label" for="stack-name">Nome</label>
+            <div class="control">
+              <input class="input" type="text" placeholder="Java" id="stack-name" />
+            </div>
+            <small class="help">
+              Stacks são como categorias. Elas ajudam a agrupar documentos com temas semelhantes,
+              facilitando a organização já que tudo relacionado ao mesmo assunto está no mesmo
+              lugar.
+            </small>
+          </div>
+
+          <div class="control">
+            <div class="description-container">
+              <label class="label" for="stack-description">Descrição da Stack</label>
+              <textarea
+                class="textarea has-fixed-size"
+                placeholder="Lançada pela primeira vez pela Sun Microsystems em 1995..."
+                id="stack-description"
+                rows="4"
+              ></textarea>
+              <small class="description-len">160</small>
+            </div>
+            <small class="help">
+              Um resumo breve e conciso do conteúdo. Essa descrição não é visível para os usuários
+              na página em si, mas é utilizada pelos mecanismos de busca para exibir um trecho
+              descritivo nos resultados de pesquisa e na apresentação do artigo.
+            </small>
+          </div>
+        </section>
+        <footer class="modal-card-foot">
+          <div class="buttons">
+            <button data-no-hide="true" class="button is-success">Adicionar nova stack</button>
+            <button type="button" class="button">Cancelar</button>
+          </div>
+        </footer>
+      </div>
+    </form>
+
+    <th:block th:replace="~{fragments/footer}"></th:block>
+
+    <input
+      type="hidden"
+      th:data-slug="${article.slug}"
+      value="/article/edit/metadata"
+      id="wwwroot-page-manager-id"
+    />
+  </body>
+</html>

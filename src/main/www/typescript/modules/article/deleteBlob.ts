@@ -5,7 +5,7 @@ export async function deleteBlob(nanoId: string, slug: string) {
   const { toaster, screenProgress } = tools();
   screenProgress.show();
   try {
-    const response = await fetch(`/api/articles/${slug}/${nanoId}`, {
+    const response = await fetch(`/api/article/${slug}/${nanoId}`, {
       method: 'DELETE',
       credentials: 'same-origin',
       headers: { 'Content-Type': 'application/json' },

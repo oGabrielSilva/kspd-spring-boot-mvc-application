@@ -22,7 +22,7 @@ export async function saveEditorChanges(
   };
 
   if (!Object.keys(data).length) return;
-  const response = await fetch('/api/articles/' + originalSlug, {
+  const response = await fetch('/api/article/' + originalSlug, {
     method: 'PATCH',
     body: JSON.stringify(data),
     headers: { 'Content-Type': 'application/json' },

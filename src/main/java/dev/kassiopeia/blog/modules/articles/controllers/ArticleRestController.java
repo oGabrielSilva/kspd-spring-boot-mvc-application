@@ -1,6 +1,9 @@
 package dev.kassiopeia.blog.modules.articles.controllers;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,8 +23,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.aventrix.jnanoid.jnanoid.NanoIdUtils;
 
 import dev.kassiopeia.blog.exceptions.BadRequest;
+import dev.kassiopeia.blog.exceptions.Conflict;
 import dev.kassiopeia.blog.exceptions.InternalServerError;
 import dev.kassiopeia.blog.exceptions.NotFound;
+import dev.kassiopeia.blog.exceptions.PayloadTooLarge;
 import dev.kassiopeia.blog.exceptions.Unauthorized;
 import dev.kassiopeia.blog.modules.articles.DTOs.ArticleDTO;
 import dev.kassiopeia.blog.modules.articles.DTOs.ArticlePatchDTO;
@@ -34,7 +39,7 @@ import dev.kassiopeia.blog.modules.user.services.UserService;
 import dev.kassiopeia.blog.utilities.StringUtils;
 
 @RestController
-@RequestMapping("/api/articles")
+@RequestMapping("/api/article")
 public class ArticleRestController {
     @Autowired
     UserService userService;
@@ -71,7 +76,7 @@ public class ArticleRestController {
         if (article == null)
             throw new NotFound("Artigo não encontrado");
         if (articleService.cannotEdit(user, article))
-            throw new Unauthorized("Usuário não tem a permissão de modificar o artigo " + slug);
+            throw new Unauthorized("Usuário não tem a permissão para modificar o artigo " + slug);
 
         var changed = false;
 
@@ -117,18 +122,19 @@ public class ArticleRestController {
         if (article == null)
             throw new BadRequest("Artigo não encontrado");
         if (articleService.cannotEdit(user, article))
-            throw new Unauthorized("Usuário não tem a permissão de modificar o artigo " + slug);
+            throw new Unauthorized("Usuário não tem a permissão para modificar o artigo " + slug);
         var id = NanoIdUtils.randomNanoId();
         var s3 = s3Service.uploadMultipart(blob, "articles/" + slug + '/' + id, null);
         if (!s3.success())
             throw new InternalServerError("Erro ao fazer upload da imagem");
-        var link = new ImageLink(s3.bucket(), s3.url(), "/articles/" + slug + "/" + id, id,
+        var link = new ImageLink(s3.bucket(), s3.url(), "/article/" + slug + "/" + id, id,
                 s3.path());
         article.getImages().add(link);
         articleRepository.save(article);
         return Map.of("url", link.getPublicURL(), "id", id);
     }
 
+    // Deleta imagens pelo nanoId dela
     @DeleteMapping("/{slug}/{nanoId}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void uploadBlob(@PathVariable("slug") String slug, @PathVariable("nanoId") String nanoId) {
@@ -141,7 +147,7 @@ public class ArticleRestController {
         if (article == null)
             throw new NotFound("Artigo não encontrado");
         if (articleService.cannotEdit(user, article))
-            throw new Unauthorized("Usuário não tem a permissão de modificar o artigo " + slug);
+            throw new Unauthorized("Usuário não tem a permissão para modificar o artigo " + slug);
         var link = article.getImages().stream().filter(img -> img.getNanoId().equals(nanoId)).findFirst();
         if (link.isEmpty())
             throw new NotFound("Imagem não encontrada");
@@ -149,6 +155,79 @@ public class ArticleRestController {
         var success = s3Service.delete(link.get().getPath());
         if (!success)
             throw new InternalServerError("Erro ao deletar a imagem " + nanoId);
+        articleRepository.save(article);
+    }
+
+    @PatchMapping("/{slug}/keywords")
+    public Map<String, List<String>> pushKeywords(@PathVariable("slug") String slug,
+            @RequestBody Map<String, List<String>> mapKeywords) {
+        if (StringUtils.isNullOrBlank(slug))
+            throw new BadRequest("Slug não informado");
+        if (mapKeywords == null || mapKeywords.isEmpty())
+            throw new BadRequest("Nenhuma lista informada");
+        var keywords = mapKeywords.get("keywords");
+        if (keywords == null || keywords.isEmpty())
+            throw new BadRequest("Lista vazia ou não informada");
+        if (keywords.size() > 20)
+            throw new PayloadTooLarge("O limite de palavras-chave é 20");
+        var user = userService.getCurrentAuthenticatedUserOrThrowsForbidden();
+        var article = articleRepository.findBySlug(slug);
+        if (article == null)
+            throw new NotFound("Artigo não encontrado");
+        if (articleService.cannotEdit(user, article))
+            throw new Unauthorized("Usuário não tem a permissão para modificar o artigo " + slug);
+        if (article.getKeywords().size() >= 20)
+            throw new Conflict("Artigo já possui a quantidade máxima de palavras-chave");
+        Set<String> saved = new HashSet<String>();
+        keywords.forEach(word -> {
+            if (article.getKeywords().size() >= 20)
+                return;
+            article.getKeywords().add(word);
+            saved.add(word);
+        });
+        if (!saved.isEmpty())
+            articleRepository.save(article);
+
+        return Map.of("keywords", article.getKeywords().stream().toList(), "saved", saved.stream().toList());
+    }
+
+    @DeleteMapping("/{slug}/keyword/{keyword}")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    public void deleteKeyword(@PathVariable("slug") String slug,
+            @PathVariable("keyword") String keyword) {
+        if (StringUtils.isNullOrBlank(slug))
+            throw new BadRequest("Slug não informado");
+        if (StringUtils.isNullOrBlank(keyword))
+            throw new BadRequest("Palavra-chave não informada");
+        var user = userService.getCurrentAuthenticatedUserOrThrowsForbidden();
+        var article = articleRepository.findBySlug(slug);
+        if (article == null)
+            throw new NotFound("Artigo não encontrado");
+        if (articleService.cannotEdit(user, article))
+            throw new Unauthorized("Usuário não tem a permissão para modificar o artigo " + slug);
+        var success = article.getKeywords().removeIf(key -> key.equals(keyword));
+        if (!success)
+            throw new NotFound("Palavra-chave não cadastrada");
+        articleRepository.save(article);
+    }
+
+    @PatchMapping("/{slug}/description")
+    public void putDescription(@PathVariable("slug") String slug, @RequestBody Map<String, String> body) {
+        if (StringUtils.isNullOrBlank(slug))
+            throw new BadRequest("Slug não informado");
+        var description = body.get("description");
+        if (StringUtils.isNullOrBlank(description))
+            throw new BadRequest("Descrição inválida ou não informada");
+        var article = articleRepository.findBySlug(slug);
+        if (article == null)
+            throw new NotFound("Artigo não encontrado");
+        if (StringUtils.isEquals(article.getDescription(), description))
+            throw new Conflict("A nova descrição não pode ser igual a anterior");
+        var user = userService.getCurrentAuthenticatedUserOrThrowsForbidden();
+        if (articleService.cannotEdit(user, article))
+            throw new Unauthorized("Usuário não tem a permissão para modificar o artigo " + slug);
+
+        article.setDescription(description);
         articleRepository.save(article);
     }
 }

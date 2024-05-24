@@ -1,6 +1,7 @@
 import '../css/global.css';
 import { Bulma } from './libs/Bulma';
 import { runAccountVerificationManager } from './pages/AccountVerificationManager';
+import { runEditArticleMetadataPageManager } from './pages/EditArticleMetadataPageManager';
 import { runEditArticlePageManager } from './pages/EditArticlePageManager';
 import { runIndexPageManager } from './pages/IndexPageManager';
 import { runProfileEditPageManager } from './pages/ProfileEditPageManager';
@@ -36,6 +37,9 @@ import { runWritePageManager } from './pages/WritePageManager';
       break;
     case '/article/edit':
       runEditArticlePageManager(wwwrootPageManager.dataset.slug);
+      break;
+    case '/article/edit/metadata':
+      runEditArticleMetadataPageManager(wwwrootPageManager.dataset.slug);
       break;
   }
 

@@ -20,4 +20,18 @@ export class ArticleValidation {
       .split(' ')
       .join('-');
   }
+
+  public extractKeywords(content: string, savedKeywords: Array<string>) {
+    return content
+      .trim()
+      .split(',')
+      .map((preKey) => preKey.trim())
+      .join(';')
+      .split(';')
+      .map((key) => {
+        const value = key.trim();
+        return savedKeywords.indexOf(value) >= 0 ? null : value;
+      })
+      .filter((key) => key !== null && key !== '' && key !== ' ');
+  }
 }

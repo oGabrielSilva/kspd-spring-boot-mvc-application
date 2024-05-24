@@ -1,6 +1,7 @@
 package dev.kassiopeia.blog.modules.articles.DTOs;
 
 import java.util.List;
+import java.util.Set;
 
 import dev.kassiopeia.blog.modules.stacks.DTOs.StackDTO;
 import dev.kassiopeia.blog.modules.user.DTOs.UserDTO;
@@ -11,7 +12,7 @@ public record ArticleDTO(
                 String title,
                 String content,
                 String description,
-                List<String> keywords,
+                Set<String> keywords,
                 List<StackDTO> stacks,
                 List<UserDTO> editors,
                 long views,
