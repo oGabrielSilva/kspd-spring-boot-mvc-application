@@ -34,7 +34,7 @@ public class TokenService {
 
     public String create(User user) {
         try {
-            var hours = user.hasRole(AuthenticationRole.MODERATOR) ? 4 : 144;
+            var hours = user.hasRole(AuthenticationRole.MODERATOR) ? 8 : 168;
             return JWT.create().withIssuer(issuer).withAudience(audience).withSubject(user.getEmail())
                     .withClaim("authorities", user.listOfRoles())
                     .withExpiresAt(LocalDateTime.now().plusHours(hours).toInstant(ZoneOffset.UTC)).sign(algorithm);
@@ -81,7 +81,7 @@ public class TokenService {
         c.setHttpOnly(true);
         c.setAttribute("SameSite", "Strict");
         c.setPath("/");
-        c.setMaxAge(60 * 60 * 24 * 2);
+        c.setMaxAge(60 * 60 * 24 * 7);
         return c;
     }
 

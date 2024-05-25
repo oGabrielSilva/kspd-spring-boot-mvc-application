@@ -30,6 +30,7 @@ import dev.kassiopeia.blog.exceptions.ServiceUnavailable;
 import dev.kassiopeia.blog.exceptions.Unauthorized;
 import dev.kassiopeia.blog.modules.aws.services.AmazonS3Service;
 import dev.kassiopeia.blog.modules.user.DTOs.AccountValidationDTO;
+import dev.kassiopeia.blog.modules.user.DTOs.UserDTO;
 import dev.kassiopeia.blog.modules.user.DTOs.UserUpdateDTO;
 import dev.kassiopeia.blog.modules.user.DTOs.UserUpdatePasswordDTO;
 import dev.kassiopeia.blog.modules.user.entities.SocialMedia;
@@ -61,6 +62,16 @@ public class UserRestController {
     EmailRepository emailRepository;
     // @Autowired
     // ApplicationBecomeAuthorRepository applicationBecomeAuthorRepository;
+
+    @GetMapping("/{user}")
+    public UserDTO findUser(@PathVariable("user") String user) {
+        if (StringUtils.isNullOrBlank(user))
+            throw new BadRequest("Informe qual usuário está buscando");
+        var search = user.contains("@") ? userRepository.findByEmail(user) : userRepository.findByUsername(user);
+        if (search == null)
+            throw new NotFound(String.format("Usuário %s não encontrado", user));
+        return search.toDataTransferObject();
+    }
 
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     @PatchMapping

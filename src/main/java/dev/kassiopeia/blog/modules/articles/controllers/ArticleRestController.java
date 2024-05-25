@@ -38,6 +38,7 @@ import dev.kassiopeia.blog.modules.aws.services.AmazonS3Service;
 import dev.kassiopeia.blog.modules.stacks.DTOs.StackDTO;
 import dev.kassiopeia.blog.modules.stacks.repositories.StackRepository;
 import dev.kassiopeia.blog.modules.stacks.services.StackService;
+import dev.kassiopeia.blog.modules.user.repositories.UserRepository;
 import dev.kassiopeia.blog.modules.user.services.UserService;
 import dev.kassiopeia.blog.utilities.StringUtils;
 
@@ -46,6 +47,8 @@ import dev.kassiopeia.blog.utilities.StringUtils;
 public class ArticleRestController {
     @Autowired
     UserService userService;
+    @Autowired
+    UserRepository userRepository;
     @Autowired
     ArticleService articleService;
     @Autowired
@@ -278,5 +281,18 @@ public class ArticleRestController {
             throw new Unauthorized("Usuário não tem a permissão para modificar o artigo " + slug);
         article.getStacks().removeIf(stack -> stack.getName().equals(stackName));
         articleRepository.save(article);
+    }
+
+    @PatchMapping("/{slug}/editors")
+    public void putEditor(@PathVariable("slug") String slug, @RequestBody Map<String, String> body) {
+        if (StringUtils.isNullOrBlank(slug))
+            throw new BadRequest("Slug não informado");
+        var email = body.get("email");
+        if (StringUtils.isNullOrBlank(email))
+            throw new BadRequest("Email inválido ou não informada");
+        var userByEmail = userRepository.findByEmail(email);
+        if (userByEmail == null)
+            throw new NotFound("Usuário não existe");
+
     }
 }

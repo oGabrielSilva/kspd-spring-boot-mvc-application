@@ -207,11 +207,15 @@
             </div>
           </div>
           <section>
-            <div>
+            <form
+              data-non-author="Esse usuário não tem permissão para ser um editor"
+              id="form-add-new-editor"
+            >
               <label class="label" for="add-editor">Adicione um novo editor</label>
               <div class="field has-addons" style="width: 100%">
                 <div class="control" style="width: 100%">
                   <input
+                    data-message="Informe um email ou usarname"
                     class="input"
                     id="add-editor"
                     type="text"
@@ -219,12 +223,12 @@
                   />
                 </div>
                 <div class="control">
-                  <button type="button" class="button is-info">Buscar</button>
+                  <button type="submit" class="button is-info">Buscar</button>
                 </div>
               </div>
-            </div>
+            </form>
             <div style="overflow-x: auto" class="pt-4">
-              <table class="table" style="width: 100%">
+              <table data-no="Não" class="table" id="metadata-user-tb" style="width: 100%">
                 <thead>
                   <tr>
                     <th class="has-text-centered">Email</th>
@@ -251,7 +255,7 @@
                       <button
                         th:if="${!imOwner}"
                         class="button is-small is-danger remove-editor"
-                        th:data-hash="${editor.id}"
+                        th:data-hash="${editor.email}"
                         type="button"
                       >
                         <i class="fa-solid fa-user-slash"></i>
@@ -354,6 +358,42 @@
               class="button is-warning"
             >
               Sim, remover <strong></strong>
+            </button>
+            <button type="button" class="button">Cancelar</button>
+          </div>
+        </footer>
+      </div>
+    </form>
+
+    <form
+      data-message="Usuário adicionado como editor"
+      id="confirm-add-new-editor-modal"
+      class="modal"
+    >
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <h1 class="modal-card-title">Adicionar <strong id="user-name"></strong> como editor?</h1>
+
+          <button type="button" class="delete" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+          <div>
+            <span>Email: <code id="user-email"></code></span>
+          </div>
+          <div>
+            <span>Username: <code id="user-username"></code></span>
+          </div>
+        </section>
+        <footer class="modal-card-foot">
+          <div class="buttons">
+            <button
+              style="display: block"
+              data-no-hide="true"
+              type="submit"
+              class="button is-warning"
+            >
+              Sim, adicionar <strong></strong>
             </button>
             <button type="button" class="button">Cancelar</button>
           </div>
