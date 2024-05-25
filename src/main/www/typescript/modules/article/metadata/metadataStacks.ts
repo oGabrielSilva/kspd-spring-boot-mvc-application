@@ -2,61 +2,79 @@ import { hideModal, showModal } from '../../../libs/Bulma';
 import { forbidden } from '../../../utilities/forbidden';
 import { generateHTML } from '../../../utilities/generateHtml';
 import { tools } from '../../../utilities/tools';
+import { addStackToTable } from './partials/addStackToTable';
+import { listenCreateStackModal } from './partials/listenCreateStackModal';
+
+export const stackTable = document.querySelector('table#stack-tb') as HTMLTableElement;
+export let onClickRemoveStack: (button: HTMLButtonElement) => void;
 
 export function metadataStacks(slug: string) {
   const form = document.querySelector('form#add-stack') as HTMLFormElement;
   const createStackModal = document.getElementById('modal-create-stack') as HTMLFormElement;
+  const selectStack = form.querySelector('select');
 
   listenCreateStackModal(createStackModal, slug);
+
+  onClickRemoveStack = (button) => {
+    const stack = button.dataset.stack;
+    confirmRemoveStack(stack);
+    confirmRemoveStackModal.dataset.stack = stack;
+  };
+
+  stackTable.querySelectorAll('button').forEach((button) => {
+    button.onclick = () => onClickRemoveStack(button);
+  });
 
   form
     .querySelector<HTMLElement>('#create-stack')
     .addEventListener('click', () => showModal(createStackModal));
+
+  const confirmStackModal = document.querySelector('#confirm-add-stack-modal') as HTMLFormElement;
+  const confirmStackModalTitles = confirmStackModal.querySelectorAll('strong');
+
+  listenConfirmStackIsAccepted(confirmStackModal, selectStack, slug);
+
+  function confirmStack(stack: string) {
+    confirmStackModalTitles.forEach((title) => (title.textContent = stack));
+    showModal(confirmStackModal);
+  }
+
+  const confirmRemoveStackModal = document.getElementById(
+    'confirm-remove-stack-modal'
+  ) as HTMLFormElement;
+  const confirmRemoveStackModalTitles = confirmRemoveStackModal.querySelectorAll('strong');
+
+  listenConfirmRemoveStackIsAccepted(confirmRemoveStackModal, slug);
+
+  function confirmRemoveStack(stack: string) {
+    confirmRemoveStackModalTitles.forEach((title) => (title.textContent = stack));
+    showModal(confirmRemoveStackModal);
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    confirmStack(selectStack.value);
+  });
 }
 
-async function listenCreateStackModal(form: HTMLFormElement, slug: string) {
-  const { anim, toaster, screenProgress } = tools();
-  const stackTable = document.querySelector('table#stack-tb') as HTMLTableElement;
-  const nameInput = form.querySelector('#stack-name') as HTMLInputElement;
-  const descriptionInput = form.querySelector('#stack-description') as HTMLTextAreaElement;
-  const descriptionHelper = form.querySelector('.description-len');
-  const descriptionMaxLen = 160;
+async function listenConfirmStackIsAccepted(
+  modal: HTMLFormElement,
+  stackSelect: HTMLSelectElement,
+  slug: string
+) {
+  const { screenProgress, toaster } = tools();
+  const successMessage = modal.dataset.message;
 
-  const successMessage = form.dataset.message;
-
-  nameInput.addEventListener('input', () => {
-    if (nameInput.value.length > 100 || nameInput.value.trim().length < 1)
-      nameInput.classList.add('is-danger');
-    else nameInput.classList.remove('is-danger');
-  });
-
-  descriptionInput.addEventListener('input', () => {
-    const len = descriptionInput.value.length;
-    if (len > descriptionMaxLen) descriptionInput.classList.add('is-danger');
-    else descriptionInput.classList.remove('is-danger');
-    descriptionHelper.textContent = String(descriptionMaxLen - len);
-  });
-
-  form.addEventListener('submit', async (e) => {
+  modal.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const name = nameInput.value.trim();
-    if (name.length < 1 || name.length > 100) {
-      anim.shake(nameInput);
-      return;
-    }
-    const description = descriptionInput.value.trim();
-    if (description.length > descriptionMaxLen) {
-      anim.shake(descriptionInput);
-      return;
-    }
-
     screenProgress.show();
+
     try {
-      const response = await fetch('/api/stack?article=' + slug, {
-        method: 'POST',
-        body: JSON.stringify({ name, description }),
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch(`/api/article/${slug}/stack`, {
+        method: 'PATCH',
+        body: JSON.stringify({ stack: stackSelect.value }),
         credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
       });
       if (response.status === 403) return forbidden();
       if (!response.ok) {
@@ -64,12 +82,10 @@ async function listenCreateStackModal(form: HTMLFormElement, slug: string) {
         toaster.danger(message);
         return;
       }
-      const stack = (await response.json()) as Stack;
-      const tr = generateTableRow(stack);
-      stackTable.tBodies[0].appendChild(tr);
-      stackTable.tBodies[0].querySelector('#no-stack')?.remove();
-      hideModal(form);
+      stackSelect.querySelector(`option[value="${stackSelect.value}"]`)?.remove();
+      addStackToTable(await response.json());
       toaster.info(successMessage);
+      hideModal(modal);
     } catch (error) {
       console.log(error);
       toaster.danger();
@@ -79,52 +95,44 @@ async function listenCreateStackModal(form: HTMLFormElement, slug: string) {
   });
 }
 
-function generateTableRow(stack: Stack) {
-  return generateHTML({
-    htmlType: 'tr',
-    attributes: [{ key: 'title', value: stack.name }],
-    children: [
-      {
-        htmlType: 'td',
-        attributes: [{ key: 'class', value: 'has-text-centered' }],
-        children: [
-          {
-            htmlType: 'a',
-            attributes: [
-              { key: 'target', value: '_blank' },
-              { key: 'rel', value: 'noopener noreferrer' },
-              { key: 'href', value: '/stack/' + stack.name },
-            ],
-            value: stack.name,
-          },
-        ],
-      },
-      {
-        htmlType: 'td',
-        attributes: [{ key: 'class', value: 'has-text-centered' }],
-        value: stack.description,
-      },
-      {
-        htmlType: 'td',
-        attributes: [{ key: 'class', value: 'has-text-centered' }],
-        children: [
-          {
-            htmlType: 'button',
-            attributes: [
-              { key: 'class', value: 'button is-small is-danger remove-stack' },
-              { key: 'data-stack', value: stack.name },
-              { key: 'type', value: 'button' },
-            ],
-            children: [
-              {
-                htmlType: 'i',
-                attributes: [{ key: 'class', value: 'fa-solid fa-trash-arrow-up' }],
-              },
-            ],
-            onClick: () => console.log('clicked at', stack),
-          },
-        ],
-      },
-    ],
+async function listenConfirmRemoveStackIsAccepted(modal: HTMLFormElement, slug: string) {
+  const { screenProgress, toaster } = tools();
+  const successMessage = modal.dataset.message;
+  const select = document.getElementById('add-stack').querySelector<HTMLSelectElement>('select');
+
+  modal.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    screenProgress.show();
+    const stack = modal.dataset.stack;
+
+    try {
+      const response = await fetch(`/api/article/${slug}/stack`, {
+        method: 'DELETE',
+        body: JSON.stringify({ stack }),
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      if (response.status === 403) return forbidden();
+      if (!response.ok) {
+        const { message } = await response.json();
+        toaster.danger(message);
+        return;
+      }
+      stackTable.querySelector(`tr[data-stack="${stack}"]`)?.remove();
+      select.appendChild(
+        generateHTML({
+          htmlType: 'option',
+          attributes: [{ key: 'value', value: stack }],
+          value: stack,
+        })
+      );
+      toaster.info(successMessage);
+      hideModal(modal);
+    } catch (error) {
+      console.log(error);
+      toaster.danger();
+    } finally {
+      screenProgress.hide();
+    }
   });
 }

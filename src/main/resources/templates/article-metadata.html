@@ -136,7 +136,7 @@
                 </div>
               </div>
               <div>
-                <button type="button" class="button is-primary is-outlined">Adicionar stack</button>
+                <button type="submit" class="button is-primary is-outlined">Adicionar stack</button>
 
                 <button
                   type="button"
@@ -165,6 +165,7 @@
                     th:unless="${#lists.isEmpty(article.stacks)}"
                     th:each="stack : ${article.stacks}"
                     th:title="${stack.name}"
+                    th:data-stack="${stack.name}"
                   >
                     <td class="has-text-centered">
                       <a
@@ -306,6 +307,54 @@
         <footer class="modal-card-foot">
           <div class="buttons">
             <button data-no-hide="true" class="button is-success">Adicionar nova stack</button>
+            <button type="button" class="button">Cancelar</button>
+          </div>
+        </footer>
+      </div>
+    </form>
+
+    <form data-message="Stack adicionada ao artigo" id="confirm-add-stack-modal" class="modal">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <h1 class="modal-card-title">Adicionar <strong id="cstack-name"></strong>?</h1>
+
+          <button type="button" class="delete" aria-label="close"></button>
+        </header>
+        <footer class="modal-card-foot">
+          <div class="buttons">
+            <button
+              style="display: block"
+              data-no-hide="true"
+              type="submit"
+              class="button is-primary"
+            >
+              Sim, adicionar <strong></strong>
+            </button>
+            <button type="button" class="button is-outlined is-danger">Cancelar</button>
+          </div>
+        </footer>
+      </div>
+    </form>
+
+    <form data-message="Stack removida" id="confirm-remove-stack-modal" class="modal">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <h1 class="modal-card-title">Remover <strong id="cstack-name"></strong>?</h1>
+
+          <button type="button" class="delete" aria-label="close"></button>
+        </header>
+        <footer class="modal-card-foot">
+          <div class="buttons">
+            <button
+              style="display: block"
+              data-no-hide="true"
+              type="submit"
+              class="button is-warning"
+            >
+              Sim, remover <strong></strong>
+            </button>
             <button type="button" class="button">Cancelar</button>
           </div>
         </footer>

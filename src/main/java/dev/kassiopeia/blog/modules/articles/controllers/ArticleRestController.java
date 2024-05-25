@@ -35,6 +35,9 @@ import dev.kassiopeia.blog.modules.articles.entities.ImageLink;
 import dev.kassiopeia.blog.modules.articles.repositories.ArticleRepository;
 import dev.kassiopeia.blog.modules.articles.services.ArticleService;
 import dev.kassiopeia.blog.modules.aws.services.AmazonS3Service;
+import dev.kassiopeia.blog.modules.stacks.DTOs.StackDTO;
+import dev.kassiopeia.blog.modules.stacks.repositories.StackRepository;
+import dev.kassiopeia.blog.modules.stacks.services.StackService;
 import dev.kassiopeia.blog.modules.user.services.UserService;
 import dev.kassiopeia.blog.utilities.StringUtils;
 
@@ -49,6 +52,10 @@ public class ArticleRestController {
     ArticleRepository articleRepository;
     @Autowired
     AmazonS3Service s3Service;
+    @Autowired
+    StackRepository stackRepository;
+    @Autowired
+    StackService stackService;
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
@@ -211,6 +218,7 @@ public class ArticleRestController {
         articleRepository.save(article);
     }
 
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
     @PatchMapping("/{slug}/description")
     public void putDescription(@PathVariable("slug") String slug, @RequestBody Map<String, String> body) {
         if (StringUtils.isNullOrBlank(slug))
@@ -228,6 +236,47 @@ public class ArticleRestController {
             throw new Unauthorized("Usuário não tem a permissão para modificar o artigo " + slug);
 
         article.setDescription(description);
+        articleRepository.save(article);
+    }
+
+    @PatchMapping("/{slug}/stack")
+    public StackDTO putStack(@PathVariable("slug") String slug, @RequestBody Map<String, String> body) {
+        if (StringUtils.isNullOrBlank(slug))
+            throw new BadRequest("Slug não informado");
+        var stackName = body.get("stack");
+        if (StringUtils.isNullOrBlank(stackName))
+            throw new BadRequest("Stack inválida ou não informada");
+        var stack = stackRepository.findByName(stackName);
+        if (stack == null)
+            throw new NotFound(String.format("Stack %s não existe", stackName));
+        var article = articleRepository.findBySlug(slug);
+        if (article == null)
+            throw new NotFound("Artigo não encontrado");
+        var user = userService.getCurrentAuthenticatedUserOrThrowsForbidden();
+        if (articleService.cannotEdit(user, article))
+            throw new Unauthorized("Usuário não tem a permissão para modificar o artigo " + slug);
+        var success = article.getStacks().add(stack);
+        if (success)
+            articleRepository.save(article);
+        return stackService.toDataTransferObject(stack);
+    }
+
+    @DeleteMapping("/{slug}/stack")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    public void removeStack(@PathVariable("slug") String slug, @RequestBody Map<String, String> body) {
+        if (StringUtils.isNullOrBlank(slug))
+            throw new BadRequest("Slug não informado");
+        var stackName = body.get("stack");
+        if (StringUtils.isNullOrBlank(stackName))
+            throw new BadRequest("Stack inválida ou não informada");
+
+        var article = articleRepository.findBySlug(slug);
+        if (article == null)
+            throw new NotFound("Artigo não encontrado");
+        var user = userService.getCurrentAuthenticatedUserOrThrowsForbidden();
+        if (articleService.cannotEdit(user, article))
+            throw new Unauthorized("Usuário não tem a permissão para modificar o artigo " + slug);
+        article.getStacks().removeIf(stack -> stack.getName().equals(stackName));
         articleRepository.save(article);
     }
 }
