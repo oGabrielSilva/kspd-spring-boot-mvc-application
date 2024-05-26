@@ -77,7 +77,7 @@ public class ArticleController {
                 .findAllByNameNotIn(art.getStacks().stream().map(stack -> stack.getName()).toList());
 
         var mv = new ModelAndView("article-metadata");
-        mv.addObject("imOwner", user.getId().equals(art.getCreatedBy().id()));
+        mv.addObject("ownerId", art.getCreatedBy().id());
         mv.addObject("article", art);
         mv.addObject("title", art.getTitle());
         mv.addObject("stacks", stacks);

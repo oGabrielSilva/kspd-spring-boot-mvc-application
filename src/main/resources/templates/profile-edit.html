@@ -147,7 +147,7 @@
             <label class="label" for="input-bio"> Bio </label>
             <div class="control">
               <textarea
-                th:value="${user.bio}"
+                th:text="${user.bio}"
                 th:data-original="${user.bio}"
                 class="textarea"
                 name="bio"

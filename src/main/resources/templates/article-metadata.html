@@ -228,21 +228,32 @@
               </div>
             </form>
             <div style="overflow-x: auto" class="pt-4">
-              <table data-no="Não" class="table" id="metadata-user-tb" style="width: 100%">
+              <table
+                data-button-title="Remover #?"
+                data-no="Não"
+                class="table"
+                id="metadata-user-tb"
+                style="width: 100%"
+              >
                 <thead>
                   <tr>
                     <th class="has-text-centered">Email</th>
                     <th class="has-text-centered">Username</th>
                     <th class="has-text-centered"><abbr title="Papel do usuário">R.</abbr></th>
-                    <th class="has-text-centered"><abbr title="Criador do artigo">#</abbr></th>
+                    <th class="has-text-centered">
+                      <abbr title="Criador do artigo">
+                        <span class="icon"><i class="fa-regular fa-chess-king"></i></span>
+                      </abbr>
+                    </th>
                     <th class="has-text-centered">Ações</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr
                     th:each="editor : ${article.editors}"
-                    th:class="${imOwner} ? 'is-primary' : ''"
-                    th:title="${imOwner} ? 'Você' : ${editor.email}"
+                    th:class="${ownerId == editor.id} ? 'is-warning' : ''"
+                    th:title="${ownerId == editor.id} ? 'Você' : ${editor.email}"
+                    th:data-hash="${editor.email}"
                   >
                     <td class="has-text-centered" th:text="${editor.email}"></td>
                     <td class="has-text-centered" th:text="${editor.username}"></td>
@@ -253,10 +264,11 @@
                     ></td>
                     <td class="has-text-centered">
                       <button
-                        th:if="${!imOwner}"
+                        th:if="${ownerId != editor.id}"
                         class="button is-small is-danger remove-editor"
                         th:data-hash="${editor.email}"
                         type="button"
+                        th:title="|Remover ${editor.name}|"
                       >
                         <i class="fa-solid fa-user-slash"></i>
                       </button>
@@ -366,7 +378,7 @@
     </form>
 
     <form
-      data-message="Usuário adicionado como editor"
+      data-message='Usuário "#" adicionado como editor'
       id="confirm-add-new-editor-modal"
       class="modal"
     >
@@ -394,6 +406,36 @@
               class="button is-warning"
             >
               Sim, adicionar <strong></strong>
+            </button>
+            <button type="button" class="button">Cancelar</button>
+          </div>
+        </footer>
+      </div>
+    </form>
+
+    <form
+      data-message='Usuário "#" removido da lista de editores'
+      id="confirm-remove-editor-modal"
+      class="modal"
+    >
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <h1 class="modal-card-title">
+            Remover <strong id="editor-view-email"></strong> da lista de editores?
+          </h1>
+
+          <button type="button" class="delete" aria-label="close"></button>
+        </header>
+        <footer class="modal-card-foot">
+          <div class="buttons">
+            <button
+              style="display: block"
+              data-no-hide="true"
+              type="submit"
+              class="button is-primary"
+            >
+              Remover
             </button>
             <button type="button" class="button">Cancelar</button>
           </div>

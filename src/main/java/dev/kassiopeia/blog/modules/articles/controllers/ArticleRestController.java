@@ -284,15 +284,54 @@ public class ArticleRestController {
     }
 
     @PatchMapping("/{slug}/editors")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void putEditor(@PathVariable("slug") String slug, @RequestBody Map<String, String> body) {
         if (StringUtils.isNullOrBlank(slug))
             throw new BadRequest("Slug não informado");
         var email = body.get("email");
         if (StringUtils.isNullOrBlank(email))
-            throw new BadRequest("Email inválido ou não informada");
-        var userByEmail = userRepository.findByEmail(email);
-        if (userByEmail == null)
+            throw new BadRequest("Email inválido ou não informado");
+        var newEditor = userRepository.findByEmail(email);
+        if (newEditor == null)
+            throw new NotFound("Usuário não existe");
+        if (!newEditor.isEmailChecked())
+            throw new Unauthorized(String.format("Usuário %s não tem email verificado", newEditor.getEmail()));
+        if (newEditor.isNonAuthor())
+            throw new Unauthorized(String.format("Usuário %s não pode ser um editor", newEditor.getEmail()));
+        var article = articleRepository.findBySlug(slug);
+        if (article == null)
+            throw new NotFound("Artigo não encontrado");
+        var user = userService.getCurrentAuthenticatedUserOrThrowsForbidden();
+        if (articleService.cannotEdit(user, article))
+            throw new Unauthorized("Usuário não tem a permissão necessária para executar esta ação");
+        article.pushEditors(newEditor);
+        articleRepository.save(article);
+    }
+
+    @DeleteMapping("/{slug}/editors")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    public void removeEditor(@PathVariable("slug") String slug, @RequestBody Map<String, String> body) {
+        if (StringUtils.isNullOrBlank(slug))
+            throw new BadRequest("Slug não informado");
+
+        var email = body.get("email");
+        if (StringUtils.isNullOrBlank(email))
+            throw new BadRequest("Email inválido ou não informado");
+
+        var editorExists = userRepository.existsByEmail(email);
+        if (!editorExists)
             throw new NotFound("Usuário não existe");
 
+        var article = articleRepository.findBySlug(slug);
+        if (article == null)
+            throw new NotFound("Artigo não encontrado");
+
+        var user = userService.getCurrentAuthenticatedUserOrThrowsForbidden();
+        if (articleService.cannotEdit(user, article))
+            throw new Unauthorized("Usuário não tem a permissão necessária para executar esta ação");
+
+        var removed = article.getEditors().removeIf(ed -> ed.email().equals(email));
+        if (removed)
+            articleRepository.save(article);
     }
 }
