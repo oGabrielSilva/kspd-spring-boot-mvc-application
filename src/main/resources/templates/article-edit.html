@@ -264,6 +264,9 @@
             class="mb-0 content"
             data-placeholder="Escreva..."
             data-save="Documento salvo"
+            th:style='|font-family: "${article.fontFamily.fontName}", ${article.fontFamily.fontType}|'
+            th:data-font-name="${article.fontFamily.fontName}"
+            th:data-font-type="${article.fontFamily.fontType}"
           ></article>
           <button type="button" class="is-hidden" id="up-down">
             <span class="icon">

@@ -38,6 +38,7 @@ export async function saveEditorChanges(
   if (response.status === 204) return;
   const result = (await response.json()) as Article;
   if (result.slug !== originalSlug) {
+    window.onbeforeunload = () => {};
     window.location.href = '/' + result.slug + '/edit';
   }
 }

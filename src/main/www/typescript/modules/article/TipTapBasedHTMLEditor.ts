@@ -6,6 +6,7 @@ import { generateHTML } from '../../utilities/generateHtml';
 import { extensions, toolbar } from '../../libs/Tiptap';
 import { deleteBlob } from './deleteBlob';
 import { uploadBlob } from './uploadBlob';
+import { forbidden } from '../../utilities/forbidden';
 
 export class TipTapBasedHTMLEditor {
   static slug: string;
@@ -288,7 +289,7 @@ export class TipTapBasedHTMLEditor {
         screenProgress.hide();
       }
     };
-    tool.fontFamily.oninput = updateFont;
+    tool.fontFamily.oninput = () => updateFont();
     tool.clean.onclick = () => {
       editor
         .chain()
@@ -307,11 +308,20 @@ export class TipTapBasedHTMLEditor {
         .run();
     };
 
-    function updateFont() {
-      const font = tool.fontFamily.value;
-      const type = tool.fontFamily.querySelector<HTMLElement>(`option[value="${font}"]`).dataset
-        .type;
-      article.style.fontFamily = `"${font}", ${type}`;
+    function updateFont(isFirstTime = false) {
+      if (isFirstTime) {
+        const fontName = article.dataset.fontName;
+        const fontType = article.dataset.fontType;
+        Array.from(tool.fontFamily.querySelectorAll('option'))
+          .find((opt) => opt.value === fontName)
+          ?.setAttribute('selected', 'true');
+        return;
+      }
+      const fontName = tool.fontFamily.value;
+      const fontType = tool.fontFamily.querySelector<HTMLElement>(`option[value="${fontName}"]`)
+        .dataset.type;
+      article.style.fontFamily = `"${fontName}", ${fontType}`;
+      patchArticleFontFamily(TipTapBasedHTMLEditor.slug, fontName, fontType);
     }
 
     function updateFigureClicks(
@@ -347,7 +357,27 @@ export class TipTapBasedHTMLEditor {
       }
     });
 
-    updateFont();
+    updateFont(true);
     return { editor, tool };
+  }
+}
+
+export async function patchArticleFontFamily(
+  articleSlug: string,
+  fontName: string,
+  fontType: string
+) {
+  const response = await fetch(`/api/article/${articleSlug}/font-family`, {
+    method: 'PATCH',
+    body: JSON.stringify({ fontName, fontType }),
+    credentials: 'same-origin',
+    headers: { 'Content-Type': 'application/json' },
+  });
+  if (response.status === 403) return forbidden();
+  const { toaster } = tools();
+  if (!response.ok) {
+    const { message } = await response.json();
+    toaster.danger(message);
+    return;
   }
 }

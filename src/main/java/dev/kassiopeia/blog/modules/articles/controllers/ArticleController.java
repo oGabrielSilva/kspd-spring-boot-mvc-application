@@ -18,6 +18,7 @@ import dev.kassiopeia.blog.exceptions.InternalServerError;
 import dev.kassiopeia.blog.exceptions.NotFound;
 import dev.kassiopeia.blog.modules.articles.entities.Article;
 import dev.kassiopeia.blog.modules.articles.repositories.ArticleRepository;
+import dev.kassiopeia.blog.modules.articles.services.ArticleService;
 import dev.kassiopeia.blog.modules.aws.services.AmazonS3Service;
 import dev.kassiopeia.blog.modules.stacks.entities.Stack;
 import dev.kassiopeia.blog.modules.stacks.repositories.StackRepository;
@@ -31,19 +32,43 @@ public class ArticleController {
     @Autowired
     ArticleRepository articleRepository;
     @Autowired
+    ArticleService articleService;
+    @Autowired
     StackRepository stackRepository;
     @Autowired
     UserService userService;
 
-    @GetMapping("/{slug}/edit")
-    public ModelAndView edit(@PathVariable("slug") String slug) {
+    @GetMapping("/{slug}")
+    public ModelAndView view(@PathVariable("slug") String slug) {
         if (StringUtils.isNullOrBlank(slug)) {
-            throw new NotFound("");
+            throw new NotFound("Slug não informado");
         }
 
         Article art = articleRepository.findBySlug(slug);
         if (art == null) {
-            throw new NotFound("");
+            throw new NotFound("Artigo não existe");
+        }
+
+        var user = userService.getCurrentAuthenticatedUser();
+
+        if (art.getMetadata().isPublished() || user != null && articleService.canEdit(user, art)) {
+            var mv = new ModelAndView("article");
+            mv.addObject("article", art);
+            return mv;
+        }
+
+        throw new NotFound("Não foi encontrado nenhum artigo disponível");
+    }
+
+    @GetMapping("/{slug}/edit")
+    public ModelAndView edit(@PathVariable("slug") String slug) {
+        if (StringUtils.isNullOrBlank(slug)) {
+            throw new NotFound("Slug não informado");
+        }
+
+        Article art = articleRepository.findBySlug(slug);
+        if (art == null) {
+            throw new NotFound("Artigo não existe");
         }
 
         var user = userService.getCurrentAuthenticatedUserOrThrowsForbidden();
@@ -60,12 +85,12 @@ public class ArticleController {
     @GetMapping("/{slug}/edit/metadata")
     public ModelAndView editMetadata(@PathVariable("slug") String slug) {
         if (StringUtils.isNullOrBlank(slug)) {
-            throw new NotFound("");
+            throw new NotFound("Slug não informado");
         }
 
         Article art = articleRepository.findBySlug(slug);
         if (art == null) {
-            throw new NotFound("");
+            throw new NotFound("Artigo não existe");
         }
 
         var user = userService.getCurrentAuthenticatedUserOrThrowsForbidden();

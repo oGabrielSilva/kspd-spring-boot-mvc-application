@@ -31,6 +31,7 @@ import dev.kassiopeia.blog.exceptions.Unauthorized;
 import dev.kassiopeia.blog.modules.articles.DTOs.ArticleDTO;
 import dev.kassiopeia.blog.modules.articles.DTOs.ArticlePatchDTO;
 import dev.kassiopeia.blog.modules.articles.entities.Article;
+import dev.kassiopeia.blog.modules.articles.entities.ArticleFont;
 import dev.kassiopeia.blog.modules.articles.entities.ImageLink;
 import dev.kassiopeia.blog.modules.articles.repositories.ArticleRepository;
 import dev.kassiopeia.blog.modules.articles.services.ArticleService;
@@ -333,5 +334,31 @@ public class ArticleRestController {
         var removed = article.getEditors().removeIf(ed -> ed.email().equals(email));
         if (removed)
             articleRepository.save(article);
+    }
+
+    @PatchMapping("/{slug}/font-family")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    public void changeFontFamily(@PathVariable("slug") String slug, @RequestBody Map<String, String> body) {
+        if (StringUtils.isNullOrBlank(slug))
+            throw new BadRequest("Slug não informado");
+
+        var fontName = body.get("fontName");
+        if (StringUtils.isNullOrBlank(fontName))
+            throw new BadRequest("Informe uma fonte");
+
+        var fontType = body.get("fontType");
+        if (StringUtils.isNullOrBlank(fontType))
+            throw new BadRequest("Informe um tipo de fonte");
+
+        var article = articleRepository.findBySlug(slug);
+        if (article == null)
+            throw new NotFound("Artigo não encontrado");
+
+        var user = userService.getCurrentAuthenticatedUserOrThrowsForbidden();
+        if (articleService.cannotEdit(user, article))
+            throw new Unauthorized("Usuário não tem a permissão necessária para executar esta ação");
+
+        article.setFontFamily(new ArticleFont(fontName, fontType));
+        articleRepository.save(article);
     }
 }

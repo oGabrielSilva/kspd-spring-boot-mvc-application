@@ -40,6 +40,7 @@ public class Article extends Metadata {
     private String description = "";
     private Set<String> keywords = new HashSet<String>();
     private long views = 0;
+    private ArticleFont fontFamily = new ArticleFont();
 
     private Set<Stack> stacks = new HashSet<Stack>();
     private String lang = "pt-BR";

@@ -20,13 +20,11 @@ public class ArticleService {
         UserRepository userRepository;
 
         public boolean canEdit(User user, Article article) {
-                return article.getEditors().stream().filter(editor -> editor.id().equals(user.getId())).findFirst()
-                                .isPresent();
+                return article.getEditors().stream().anyMatch(editor -> editor.id().equals(user.getId()));
         }
 
         public boolean cannotEdit(User user, Article article) {
-                return article.getEditors().stream().filter(editor -> editor.id().equals(user.getId())).findFirst()
-                                .isEmpty();
+                return !canEdit(user, article);
         }
 
         public ArticleDTO toDataTransferObject(Article art) {

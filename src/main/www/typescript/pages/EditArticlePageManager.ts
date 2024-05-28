@@ -64,6 +64,4 @@ export function runEditArticlePageManager(slug: string) {
     e.preventDefault();
     return (e.returnValue = true);
   };
-
-  (window as any).editor = editor;
 }
