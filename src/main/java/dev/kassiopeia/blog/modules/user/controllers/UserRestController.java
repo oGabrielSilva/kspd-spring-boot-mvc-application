@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.amazonaws.services.s3.model.ObjectMetadata;
 
 import dev.kassiopeia.blog.authentication.services.TokenService;
 import dev.kassiopeia.blog.authentication.validation.AuthenticationValidation;
@@ -40,8 +43,6 @@ import dev.kassiopeia.blog.modules.user.repositories.UserRepository;
 import dev.kassiopeia.blog.modules.user.services.UserService;
 import dev.kassiopeia.blog.utilities.StringUtils;
 import jakarta.servlet.http.HttpServletResponse;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/api/user")
@@ -105,6 +106,7 @@ public class UserRestController {
             if (userRepository.findByUsername(payload.username()) != null)
                 throw new Conflict("Username já está sendo usado por outro usuário");
             user.setUsername(payload.username().trim());
+            user.setAvatarURL("/api/user/avatar/" + user.getUsername() + "?version=" + System.currentTimeMillis());
             changed = true;
         }
 

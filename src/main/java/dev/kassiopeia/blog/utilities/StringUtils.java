@@ -25,4 +25,12 @@ public class StringUtils {
         return !isDescriptionTagTextValidForSEO(description);
     }
 
+    public static boolean endsWith(String str, String suffix) {
+        return str != null && suffix != null && str.endsWith(suffix);
+    }
+
+    public static String removeEnd(String str, String remove) {
+        return endsWith(str, remove) ? str.substring(0, str.length() - remove.length()) : str;
+    }
+
 }

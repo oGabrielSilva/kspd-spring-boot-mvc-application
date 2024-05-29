@@ -8,6 +8,7 @@ import { runProfileEditPageManager } from './pages/ProfileEditPageManager';
 import { runSessionPageManager } from './pages/SessionPageManager';
 import { runTermsPageManager } from './pages/TermsPageManager';
 import { runWritePageManager } from './pages/WritePageManager';
+import { runArticlePage } from './pages/runArticlePage';
 
 (() => {
   const wwwrootPageManager = document.getElementById('wwwroot-page-manager-id') as HTMLInputElement;
@@ -34,6 +35,9 @@ import { runWritePageManager } from './pages/WritePageManager';
       break;
     case '/write':
       runWritePageManager();
+      break;
+    case '/article':
+      runArticlePage();
       break;
     case '/article/edit':
       runEditArticlePageManager(wwwrootPageManager.dataset.slug);
