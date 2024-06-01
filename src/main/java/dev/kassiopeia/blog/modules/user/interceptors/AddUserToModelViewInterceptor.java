@@ -16,8 +16,9 @@ public class AddUserToModelViewInterceptor implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
-            ModelAndView modelAndView) throws Exception {
+            ModelAndView mv) throws Exception {
         var user = userService.getCurrentAuthenticatedUser();
-        modelAndView.addObject("user", user);
+
+        mv.addObject("user", user);
     }
 }

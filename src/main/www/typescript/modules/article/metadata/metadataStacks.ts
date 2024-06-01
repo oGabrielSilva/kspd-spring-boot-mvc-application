@@ -2,18 +2,18 @@ import { hideModal, showModal } from '../../../libs/Bulma';
 import { forbidden } from '../../../utilities/forbidden';
 import { generateHTML } from '../../../utilities/generateHtml';
 import { tools } from '../../../utilities/tools';
+import { StackForm } from '../../stack/StackForm';
 import { addStackToTable } from './partials/addStackToTable';
-import { listenCreateStackModal } from './partials/listenCreateStackModal';
 
 export const stackTable = document.querySelector('table#stack-tb') as HTMLTableElement;
 export let onClickRemoveStack: (button: HTMLButtonElement) => void;
 
 export function metadataStacks(slug: string) {
   const form = document.querySelector('form#add-stack') as HTMLFormElement;
-  const createStackModal = document.getElementById('modal-create-stack') as HTMLFormElement;
   const selectStack = form.querySelector('select');
 
-  listenCreateStackModal(createStackModal, slug);
+  const stackForm = StackForm.createAndListenFields(slug);
+  stackForm.onCreate = addStackToTable;
 
   onClickRemoveStack = (button) => {
     const stack = button.dataset.stack;
@@ -25,9 +25,7 @@ export function metadataStacks(slug: string) {
     button.onclick = () => onClickRemoveStack(button);
   });
 
-  form
-    .querySelector<HTMLElement>('#create-stack')
-    .addEventListener('click', () => showModal(createStackModal));
+  form.querySelector('#create-stack').addEventListener('click', stackForm.show);
 
   const confirmStackModal = document.querySelector('#confirm-add-stack-modal') as HTMLFormElement;
   const confirmStackModalTitles = confirmStackModal.querySelectorAll('strong');

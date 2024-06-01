@@ -56,7 +56,6 @@ public class User extends Metadata implements UserDetails {
 
     private String password;
 
-    private boolean activated = true;
     private boolean locked = false;
 
     @Getter(AccessLevel.NONE)
@@ -135,7 +134,7 @@ public class User extends Metadata implements UserDetails {
         return role != AuthenticationRole.COMMON;
     }
 
-    public boolean isModerator() {
+    public boolean isMod() {
         return role != AuthenticationRole.COMMON && role != AuthenticationRole.AUTHOR;
     }
 
@@ -149,6 +148,10 @@ public class User extends Metadata implements UserDetails {
 
     public boolean isNonAuthor() {
         return role == AuthenticationRole.COMMON;
+    }
+
+    public boolean isNonMod() {
+        return !isMod();
     }
 
     @Override
@@ -200,6 +203,6 @@ public class User extends Metadata implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return activated;
+        return isActive();
     }
 }

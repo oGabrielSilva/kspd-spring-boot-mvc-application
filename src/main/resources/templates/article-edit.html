@@ -17,7 +17,9 @@
               th:value="${article.slug}"
               th:data-original="${article.slug}"
             />
-            <a target="_blank" th:href="|/${article.slug}/edit/metadata|">Metadados</a>
+            <a target="_blank" th:href="@{/{slug}/edit/metadata(slug=${article.slug})}"
+              >Metadados</a
+            >
           </div>
           <input
             data-slug=""
@@ -342,13 +344,15 @@
                 </div>
                 <div class="mb-3">
                   <label for="figure-loading">Tipo de carregamento</label>
-                  <div class="select is-link">
-                    <select id="figure-loading">
-                      <option value="lazy">Lazy (otimiza o desempenho)</option>
-                      <option value="eager">
-                        Eager (prioriza o carregamento imediato da imagem)
-                      </option>
-                    </select>
+                  <div>
+                    <div class="select is-link">
+                      <select id="figure-loading">
+                        <option value="lazy">Lazy (otimiza o desempenho)</option>
+                        <option value="eager">
+                          Eager (prioriza o carregamento imediato da imagem)
+                        </option>
+                      </select>
+                    </div>
                   </div>
                 </div>
                 <button id="del-figure-img" type="button" class="mt-4 button is-danger is-outlined">

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <th:block th:replace="~{fragments/default-head}"></th:block>
+  </head>
+
+  <body>
+    <header class="p-3">
+      <div>
+        <th:block th:replace="~{fragments/default-navigation}"></th:block>
+      </div>
+    </header>
+
+    <div class="container">
+      <section class="section">
+        <main class="p-3 flex-1">
+          <div class="is-flex g-1 is-justify-content-space-between">
+            <h1 class="subtitle is-6 mb-0">Stack: <span th:text="${stack.name}"></span></h1>
+            <button id="show-edit" class="button is-warning is-outlined">
+              <span class="icon">
+                <i class="fa-solid fa-file-pen"></i>
+              </span>
+            </button>
+          </div>
+
+          <h1 data-stack-name th:text="${stack.name}" class="title"></h1>
+          <p data-stack-description th:text="${stack.description}"></p>
+          <div>
+            <form
+              th:action="@{/stack/{name}/state(name=${stack.name})}"
+              method="PATCH"
+              class="py-5"
+            >
+              <h2>
+                Status da Stack <strong th:text="${stack.name}"></strong>:
+                <strong th:if="${stack.isActive()}" class="has-text-success">Ativo!</strong>
+                <strong th:unless="${stack.isActive()}" class="has-text-danger">Desativado!</strong>
+              </h2>
+
+              <div class="is-flex g-1 my-3">
+                <button th:if="${stack.isActive()}" class="button has-text-danger p-0 is-ghost">
+                  Clique para desativar
+                </button>
+                <button
+                  th:unless="${stack.isActive()}"
+                  class="button has-text-success p-0 is-ghost"
+                >
+                  Clique para ativar
+                </button>
+              </div>
+            </form>
+          </div>
+        </main>
+      </section>
+    </div>
+
+    <form th:replace="~{fragments/form-stack-edit}"></form>
+
+    <th:block th:replace="~{fragments/footer}"></th:block>
+
+    <input type="hidden" value="/stack/state" id="wwwroot-page-manager-id" />
+
+    <script th:inline="javascript">
+      const stack = /*[[${stackDTO}]]*/ null;
+    </script>
+  </body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <th:block th:replace="~{fragments/default-head}"></th:block>
+  </head>
+
+  <body>
+    <header class="p-3">
+      <div>
+        <th:block th:replace="~{fragments/default-navigation}"></th:block>
+      </div>
+    </header>
+
+    <div class="container">
+      <section class="section">
+        <main class="p-3 flex-1">
+          <h1 class="title" th:text="${stack.name}">Stack</h1>
+          <section class="no-posts" th:if="${#lists.isEmpty(posts)}">
+            <span>Nenhum artigo publicado nessa Stack</span>
+          </section>
+          <div class="py-5" th:unless="${#lists.isEmpty(posts)}" th:each="post : ${posts}">
+            <section th:if="${post.isActive}" class="post" data-post th:data-slug="${post.slug}">
+              <a th:href="@{/{slug}(slug=${post.slug})}">
+                <h2 class="title is-5" th:text="${post.title}"></h2>
+              </a>
+              <p class="pb-3" th:text="${post.description}"></p>
+              <div>
+                <div><em data-format-time th:text="${post.updatedAt}"></em></div>
+                <span class="tag mr-3" th:each="keyword : ${post.keywords}" th:text="${keyword}">
+                  Tag label
+                </span>
+              </div>
+            </section>
+          </div>
+        </main>
+      </section>
+    </div>
+
+    <th:block th:replace="~{fragments/footer}"></th:block>
+
+    <input type="hidden" value="/stack" id="wwwroot-page-manager-id" />
+  </body>
+</html>

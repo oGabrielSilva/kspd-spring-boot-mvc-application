@@ -148,6 +148,9 @@
                 </button>
               </div>
             </form>
+
+            <div th:replace="~{fragments/form-stack}"></div>
+
             <div style="overflow-x: auto" class="">
               <table class="table" id="stack-tb" style="width: 100%">
                 <thead>
@@ -169,7 +172,7 @@
                   >
                     <td class="has-text-centered">
                       <a
-                        th:href="|/stack/${stack.name}|"
+                        th:href="@{/stack/{name}(name=${stack.name})}"
                         target="_blank"
                         rel="noopener noreferrer"
                         th:text="${stack.name}"
@@ -281,53 +284,6 @@
         </div>
       </section>
     </main>
-
-    <form data-message="Stack adicionada ao artigo" id="modal-create-stack" class="modal">
-      <div class="modal-background"></div>
-      <div class="modal-card">
-        <header class="modal-card-head">
-          <p class="modal-card-title">Crie uma nova stack</p>
-          <button type="button" class="delete" aria-label="close"></button>
-        </header>
-        <section class="modal-card-body">
-          <div class="field">
-            <label class="label" for="stack-name">Nome</label>
-            <div class="control">
-              <input class="input" type="text" placeholder="Java" id="stack-name" />
-            </div>
-            <small class="help">
-              Stacks são como categorias. Elas ajudam a agrupar documentos com temas semelhantes,
-              facilitando a organização já que tudo relacionado ao mesmo assunto está no mesmo
-              lugar.
-            </small>
-          </div>
-
-          <div class="control">
-            <div class="description-container">
-              <label class="label" for="stack-description">Descrição da Stack</label>
-              <textarea
-                class="textarea has-fixed-size"
-                placeholder="Lançada pela primeira vez pela Sun Microsystems em 1995..."
-                id="stack-description"
-                rows="4"
-              ></textarea>
-              <small class="description-len">160</small>
-            </div>
-            <small class="help">
-              Um resumo breve e conciso do conteúdo. Essa descrição não é visível para os usuários
-              na página em si, mas é utilizada pelos mecanismos de busca para exibir um trecho
-              descritivo nos resultados de pesquisa e na apresentação do artigo.
-            </small>
-          </div>
-        </section>
-        <footer class="modal-card-foot">
-          <div class="buttons">
-            <button data-no-hide="true" class="button is-success">Adicionar nova stack</button>
-            <button type="button" class="button">Cancelar</button>
-          </div>
-        </footer>
-      </div>
-    </form>
 
     <form data-message="Stack adicionada ao artigo" id="confirm-add-stack-modal" class="modal">
       <div class="modal-background"></div>

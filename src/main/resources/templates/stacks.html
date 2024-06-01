@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <th:block th:replace="~{fragments/default-head}"></th:block>
+  </head>
+
+  <body>
+    <header class="p-3">
+      <div>
+        <th:block th:replace="~{fragments/default-navigation}"></th:block>
+      </div>
+    </header>
+
+    <div class="container">
+      <section class="section">
+        <div class="has-text-right pb-3" th:if="${isAuthor}">
+          <button id="button-open-stack-form" class="button is-ghost">
+            <span class="has-text-primary">Adicionar nova Stack</span>
+          </button>
+        </div>
+        <main class="p-3 flex-1">
+          <h1 class="subtitle is-6">Stacks:</h1>
+          <section th:if="${#lists.isEmpty(stacks)}" class="mb-6">
+            <div>
+              <span>Nenhuma stack cadastrada</span>
+            </div>
+          </section>
+          <section
+            th:unless="${#lists.isEmpty(stacks)}"
+            th:each="stack : ${stacks}"
+            th:data-section-stack="${stack.name}"
+            class="mb-6"
+          >
+            <h2 class="title is-4 mb-3" th:text="${stack.name}"></h2>
+            <p class="mb-3" th:text="${stack.description}"></p>
+            <div class="is-flex g-1 is-justify-content-space-between">
+              <div class="is-flex g-1">
+                <a
+                  class="button is-ghost p-0"
+                  th:href="@{/stack/{name}(name=${stack.name})}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <small class="small">Vejas as publicações</small>
+                </a>
+                <button
+                  th:if="${isMod}"
+                  class="button isMod is-ghost p-0 has-text-warning"
+                  data-edit
+                  th:data-stack="${stack.name}"
+                >
+                  <small class="small">Editar</small>
+                </button>
+              </div>
+            </div>
+          </section>
+        </main>
+      </section>
+    </div>
+
+    <div th:if="${isAuthor}">
+      <form th:replace="~{fragments/form-stack}"></form>
+    </div>
+    <div th:if="${isMod}">
+      <form th:replace="~{fragments/form-stack-edit}"></form>
+    </div>
+
+    <th:block th:replace="~{fragments/footer}"></th:block>
+
+    <input type="hidden" th:data-is-mod="${isMod}" value="/stacks" id="wwwroot-page-manager-id" />
+
+    <script th:inline="javascript">
+      const listOfStacks = /*[[${stacks}]]*/ null;
+    </script>
+  </body>
+</html>

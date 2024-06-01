@@ -257,6 +257,10 @@ figure:not([class]) {
   -webkit-box-orient: vertical;
 }
 
+.flex-1 {
+  flex: 1;
+}
+
 @media screen and (max-width: 1110px) {
   .dev-aside {
     width: 35%;

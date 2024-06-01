@@ -27,6 +27,8 @@ public class Metadata {
     @LastModifiedBy
     private UserInternalDTO updatedBy;
 
+    private boolean isActive = true;
+
     @Version
     private Long version;
 }

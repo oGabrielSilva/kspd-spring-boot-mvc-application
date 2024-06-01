@@ -1,19 +1,24 @@
 import '../css/global.css';
 import { Bulma } from './libs/Bulma';
 import { runAccountVerificationManager } from './pages/AccountVerificationManager';
+import { ArticlePageManager } from './pages/ArticlePageManager';
 import { runEditArticleMetadataPageManager } from './pages/EditArticleMetadataPageManager';
 import { runEditArticlePageManager } from './pages/EditArticlePageManager';
 import { runIndexPageManager } from './pages/IndexPageManager';
 import { runProfileEditPageManager } from './pages/ProfileEditPageManager';
 import { runSessionPageManager } from './pages/SessionPageManager';
+import { StacksPageManager } from './pages/StacksPageManager';
 import { runTermsPageManager } from './pages/TermsPageManager';
+import { UniqueStackPageManager } from './pages/UniqueStackPageManager';
 import { runWritePageManager } from './pages/WritePageManager';
-import { runArticlePage } from './pages/runArticlePage';
+import { formatTime } from './utilities/formatTime';
 
 (() => {
+  Bulma();
+
   const wwwrootPageManager = document.getElementById('wwwroot-page-manager-id') as HTMLInputElement;
 
-  if (!wwwrootPageManager) console.error('WWWROOT manager id not found');
+  if (!wwwrootPageManager) return console.error('WWWROOT manager id not found');
 
   switch (wwwrootPageManager.value ?? '') {
     case '':
@@ -37,7 +42,7 @@ import { runArticlePage } from './pages/runArticlePage';
       runWritePageManager();
       break;
     case '/article':
-      runArticlePage();
+      ArticlePageManager.instance.run();
       break;
     case '/article/edit':
       runEditArticlePageManager(wwwrootPageManager.dataset.slug);
@@ -45,7 +50,12 @@ import { runArticlePage } from './pages/runArticlePage';
     case '/article/edit/metadata':
       runEditArticleMetadataPageManager(wwwrootPageManager.dataset.slug);
       break;
+    case '/stack':
+      UniqueStackPageManager.instance.run();
+      break;
+    case '/stacks':
+      StacksPageManager.instance.run(wwwrootPageManager.dataset.isMod === 'true');
+      break;
   }
-
-  Bulma();
+  document.querySelectorAll('[data-format-time]')?.forEach(formatTime);
 })();

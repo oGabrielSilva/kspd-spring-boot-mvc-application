@@ -36,7 +36,9 @@
         >
           <article class="content">
             <div class="pb-3">
-              <cite>Atualizado em: <span th:text="${updatedAt}"></span></cite>
+              <cite
+                >Atualizado em: <span data-format-time th:text="${article.updatedAt}"></span
+              ></cite>
             </div>
             <div th:utext="${article.content}"></div>
           </article>

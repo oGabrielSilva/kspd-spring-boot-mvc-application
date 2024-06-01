@@ -51,7 +51,7 @@ function generateTableRow(stack: Stack) {
             attributes: [
               { key: 'target', value: '_blank' },
               { key: 'rel', value: 'noopener noreferrer' },
-              { key: 'href', value: '/stack/' + stack.name },
+              { key: 'href', value: encodeURI(`/stack/${stack.name}`) },
             ],
             value: stack.name,
           },

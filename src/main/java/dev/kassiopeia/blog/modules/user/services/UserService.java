@@ -39,4 +39,8 @@ public class UserService implements UserDetailsService {
             throw new Forbidden();
     }
 
+    public boolean isAuthenticatedByUserEntity() {
+        return getCurrentAuthenticatedUser() != null;
+    }
+
 }

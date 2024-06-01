@@ -244,8 +244,6 @@ export class TipTapBasedHTMLEditor {
       try {
         const file = tool.figureInput.files[0];
         const blob = await image.fileToBlobWebpWithoutResize(file, 0.8);
-        console.log('Original:', file.size);
-        console.log('New:', blob.size);
         if (blob.size / (1024 * 1024) > 5) {
           toaster.alert(tool.figureInput.dataset.message);
           return;
