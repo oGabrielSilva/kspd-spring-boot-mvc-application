@@ -1,9 +1,9 @@
 export class AuthenticationValidation {
-  private readonly emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  public static readonly emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   private readonly usernameRegex = /[^a-zA-Z0-9\-_.]/g;
 
   public isEmailValid(email: string) {
-    return typeof email === 'string' && this.emailRegex.test(email);
+    return typeof email === 'string' && AuthenticationValidation.emailRegex.test(email);
   }
 
   public isPasswordValid(password: string) {

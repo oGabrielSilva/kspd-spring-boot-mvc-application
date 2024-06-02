@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <th:block th:replace="~{fragments/default-head}"></th:block>
+  </head>
+
+  <body>
+    <header class="p-3">
+      <div>
+        <th:block th:replace="~{fragments/default-navigation}"></th:block>
+      </div>
+    </header>
+
+    <div class="container">
+      <section class="section">
+        <main class="p-3 flex-1">
+          <h1 class="title">Contanto</h1>
+          <p>
+            Este formulário não exige que você possua uma conta na plataforma e, caso haja, não será
+            vinculado a ela.
+          </p>
+
+          <form
+            data-message="Agradecemos o seu contato! Entraremos em contato caso seja necessário :)"
+            id="submit-contact"
+            class="px-3 py-5"
+          >
+            <label class="label">Nome</label>
+            <div class="field">
+              <div class="field-body">
+                <div class="field">
+                  <div class="control is-expanded has-icons-left">
+                    <input class="input" type="text" id="name" placeholder="Nome" />
+                    <span class="icon is-small is-left">
+                      <i class="fas fa-user"></i>
+                    </span>
+                  </div>
+                </div>
+                <div class="field">
+                  <div class="control is-expanded">
+                    <input class="input" type="text" id="surname" placeholder="Sobrenome" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="email" class="label">Email</label>
+              <div class="control has-icons-left">
+                <input
+                  class="input"
+                  id="email"
+                  type="email"
+                  placeholder="donquixote@kassiopeia.dev"
+                />
+                <span class="icon is-small is-left">
+                  <i class="fas fa-envelope"></i>
+                </span>
+              </div>
+            </div>
+
+            <div class="field pt-5">
+              <label for="subject" class="label">Assunto</label>
+              <div class="control">
+                <input
+                  class="input"
+                  id="subject"
+                  type="text"
+                  placeholder="Defina o assunto principal do seu contato"
+                />
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="message" class="label">Mensagem</label>
+              <div class="control">
+                <textarea class="textarea" id="message" rows="12"></textarea>
+                <small id="text-helper">1000</small>
+              </div>
+            </div>
+
+            <div class="file mb-0" data-file-container>
+              <label class="file-label">
+                <input class="file-input" type="file" id="file" />
+                <span class="file-cta">
+                  <span class="file-icon">
+                    <i class="fas fa-upload"></i>
+                  </span>
+                  <span class="file-label">Choose a file…</span>
+                </span>
+                <span class="file-name is-hidden"></span>
+              </label>
+            </div>
+            <div class="pb-5">
+              <p data-file-max-len class="has-text-danger is-hidden">
+                Arquivo muito grande. Máximo de 5MB
+              </p>
+            </div>
+
+            <div class="field">
+              <label class="label">País</label>
+              <div class="control has-icons-left">
+                <span class="select">
+                  <select id="country"></select>
+                </span>
+                <span class="icon is-small is-left">
+                  <i class="fas fa-globe"></i>
+                </span>
+              </div>
+            </div>
+
+            <p>
+              Ao enviar este formulário, autorizo a Kassiopeia.dev a utilizar as informações
+              fornecidas no formulário para fins de suporte. Estou ciente e concordo que a
+              plataforma poderá processar esses dados por meio de serviços de terceiros, conforme
+              detalhado nos
+              <a href="/terms" target="_blank" rel="noopener noreferrer">Termos</a>.
+            </p>
+            <div class="my-5">
+              <button type="submit" class="button is-primary">Enviar</button>
+            </div>
+          </form>
+        </main>
+      </section>
+    </div>
+
+    <th:block th:replace="~{fragments/footer}"></th:block>
+
+    <input type="hidden" value="/contact" id="wwwroot-page-manager-id" />
+  </body>
+</html>

@@ -1,7 +1,6 @@
 package dev.kassiopeia.blog.modules.article.controllers;
 
 import java.io.IOException;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +28,6 @@ import dev.kassiopeia.blog.utilities.StringUtils;
 
 @Controller
 public class ArticleController {
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-
     @Autowired
     AmazonS3Service s3Service;
     @Autowired

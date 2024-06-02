@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AuthenticationValidation {
-    private static final String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+    public static final String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
 
     public boolean isEmailValid(String email) {
         return email != null && email.matches(emailRegex);

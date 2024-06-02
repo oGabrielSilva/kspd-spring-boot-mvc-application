@@ -2,6 +2,7 @@ import '../css/global.css';
 import { Bulma } from './libs/Bulma';
 import { runAccountVerificationManager } from './pages/AccountVerificationManager';
 import { ArticlePageManager } from './pages/ArticlePageManager';
+import { ContactPageManager } from './pages/ContactPageManager';
 import { runEditArticleMetadataPageManager } from './pages/EditArticleMetadataPageManager';
 import { runEditArticlePageManager } from './pages/EditArticlePageManager';
 import { runIndexPageManager } from './pages/IndexPageManager';
@@ -20,42 +21,26 @@ import { formatTime } from './utilities/formatTime';
 
   if (!wwwrootPageManager) return console.error('WWWROOT manager id not found');
 
-  switch (wwwrootPageManager.value ?? '') {
-    case '':
-      break;
-    case '/index':
-      runIndexPageManager();
-      break;
-    case '/session':
-      runSessionPageManager();
-      break;
-    case '/profile-edit':
-      runProfileEditPageManager();
-      break;
-    case '/account-verification':
-      runAccountVerificationManager();
-      break;
-    case '/terms':
-      runTermsPageManager();
-      break;
-    case '/write':
-      runWritePageManager();
-      break;
-    case '/article':
-      ArticlePageManager.instance.run();
-      break;
-    case '/article/edit':
-      runEditArticlePageManager(wwwrootPageManager.dataset.slug);
-      break;
-    case '/article/edit/metadata':
-      runEditArticleMetadataPageManager(wwwrootPageManager.dataset.slug);
-      break;
-    case '/stack':
-      UniqueStackPageManager.instance.run();
-      break;
-    case '/stacks':
-      StacksPageManager.instance.run(wwwrootPageManager.dataset.isMod === 'true');
-      break;
-  }
+  const path = wwwrootPageManager.value ?? '';
+  const slug = wwwrootPageManager.dataset.slug;
+  const isMod = wwwrootPageManager.dataset.isMod === 'true';
+  (
+    ({
+      '': () => {},
+      '/index': runIndexPageManager,
+      '/session': runSessionPageManager,
+      '/profile-edit': runProfileEditPageManager,
+      '/account-verification': runAccountVerificationManager,
+      '/terms': runTermsPageManager,
+      '/write': runWritePageManager,
+      '/article': () => ArticlePageManager.instance.run(),
+      '/article/edit': () => runEditArticlePageManager(slug),
+      '/article/edit/metadata': () => runEditArticleMetadataPageManager(slug),
+      '/stack': () => UniqueStackPageManager.instance.run(),
+      '/stacks': () => StacksPageManager.instance.run(isMod),
+      '/contact': () => ContactPageManager.instance.run(),
+    }) as { [key: string]: () => void }
+  )[path]();
+
   document.querySelectorAll('[data-format-time]')?.forEach(formatTime);
 })();

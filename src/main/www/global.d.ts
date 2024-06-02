@@ -50,6 +50,11 @@ declare global {
     name: string;
     description: string;
   }
+
+  interface Country {
+    name: string;
+    code: string;
+  }
 }
 
 export {};
