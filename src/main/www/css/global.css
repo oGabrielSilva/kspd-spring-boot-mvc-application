@@ -25,6 +25,15 @@ main {
   cursor: pointer;
 }
 
+.master {
+  border-radius: 40%;
+  object-fit: cover;
+  width: 100vw;
+  max-width: 150px;
+  height: 100vh;
+  max-height: 150px;
+}
+
 .g-0 {
   gap: 0.5rem;
 }

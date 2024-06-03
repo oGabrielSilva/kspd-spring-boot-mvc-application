@@ -39,6 +39,7 @@ import { formatTime } from './utilities/formatTime';
       '/stack': () => UniqueStackPageManager.instance.run(),
       '/stacks': () => StacksPageManager.instance.run(isMod),
       '/contact': () => ContactPageManager.instance.run(),
+      '/master': () => {},
     }) as { [key: string]: () => void }
   )[path]();
 

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <th:block th:replace="~{fragments/default-head}"></th:block>
+    <style>
+      .main-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      @media screen and (max-width: 474px) {
+        .main-header {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header class="p-3">
+      <div>
+        <th:block th:replace="~{fragments/default-navigation}"></th:block>
+      </div>
+    </header>
+
+    <div class="container">
+      <section class="section">
+        <main class="p-3 flex-1">
+          <div class="main-header">
+            <img
+              src="/public/image/master/gabriel-henrique-da-silva.JPG"
+              alt="Foto de Gabriel"
+              aria-label="Imagem do criador da plataforma, Gabriel Henrique da Silva"
+              title="Gabriel Silva"
+              width="150"
+              height="150"
+              loading="lazy"
+              class="master"
+            />
+            <div>
+              <h1 class="title">Gabriel</h1>
+              <h3 class="subtitle mb-0">Gestor da TI | Desenvolvedor FullStack</h3>
+              <p>Gabriel Henrique da Silva</p>
+              <div class="my-3">
+                <a
+                  href="https://x.com/odev_gabriel"
+                  title="Twitter | X"
+                  aria-label="Link para o perfil de Gabriel no Twitter"
+                  target="_blank"
+                  class="button"
+                >
+                  <span class="icon is-small">
+                    <i class="fa-brands fa-twitter"></i>
+                  </span>
+                </a>
+
+                <a
+                  href="https://github.com/oGabrielSilva"
+                  title="GitHub"
+                  aria-label="Link para o GitHub de Gabriel"
+                  target="_blank"
+                  class="button"
+                >
+                  <span class="icon is-small">
+                    <i class="fa-brands fa-github"></i>
+                  </span>
+                </a>
+
+                <a
+                  href="https://gabrielhenriquedasilva.vercel.app"
+                  title="Currículo"
+                  aria-label="Link para o curríulo de Gabriel"
+                  target="_blank"
+                  class="button"
+                >
+                  <span class="icon is-small">
+                    <i class="fa-regular fa-file-zipper"></i>
+                  </span>
+                </a>
+
+                <a
+                  href="mailto:odev.gabriel@gmail.com"
+                  title="E-mail"
+                  aria-label="Link para enviar um email a Gabriel"
+                  target="_blank"
+                  class="button"
+                >
+                  <span class="icon is-small">
+                    <i class="fa-solid fa-envelope"></i>
+                  </span>
+                </a>
+              </div>
+            </div>
+          </div>
+          <p class="mt-1">
+            Entre os anos de 2019 e 2020 conheci e me apaixonei tanto pela web, quanto pelo
+            famigerado JavaScript. Desde então venho atrás de novas habilidades: aprendi TypeScript,
+            React, Spring Boot, Node, etc. Em 2021 ingressei em uma faculdade na área: Gestão da
+            Tecnologia da Informação, que envolve duas das coisas que gosto: gestão e tecnologia.
+          </p>
+          <p class="mt-1">
+            Finalizei as aulas e publiquei um
+            <a
+              href="https://rsdjournal.org/index.php/rsd/article/view/44812"
+              target="_blank"
+              rel="noopener noreferrer"
+              >artigo científico</a
+            >
+            sobre um sistema que desenvolvi para um projeto. Usei tal artigo para substituir meu
+            TCC.
+          </p>
+          <p class="mt-1">
+            Agora, desenvolvendo a Kassiopeia, desejo espalhar o conhecimento que vim adquirindo de
+            2019 para cá. Dúvidas que tive e que não consegui as respostas de maneira fácil. Quero
+            repassar tudo!
+          </p>
+          <p class="mt-1">
+            Portanto, seja bem-vindo ao meu projeto:
+            <a href="/" target="_blank" rel="noopener noreferrer">Kassiopeia.dev</a>
+          </p>
+        </main>
+      </section>
+    </div>
+
+    <th:block th:replace="~{fragments/footer}"></th:block>
+
+    <input type="hidden" value="/master" id="wwwroot-page-manager-id" />
+  </body>
+</html>
