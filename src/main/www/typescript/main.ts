@@ -24,8 +24,8 @@ import { formatTime } from './utilities/formatTime';
   const path = wwwrootPageManager.value ?? '';
   const slug = wwwrootPageManager.dataset.slug;
   const isMod = wwwrootPageManager.dataset.isMod === 'true';
-  (
-    ({
+  const pageManager = (
+    {
       '': () => {},
       '/index': runIndexPageManager,
       '/session': runSessionPageManager,
@@ -40,8 +40,10 @@ import { formatTime } from './utilities/formatTime';
       '/stacks': () => StacksPageManager.instance.run(isMod),
       '/contact': () => ContactPageManager.instance.run(),
       '/master': () => {},
-    }) as { [key: string]: () => void }
-  )[path]();
+    } as { [key: string]: () => void }
+  )[path];
+
+  pageManager ? pageManager() : void 0;
 
   document.querySelectorAll('[data-format-time]')?.forEach(formatTime);
 })();

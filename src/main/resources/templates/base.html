@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <th:block th:replace="~{fragments/default-head}"></th:block>
+  </head>
+
+  <body>
+    <header class="p-3">
+      <div>
+        <th:block th:replace="~{fragments/default-navigation}"></th:block>
+      </div>
+    </header>
+
+    <div class="container">
+      <section class="section">
+        <main class="p-3 flex-1"></main>
+      </section>
+    </div>
+
+    <th:block th:replace="~{fragments/footer}"></th:block>
+
+    <input type="hidden" value="null" id="wwwroot-page-manager-id" />
+  </body>
+</html>

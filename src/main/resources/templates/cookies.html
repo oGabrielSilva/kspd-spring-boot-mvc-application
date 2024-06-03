@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <th:block th:replace="~{fragments/default-head}"></th:block>
+  </head>
+
+  <body>
+    <header class="p-3">
+      <div>
+        <th:block th:replace="~{fragments/default-navigation}"></th:block>
+      </div>
+    </header>
+
+    <div class="container">
+      <section class="section">
+        <main class="p-3 flex-1">
+          <article>
+            <h1 class="title">Política de Cookies</h1>
+
+            <p>
+              Para garantir a melhor experiência possível para nossos usuários, utilizamos cookies.
+              Os cookies são pequenas informações em formato de texto no seu navegador. Em visitas
+              subsequentes, iremos reconhecê-los para melhorar sua experiência na plataforma.
+            </p>
+            <p>
+              Mas não há com o que se preocupar! Não haverá nenhum risco em utilizar os nossos
+              cookies. São apenas configurações.
+            </p>
+
+            <p>
+              Nossa plataforma valoriza a transparência e a privacidade dos usuários. Por isso,
+              queremos informá-lo sobre os cookies que utilizamos.
+            </p>
+
+            <div class="py-3">
+              <ul>
+                <li>
+                  <strong>Autenticação</strong>:
+                  <span>
+                    utilizamos cookies para gerenciar sua autenticação, garantindo que você possa
+                    acessar sua conta. Isso ajuda a manter sua sessão ativa, mas não se preocupe,
+                    não há dados privados expostos.
+                  </span>
+                </li>
+                <li>
+                  <strong>Cookies de Terceiros</strong>:
+                  <span>
+                    Nossa plataforma utiliza alguns serviços de terceiros, como o Font Awesome e o
+                    próprio Google. Esses serviços podem definir cookies para seu funcionamento
+                    adequado. No entanto, não há motivo para preocupação, pois nossa equipe
+                    seleciona cuidadosamente todas as bibliotecas e funções de terceiros, e não
+                    compartilhamos informações dos usuários com eles
+                  </span>
+                </li>
+              </ul>
+            </div>
+
+            <section class="pt-5">
+              <h2 class="subtitle">Mais informações</h2>
+              <p>
+                Se você tiver qualquer dúvida sobre o uso de cookies em nossa plataforma, sinta-se à
+                vontade para entrar em contato conosco através deste <a href="/contact">link</a>.
+              </p>
+              <p>
+                Agradecemos pela confiança e desejamos uma excelente experiência em nossa
+                plataforma.
+              </p>
+            </section>
+
+            <p class="py-5">
+              <em>
+                Ao utilizar nosso site, você concorda com o uso de cookies conforme descrito nesta
+                política.
+              </em>
+            </p>
+          </article>
+        </main>
+      </section>
+    </div>
+
+    <th:block th:replace="~{fragments/footer}"></th:block>
+
+    <input type="hidden" value="/cookies" id="wwwroot-page-manager-id" />
+  </body>
+</html>

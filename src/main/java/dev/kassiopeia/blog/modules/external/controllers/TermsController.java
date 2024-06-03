@@ -1,4 +1,4 @@
-package dev.kassiopeia.blog.modules.terms.controllers;
+package dev.kassiopeia.blog.modules.external.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
