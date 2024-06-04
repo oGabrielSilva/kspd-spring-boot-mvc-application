@@ -15,6 +15,7 @@ export class ContactPageManager {
 
   private readonly form = document.getElementById('submit-contact');
   private readonly successMessage = this.form.dataset.message;
+  private readonly isReport = wwwrootPageManager.value === '/report';
 
   private readonly nameInput = this.form.querySelector<HTMLInputElement>('#name');
   private readonly surnameInput = this.form.querySelector<HTMLInputElement>('#surname');
@@ -157,6 +158,7 @@ export class ContactPageManager {
         body.set('message', message);
         body.set('file', file);
         body.set('country', country);
+        body.set('isReport', String(this.isReport));
 
         const request = await fetch('/api/contact', {
           body,
@@ -194,8 +196,6 @@ export class ContactPageManager {
     this.listen();
     this.configureOptionCountries();
     this.updateMessageHelper();
-
-    console.log(this);
   }
 
   public static get instance() {

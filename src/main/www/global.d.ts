@@ -55,6 +55,8 @@ declare global {
     name: string;
     code: string;
   }
+
+  var wwwrootPageManager: HTMLInputElement;
 }
 
 export {};

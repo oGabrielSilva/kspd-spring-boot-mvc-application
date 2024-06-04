@@ -14,7 +14,7 @@
     <div class="container">
       <section class="section">
         <main class="p-3 flex-1">
-          <h1 class="title">Contanto</h1>
+          <h1 class="title">Contato</h1>
           <p>
             Este formulário não exige que você possua uma conta na plataforma e, caso haja, não será
             vinculado a ela.
@@ -126,6 +126,10 @@
 
     <th:block th:replace="~{fragments/footer}"></th:block>
 
-    <input type="hidden" value="/contact" id="wwwroot-page-manager-id" />
+    <input
+      type="hidden"
+      th:value="${isReport ? '/report' : '/contact'}"
+      id="wwwroot-page-manager-id"
+    />
   </body>
 </html>

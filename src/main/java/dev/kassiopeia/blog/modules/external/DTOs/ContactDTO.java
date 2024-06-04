@@ -6,6 +6,7 @@ public record ContactDTO(
                 String email,
                 String subject,
                 String message,
-                String country) {
+                String country,
+                Boolean isReport) {
 
 }

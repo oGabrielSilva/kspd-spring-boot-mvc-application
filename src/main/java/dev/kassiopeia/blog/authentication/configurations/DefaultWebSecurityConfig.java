@@ -44,6 +44,7 @@ public class DefaultWebSecurityConfig implements WebMvcConfigurer {
                 .authorizeHttpRequests(
                         request -> request.requestMatchers("/api/session", "/api/session/sign-up")
                                 .permitAll()
+                                .requestMatchers("/api/contact").permitAll()
                                 .requestMatchers("/api/user/avatar/**").permitAll()
                                 .requestMatchers("/api/**").hasRole(AuthenticationRole.COMMON.asString())
                                 .requestMatchers("/api/article", "/api/article/**")

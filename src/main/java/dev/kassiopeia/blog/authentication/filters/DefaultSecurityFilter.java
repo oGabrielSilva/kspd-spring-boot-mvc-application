@@ -50,6 +50,6 @@ public class DefaultSecurityFilter extends OncePerRequestFilter {
         String path = request.getServletPath();
         return path.startsWith("/public") || path.startsWith("/api/session/sign-up")
                 || path.startsWith("/api/user/avatar/**")
-                || path.startsWith("/api/session");
+                || path.startsWith("/api/session") || path.startsWith("/api/contact");
     }
 }

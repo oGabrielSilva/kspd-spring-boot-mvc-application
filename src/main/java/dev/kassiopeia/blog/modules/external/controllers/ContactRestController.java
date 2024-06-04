@@ -50,7 +50,7 @@ public class ContactRestController {
 
         Contact contact = contactRepository
                 .save(new Contact(dto.name(), dto.surname(), dto.email(), dto.subject(), dto.message(),
-                        dto.country(), null));
+                        dto.country(), null, dto.isReport() == null ? false : dto.isReport()));
 
         if (file != null && validation.isFileValid(file.getSize())) {
             ObjectMetadata mt = new ObjectMetadata();

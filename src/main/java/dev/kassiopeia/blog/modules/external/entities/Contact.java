@@ -35,8 +35,10 @@ public class Contact {
     private String country;
     private String fileURL;
 
+    private boolean isReport;
+
     public Contact(String name, String surname, String email, String subject, String message, String country,
-            String fileURL) {
+            String fileURL, boolean isReport) {
         this.name = name;
         this.surname = surname;
         this.email = email;
@@ -44,6 +46,7 @@ public class Contact {
         this.message = message;
         this.country = country;
         this.fileURL = fileURL;
+        this.isReport = isReport;
     }
 
     @CreatedDate
