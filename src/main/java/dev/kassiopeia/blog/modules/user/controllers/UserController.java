@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import dev.kassiopeia.blog.exceptions.NotFound;
+import dev.kassiopeia.blog.exceptions.Unauthorized;
+import dev.kassiopeia.blog.modules.article.repositories.ArticleRepository;
 import dev.kassiopeia.blog.modules.user.repositories.UserRepository;
 import dev.kassiopeia.blog.modules.user.services.UserService;
 
@@ -19,6 +22,9 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    ArticleRepository articleRepository;
+
     @GetMapping("/{username}")
     public ModelAndView profile(@PathVariable String username, ModelAndView mv) {
         var authenticatedUser = userService.getCurrentAuthenticatedUser();
@@ -26,16 +32,33 @@ public class UserController {
             mv.setViewName("profile-edit");
             return mv;
         }
+
         var profile = userRepository.findByUsername(username);
         if (profile == null) {
-            mv.setViewName("404");
-            return mv;
+            throw new NotFound("Usuário não existe");
         }
+
         mv.setViewName("profile-user");
         mv.addObject("profile", profile);
         var social = profile.getSocial();
         mv.addObject("social", social);
 
+        return mv;
+    }
+
+    @GetMapping("/{username}/articles")
+    public ModelAndView articlesView(@PathVariable String username, ModelAndView mv) {
+        var user = userService.getCurrentAuthenticatedUser();
+        if (user == null || !user.getUsername().equals(username)) {
+            throw new NotFound("Usuário não existe");
+        }
+
+        if (user.isNonAuthor())
+            throw new Unauthorized("Oopss... você não tem permissão para acessar tal recurso");
+
+        mv.setViewName("profile-articles");
+        var articles = articleRepository.findAllByEditorId(user.getId());
+        mv.addObject("articles", articles);
         return mv;
     }
 

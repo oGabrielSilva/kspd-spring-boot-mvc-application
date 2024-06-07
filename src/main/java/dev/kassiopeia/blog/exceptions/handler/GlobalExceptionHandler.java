@@ -102,7 +102,7 @@ public class GlobalExceptionHandler {
                                                                 ex.getMessage(), request.getRequestURL().toString(),
                                                                 HttpStatus.NOT_FOUND.value()),
                                                 HttpStatus.NOT_FOUND)
-                                : new ModelAndView("404");
+                                : new ModelAndView("404", HttpStatus.NOT_FOUND);
         }
 
         @ResponseStatus(HttpStatus.CONFLICT)
@@ -126,11 +126,15 @@ public class GlobalExceptionHandler {
 
         @ResponseStatus(HttpStatus.UNAUTHORIZED)
         @ExceptionHandler(Unauthorized.class)
-        public ResponseEntity<ExceptionResponseDto> unauthorized(HttpServletRequest request,
+        public Object unauthorized(HttpServletRequest request,
                         Unauthorized ex) {
-                return new ResponseEntity<>(new ExceptionResponseDto(LocalDateTime.now().toInstant(ZoneOffset.UTC),
-                                ex.getMessage(), request.getRequestURL().toString(), HttpStatus.UNAUTHORIZED.value()),
-                                HttpStatus.UNAUTHORIZED);
+                return request.getServletPath().contains("/api/")
+                                ? new ResponseEntity<>(
+                                                new ExceptionResponseDto(LocalDateTime.now().toInstant(ZoneOffset.UTC),
+                                                                ex.getMessage(), request.getRequestURL().toString(),
+                                                                HttpStatus.UNAUTHORIZED.value()),
+                                                HttpStatus.UNAUTHORIZED)
+                                : new ModelAndView("401", HttpStatus.UNAUTHORIZED);
         }
 
         @ResponseStatus(HttpStatus.FORBIDDEN)

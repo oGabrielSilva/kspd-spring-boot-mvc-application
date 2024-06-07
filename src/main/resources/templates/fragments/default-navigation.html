@@ -54,14 +54,19 @@
           </button>
 
           <div th:if="${user != null}" class="navbar-item has-dropdown is-hoverable">
-            <a class="navbar-link button" th:href="|/u/${user.username}|">
+            <a class="navbar-link button" th:href="@{/u/{username}(username=${user.username})}">
               <span class="icon is-small">
                 <i class="fa-solid fa-user-astronaut" aria-hidden="true"></i>
               </span>
             </a>
 
             <div class="navbar-dropdown default-navigation-dropdown">
-              <a class="navbar-item" th:href="|/u/${user.username}|">Perfil</a>
+              <a class="navbar-item" th:href="@{/u/{username}(username=${user.username})}">
+                Perfil
+              </a>
+              <a class="navbar-item" th:href="@{/u/{username}/articles(username=${user.username})}">
+                Meus artigos
+              </a>
               <hr class="navbar-divider" />
               <a class="navbar-item has-text-danger" href="/session/sign-out">Sair</a>
             </div>

@@ -270,6 +270,17 @@ figure:not([class]) {
   flex: 1;
 }
 
+.each-article {
+  padding: 2rem 1rem;
+  border-radius: 2rem;
+  cursor: pointer;
+}
+
+.each-article:hover,
+.each-article:active {
+  background: var(--bulma-border);
+}
+
 @media screen and (max-width: 1110px) {
   .dev-aside {
     width: 35%;

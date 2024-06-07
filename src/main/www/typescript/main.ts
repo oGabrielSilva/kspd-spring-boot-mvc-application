@@ -6,6 +6,7 @@ import { ContactPageManager } from './pages/ContactPageManager';
 import { runEditArticleMetadataPageManager } from './pages/EditArticleMetadataPageManager';
 import { runEditArticlePageManager } from './pages/EditArticlePageManager';
 import { runIndexPageManager } from './pages/IndexPageManager';
+import { ProfileArticlePageManager } from './pages/ProfileArticlePageManager';
 import { runProfileEditPageManager } from './pages/ProfileEditPageManager';
 import { runSessionPageManager } from './pages/SessionPageManager';
 import { StacksPageManager } from './pages/StacksPageManager';
@@ -32,6 +33,7 @@ import { formatTime } from './utilities/formatTime';
       '/index': runIndexPageManager,
       '/session': runSessionPageManager,
       '/profile-edit': runProfileEditPageManager,
+      '/profile-articles': () => ProfileArticlePageManager.instance.run(),
       '/account-verification': runAccountVerificationManager,
       '/terms': runTermsPageManager,
       '/write': runWritePageManager,

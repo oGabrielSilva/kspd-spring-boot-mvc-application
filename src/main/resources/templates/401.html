@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <th:block th:replace="~{fragments/default-head}"></th:block>
+  </head>
+
+  <body>
+    <header class="p-3">
+      <div>
+        <th:block th:replace="~{fragments/default-navigation}"></th:block>
+      </div>
+    </header>
+
+    <main class="container p-3">
+      <section class="section">
+        <h1 class="title">Oopss</h1>
+        <h3 class="subtitle">Operação não autorizada</h3>
+        <p>
+          Ops! Parece que você não tem autorização para acessar esta área. Lamentamos pela decepção.
+          Por favor, verifique suas credenciais e tente novamente.
+        </p>
+        <div class="buttons py-5 is-flex is-justify-content-center">
+          <a href="/" class="button is-link pr-5">
+            <span class="icon is-small">
+              <i class="fa-solid fa-location-arrow"></i>
+            </span>
+            <span>Home</span>
+          </a>
+
+          <a href="/report" class="button is-danger">
+            <span class="icon is-small">
+              <i class="fa-solid fa-bug"></i>
+            </span>
+            <span>Reportar</span>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <th:block th:replace="~{fragments/footer}"></th:block>
+
+    <input type="hidden" value="/401" id="wwwroot-page-manager-id" />
+  </body>
+</html>

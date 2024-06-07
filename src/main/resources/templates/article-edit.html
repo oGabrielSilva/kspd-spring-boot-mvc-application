@@ -8,6 +8,7 @@
     <main class="py-5 px-3">
       <section class="">
         <header>
+          <a href="/">Kassiopeia</a>
           <div class="is-flex is-align-items-center g-0">
             <span>Slug:</span>
             <input
@@ -17,9 +18,9 @@
               th:value="${article.slug}"
               th:data-original="${article.slug}"
             />
-            <a target="_blank" th:href="@{/{slug}/edit/metadata(slug=${article.slug})}"
-              >Metadados</a
-            >
+            <a target="_blank" th:href="@{/{slug}/edit/metadata(slug=${article.slug})}">
+              Metadados
+            </a>
           </div>
           <input
             data-slug=""
@@ -32,7 +33,7 @@
             style="border: none"
           />
         </header>
-        <div>
+        <div class="mt-1">
           <div id="toolbar" class="is-flex is-align-items-center pt-4 px-4 g-0 pb-0">
             <div class="tool-group">
               <div class="select is-normal">
