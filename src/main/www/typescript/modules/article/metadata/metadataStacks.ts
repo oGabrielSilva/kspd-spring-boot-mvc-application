@@ -25,7 +25,7 @@ export function metadataStacks(slug: string) {
     button.onclick = () => onClickRemoveStack(button);
   });
 
-  form.querySelector('#create-stack').addEventListener('click', stackForm.show);
+  form.querySelector('#create-stack').addEventListener('click', () => stackForm.show());
 
   const confirmStackModal = document.querySelector('#confirm-add-stack-modal') as HTMLFormElement;
   const confirmStackModalTitles = confirmStackModal.querySelectorAll('strong');
@@ -51,6 +51,10 @@ export function metadataStacks(slug: string) {
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
+    if (!selectStack.value) {
+      tools().anim.shake(form.querySelector('#create-stack'));
+      return;
+    }
     confirmStack(selectStack.value);
   });
 }

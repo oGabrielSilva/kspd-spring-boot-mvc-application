@@ -3,6 +3,7 @@ package dev.kassiopeia.blog.modules.article.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import dev.kassiopeia.blog.modules.user.services.UserService;
 
@@ -12,11 +13,10 @@ public class WriteController {
     UserService userService;
 
     @GetMapping("/write")
-    public String write() {
+    public ModelAndView write(ModelAndView mv) {
         var user = userService.getCurrentAuthenticatedUser();
-        if (user == null)
-            return "redirect:/session?next=/write";
-        return "write";
+        mv.setViewName(user == null ? "redirect:/session?next=/write" : "write");
+        return mv;
     }
 
 }

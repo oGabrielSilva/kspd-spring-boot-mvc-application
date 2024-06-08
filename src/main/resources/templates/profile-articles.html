@@ -23,7 +23,7 @@
           </div>
           <div th:unless="${#lists.isEmpty(articles)}">
             <div th:each="article : ${articles}" class="each-article">
-              <h3 class="subtitle mb-1 is-underlined">
+              <h3 class="title is-4 mb-1 is-underlined">
                 <span th:text="${article.title}" class="is-clickable"></span>
               </h3>
               <a

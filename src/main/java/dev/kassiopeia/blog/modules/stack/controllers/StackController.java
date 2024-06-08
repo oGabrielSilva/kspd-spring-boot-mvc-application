@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import dev.kassiopeia.blog.data.constants.AppConstants;
 import dev.kassiopeia.blog.exceptions.BadRequest;
 import dev.kassiopeia.blog.exceptions.NotFound;
 import dev.kassiopeia.blog.exceptions.ServiceUnavailable;
@@ -42,6 +43,8 @@ public class StackController {
         mv.addObject("isAdmin", user != null && user.isAdmin());
 
         mv.setViewName("stacks");
+
+        mv.addObject(AppConstants.PAGE_TITLE, "Stacks | Categorias");
         return mv;
     }
 
@@ -61,6 +64,8 @@ public class StackController {
 
         var posts = articleRepository.findAllByStackName(stack.getName());
         mv.addObject("posts", posts);
+
+        mv.addObject(AppConstants.PAGE_TITLE, stack.getName());
         return mv;
 
     }

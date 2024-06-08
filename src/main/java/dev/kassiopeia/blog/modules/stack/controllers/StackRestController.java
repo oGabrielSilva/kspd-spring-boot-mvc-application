@@ -49,7 +49,8 @@ public class StackRestController {
             throw new BadRequest("Stack não possui nome válido");
         if (StringUtils.isNotNullOrBlank(stackDTO.description())
                 && StringUtils.isNotDescriptionTagTextValidForSEO(stackDTO.description()))
-            throw new BadRequest("Descrição não é válida. Máximo de 160 caracteres");
+            throw new BadRequest(
+                    String.format("Descrição não é válida. Máximo de %s caracteres", StringUtils.DESCRIPTION_MAX_LEN));
 
         var user = userService.getCurrentAuthenticatedUserOrThrowsForbidden();
         if (user.isNonAuthor())

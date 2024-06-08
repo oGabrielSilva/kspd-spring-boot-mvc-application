@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.ModelAndView;
 
+import dev.kassiopeia.blog.data.constants.AppConstants;
 import dev.kassiopeia.blog.exceptions.BadRequest;
 import dev.kassiopeia.blog.exceptions.InternalServerError;
 import dev.kassiopeia.blog.exceptions.NotFound;
@@ -57,6 +58,8 @@ public class ArticleController {
         if (article.getMetadata().isPublished() || user != null && articleService.canEdit(user, article)) {
             var mv = new ModelAndView("article");
             mv.addObject("article", article);
+            mv.addObject(AppConstants.PAGE_TITLE,
+                    StringUtils.isNullOrBlank(article.getTitle()) ? article.getCreatedBy().name() : article.getTitle());
             mv.addObject("isEditor", articleService.canEdit(user, article));
 
             var editors = userRepository.findAllById(article.getEditors().stream().map(ed -> ed.id()).toList());
@@ -73,19 +76,21 @@ public class ArticleController {
             throw new NotFound("Slug não informado");
         }
 
-        Article art = articleRepository.findBySlug(slug);
-        if (art == null) {
+        Article article = articleRepository.findBySlug(slug);
+        if (article == null) {
             throw new NotFound("Artigo não existe");
         }
 
         var user = userService.getCurrentAuthenticatedUserOrThrowsForbidden();
-        var isEditor = art.getEditors().stream().anyMatch(e -> e.id().equals(user.getId()));
+        var isEditor = article.getEditors().stream().anyMatch(e -> e.id().equals(user.getId()));
         if (!isEditor) {
             return new ModelAndView("redirect:/" + slug);
         }
         var mv = new ModelAndView("article-edit");
-        mv.addObject("article", art);
-        mv.addObject("title", art.getTitle());
+        mv.addObject("article", article);
+        mv.addObject(AppConstants.PAGE_TITLE,
+                StringUtils.isNullOrBlank(article.getTitle()) ? article.getCreatedBy().name() : article.getTitle());
+        mv.addObject("title", article.getTitle());
         return mv;
     }
 
@@ -95,23 +100,25 @@ public class ArticleController {
             throw new NotFound("Slug não informado");
         }
 
-        Article art = articleRepository.findBySlug(slug);
-        if (art == null) {
+        Article article = articleRepository.findBySlug(slug);
+        if (article == null) {
             throw new NotFound("Artigo não existe");
         }
 
         var user = userService.getCurrentAuthenticatedUserOrThrowsForbidden();
-        var isEditor = art.getEditors().stream().anyMatch(e -> e.id().equals(user.getId()));
+        var isEditor = article.getEditors().stream().anyMatch(e -> e.id().equals(user.getId()));
         if (!isEditor) {
             return new ModelAndView("redirect:/" + slug);
         }
         List<Stack> stacks = stackRepository
-                .findAllByNameNotIn(art.getStacks().stream().map(stack -> stack.name()).toList());
+                .findAllByNameNotIn(article.getStacks().stream().map(stack -> stack.name()).toList());
 
         var mv = new ModelAndView("article-metadata");
-        mv.addObject("ownerId", art.getCreatedBy().id());
-        mv.addObject("article", art);
-        mv.addObject("title", art.getTitle());
+        mv.addObject("ownerId", article.getCreatedBy().id());
+        mv.addObject("article", article);
+        mv.addObject(AppConstants.PAGE_TITLE,
+                StringUtils.isNullOrBlank(article.getTitle()) ? article.getCreatedBy().name() : article.getTitle());
+        mv.addObject("title", article.getTitle());
         mv.addObject("stacks", stacks);
         return mv;
     }

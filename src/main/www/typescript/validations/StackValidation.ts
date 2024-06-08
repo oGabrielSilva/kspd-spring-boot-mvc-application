@@ -1,5 +1,5 @@
 export class StackValidation {
-  public readonly descriptionMaxLen = 200;
+  public readonly descriptionMaxLen = 300;
   public readonly nameMaxLen = 100;
 
   public isNameValid(name: string) {

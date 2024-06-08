@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import dev.kassiopeia.blog.authentication.services.TokenService;
+import dev.kassiopeia.blog.data.constants.AppConstants;
 import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +19,7 @@ public class SessionController {
 
     @GetMapping
     public String page(Model model) {
-        model.addAttribute("title", "Faça seu login");
+        model.addAttribute(AppConstants.PAGE_TITLE, "Faça seu login");
         return "session";
     }
 

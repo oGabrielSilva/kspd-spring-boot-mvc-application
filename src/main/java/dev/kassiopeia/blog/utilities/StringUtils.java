@@ -1,6 +1,8 @@
 package dev.kassiopeia.blog.utilities;
 
 public class StringUtils {
+    public static final int DESCRIPTION_MAX_LEN = 300;
+
     public static boolean isEquals(String test, String compare) {
         return test != null && test.equals(compare);
     }
@@ -18,7 +20,7 @@ public class StringUtils {
     }
 
     public static boolean isDescriptionTagTextValidForSEO(String description) {
-        return isNotNullOrBlank(description) && description.length() <= 200;
+        return isNotNullOrBlank(description) && description.length() <= DESCRIPTION_MAX_LEN;
     }
 
     public static boolean isNotDescriptionTagTextValidForSEO(String description) {

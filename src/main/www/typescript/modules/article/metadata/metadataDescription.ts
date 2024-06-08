@@ -3,7 +3,7 @@ import { tools } from '../../../utilities/tools';
 
 export function metadataDescription(slug: string, form: HTMLFormElement) {
   const { anim, toaster, screenProgress } = tools();
-  const maxSize = 160;
+  const maxSize = 300;
   const area = form.querySelector('#seo-description') as HTMLTextAreaElement;
   const original = area.dataset.original as string | undefined;
   const displaySize = form.querySelector('.description-len') as HTMLElement;

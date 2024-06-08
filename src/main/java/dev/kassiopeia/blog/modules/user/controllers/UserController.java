@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import dev.kassiopeia.blog.data.constants.AppConstants;
 import dev.kassiopeia.blog.exceptions.NotFound;
 import dev.kassiopeia.blog.exceptions.Unauthorized;
 import dev.kassiopeia.blog.modules.article.repositories.ArticleRepository;
@@ -30,6 +31,7 @@ public class UserController {
         var authenticatedUser = userService.getCurrentAuthenticatedUser();
         if (authenticatedUser != null && authenticatedUser.getUsername().equals(username)) {
             mv.setViewName("profile-edit");
+            mv.addObject(AppConstants.PAGE_TITLE, authenticatedUser.getUsername());
             return mv;
         }
 
@@ -43,6 +45,7 @@ public class UserController {
         var social = profile.getSocial();
         mv.addObject("social", social);
 
+        mv.addObject(AppConstants.PAGE_TITLE, profile.getUsername());
         return mv;
     }
 
